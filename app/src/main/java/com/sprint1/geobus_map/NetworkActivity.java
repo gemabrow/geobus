@@ -1,7 +1,15 @@
 package com.sprint1.geobus_map;
+
 import android.os.AsyncTask;
+import android.widget.Toast;
+
 import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.util.List;
+import java.net.URL;
 
 /**According to user's preferences, performs background async activity
  * of downloading and parsing xml file for updates to main map activity
@@ -35,37 +43,42 @@ public class NetworkActivity extends android.app.Activity {
 
     // Implementation of AsyncTask to download
     // XML feed from http://skynet.cse.ucsc.edu/bts/coord2.xml
-    private class DownloadXmlTask extends AsyncTask<String, Void, String> {
+    private class DownloadXmlTask extends AsyncTask<String, Void, List<TransitInfoXmlParser.Marker> > {
+        List<TransitInfoXmlParser.Marker> markers;
         @Override
-        protected String doInBackground(String... urls) {
+        protected List doInBackground(String... urls) {
             try {
-                return loadXmlFromNetwork(urls[0]);
+                return markers = loadXmlFromNetwork(urls[0]);
             } catch ( IOException e ){
-                return getResources().getString(R.string.connection_error);
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.connection_error), Toast.LENGTH_SHORT);
             } catch ( XmlPullParserException e ) {
-                return getResources().getString(R.string.xml_error);
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.xml_error), Toast.LENGTH_SHORT);
             }
+            return markers;
         }
 
         @Override
-        //need to adjust for drawing to Google Maps activity
-        protected void onPostExecute(String result) {
-            setContentView(R.layout.main);
+        //****need to draw to Main Google Maps activity on UI thread here*******
+        protected void onPostExecute(List<TransitInfoXmlParser.Marker> results) {
         }
     }
 
-    // Uploads XML from stackoverflow.com, parses it, and combines it with
-    // HTML markup. Returns HTML string.
-    private String loadXmlFromNetwork(String urlString) throws XmlPullParserException, IOException {
+    // Downloads XML from skynet, parses it, and returns it as a List
+    //********************************** NEED TO GUT THIS ******************************************
+    private List loadXmlFromNetwork(String urlString) throws XmlPullParserException, IOException {
         InputStream stream = null;
         // Instantiate the parser
-        StackOverflowXmlParser stackOverflowXmlParser = new StackOverflowXmlParser();
-        List<Entry> entries = null;
+        TransitInfoXmlParser TransitInfoParser = new TransitInfoXmlParser();
+        // List of buses
+        List<TransitInfoXmlParser.Marker> markers = null;
+
+        /*
         String title = null;
         String url = null;
         String summary = null;
         Calendar rightNow = Calendar.getInstance();
         DateFormat formatter = new SimpleDateFormat("MMM dd h:mmaa");
+
 
         // Checks whether the user set the preference to include summary text
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -75,10 +88,11 @@ public class NetworkActivity extends android.app.Activity {
         htmlString.append("<h3>" + getResources().getString(R.string.page_title) + "</h3>");
         htmlString.append("<em>" + getResources().getString(R.string.updated) + " " +
                 formatter.format(rightNow.getTime()) + "</em>");
+        */
 
         try {
             stream = downloadUrl(urlString);
-            entries = stackOverflowXmlParser.parse(stream);
+            markers = TransitInfoParser.parse(stream);
             // Makes sure that the InputStream is closed after the app is
             // finished using it.
         } finally {
@@ -87,22 +101,7 @@ public class NetworkActivity extends android.app.Activity {
             }
         }
 
-        // StackOverflowXmlParser returns a List (called "entries") of Entry objects.
-        // Each Entry object represents a single post in the XML feed.
-        // This section processes the entries list to combine each entry with HTML markup.
-        // Each entry is displayed in the UI as a link that optionally includes
-        // a text summary.
-        for (Entry entry : entries) {
-            htmlString.append("<p><a href='");
-            htmlString.append(entry.link);
-            htmlString.append("'>" + entry.title + "</a></p>");
-            // If the user set the preference to include summary text,
-            // adds it to the display.
-            if (pref) {
-                htmlString.append(entry.summary);
-            }
-        }
-        return htmlString.toString();
+        return markers;
     }
 
     // Given a string representation of a URL, sets up a connection and gets
