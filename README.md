@@ -1,2 +1,2 @@
-# geobus-android-map
-Initial base map - temporary repository until we figure out what to do with geobus-android
+# geobus-android
+Android variation of GeoBus
