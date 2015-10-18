@@ -1,2 +1,2 @@
 # geobus-android
-Android variation of GeoBus
+Android variation of GeoBus.
