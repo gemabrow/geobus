@@ -9,13 +9,27 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private List<TransitInfoXmlParser.Marker> bus_markers = new ArrayList<TransitInfoXmlParser.Marker>();
 
+    public void setList(List<TransitInfoXmlParser.Marker> bus_markers){
+        this.bus_markers = bus_markers;
+    }
+
+    private void startTransitInfoTask() {
+        new NetworkActivity(this).loadPage();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // gathers transit info from servers and stores in list bus_markers
+        startTransitInfoTask();
+
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

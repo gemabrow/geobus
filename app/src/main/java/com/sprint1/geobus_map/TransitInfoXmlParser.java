@@ -185,7 +185,7 @@ public class TransitInfoXmlParser {
                 case XmlPullParser.END_TAG:
                     depth--;
                     break;
-                case XmlPullParser.START_TAG;
+                case XmlPullParser.START_TAG:
                     depth++;
                     break;
             }
