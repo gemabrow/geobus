@@ -16,6 +16,7 @@ import java.net.URL;
  * Created by gerald on 10/13/15.
  */
 public class NetworkActivity extends android.app.Activity {
+    private MapsActivity activity;
     public static final String WIFI = "Wi-Fi";
     public static final String ANY = "Any";
     private static final String URL = "http://skynet.cse.ucsc.edu/bts/coord2.xml";
@@ -28,9 +29,12 @@ public class NetworkActivity extends android.app.Activity {
     public static boolean refreshDisplay = true;
     public static String sPref = null;
 
+    public NetworkActivity(MapsActivity activity){
+        this.activity = activity;
+    }
+
     // Uses AsyncTask to download the XML feed from skynet.cse.ucsc.edu.
     public void loadPage() {
-
         if((sPref.equals(ANY)) && (wifiConnected || mobileConnected)) {
             new DownloadXmlTask().execute(URL);
         }
@@ -58,8 +62,9 @@ public class NetworkActivity extends android.app.Activity {
         }
 
         @Override
-        //****need to draw to Main Google Maps activity on UI thread here*******
+        // sends list back to UI thread for drawing to GoogleMap
         protected void onPostExecute(List<TransitInfoXmlParser.Marker> results) {
+            activity.setList(results);
         }
     }
 
