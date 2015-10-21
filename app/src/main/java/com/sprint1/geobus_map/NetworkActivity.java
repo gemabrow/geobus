@@ -27,7 +27,10 @@ public class NetworkActivity extends android.app.Activity {
     private static boolean mobileConnected = false;
     // Whether the display should be refreshed.
     public static boolean refreshDisplay = true;
-    public static String sPref = null;
+
+    // setting sPref =  null causing app to crash I changed to "" but feel free to change it back
+    // to null
+    public static String sPref = "";
 
     public NetworkActivity(MapsActivity activity){
         this.activity = activity;

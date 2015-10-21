@@ -7,14 +7,21 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private ArrayList<BusStop> busStops;
+    private JsonFileReader test =  new JsonFileReader();
+
     private List<TransitInfoXmlParser.Marker> bus_markers = new ArrayList<TransitInfoXmlParser.Marker>();
 
     public void setList(List<TransitInfoXmlParser.Marker> bus_markers){
@@ -35,6 +42,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        // loads UCSC_WestSide_Bus_Stops.json file to an array of BusStop Objects which are used
+        // to create the busstop markers
+        loadJsonFromAsset();
     }
 
 
@@ -54,5 +65,37 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // set up coordinates for the center of UCSC and move the camera to there with a zoom level of 15 on startup
         LatLng ucsc = new LatLng(36.991406, -122.060731);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucsc, 15));
+        drawBusStopMarkers();
+    }
+
+    // draws the busstop markers on the google map
+    public void drawBusStopMarkers(){
+
+        for (BusStop temp : busStops){
+            mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(temp.getLatitude(), temp.getLongitude()))
+                            .title(temp.getTitle())
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop))
+            );
+        }
+    }
+
+    // loads bus stops specified by json file
+    public void loadJsonFromAsset(){
+        String jsonText = null;
+
+        try{
+
+            InputStream in = getAssets().open("UCSC_Westside_Bus_Stops.json");
+            test.readBusStopJsonStream(in);
+            busStops = new ArrayList<>(test.getBusStops());
+            System.out.println("Read File" + busStops.size());
+
+
+        }
+        catch(IOException ex) {
+            System.out.println("Error reading file");
+        }
+
     }
 }

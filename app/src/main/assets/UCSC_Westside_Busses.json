@@ -1,0 +1,1939 @@
+{
+  "all": [
+    {
+      "name":"10",
+      "MainBusStops": [
+        "Santa Cruz Metro Lane 1",
+        "Cedar & Walnut",
+        "High & Laurent",
+        "Science Hill",
+        "High & Laurent",
+        "Santa Cruz Metro Center"
+      ],
+      "Routes": [
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "6:50am",
+            "6:52am",
+            "6:57am",
+            "7:08am",
+            "7:15am",
+            "7:30am"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "",
+            "7:22am",
+            "7:27am",
+            "7:38am",
+            "7:45am",
+            "8:00am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "7:50am",
+            "7:52am",
+            "7:57am",
+            "8:08am",
+            "8:15am",
+            "8:30am"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "",
+            "8:22am",
+            "8:27am",
+            "8:38am",
+            "8:45am",
+            "9:00am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "8:50am",
+            "8:52am",
+            "8:57am",
+            "9:08am",
+            "9:15am",
+            "9:30am"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "",
+            "9:22am",
+            "9:27am",
+            "9:38am",
+            "9:45am",
+            "10:00am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "9:50am",
+            "9:52am",
+            "9:57am",
+            "10:08am",
+            "10:15am",
+            "10:35am"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "",
+            "10:22am",
+            "10:27am",
+            "10:38am",
+            "10:45am",
+            "11:05am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "10:50am",
+            "10:52am",
+            "10:57am",
+            "11:08am",
+            "11:15am",
+            "11:35am"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "",
+            "11:22am",
+            "11:27am",
+            "11:38am",
+            "11:45am",
+            "12:05pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "11:50am",
+            "11:52am",
+            "11:57am",
+            "12:08pm",
+            "12:15pm",
+            "12:35pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "12:20pm",
+            "12:22pm",
+            "12:27pm",
+            "12:38pm",
+            "12:45pm",
+            "1:05pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "12:50pm",
+            "12:52pm",
+            "12:57pm",
+            "1:08pm",
+            "1:15pm",
+            "1:35pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "1:20pm",
+            "1:22pm",
+            "1:27pm",
+            "1:38pm",
+            "1:45pm",
+            "2:05pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "1:50pm",
+            "1:52pm",
+            "1:57pm",
+            "2:08pm",
+            "2:15pm",
+            "2:35pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "2:20pm",
+            "2:22pm",
+            "2:27pm",
+            "2:38pm",
+            "2:45pm",
+            "3:05pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "2:50pm",
+            "2:52pm",
+            "2:57pm",
+            "3:08pm",
+            "3:15pm",
+            "3:35pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "3:20pm",
+            "3:22pm",
+            "3:27pm",
+            "3:38pm",
+            "3:45pm",
+            "4:05pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "3:50pm",
+            "3:52pm",
+            "3:57pm",
+            "4:08pm",
+            "4:15pm",
+            "4:35pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "4:20pm",
+            "4:22pm",
+            "4:27pm",
+            "4:38pm",
+            "4:45pm",
+            "5:05pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "4:50pm",
+            "4:52pm",
+            "4:57pm",
+            "5:08pm",
+            "5:15pm",
+            "5:35pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "5:20pm",
+            "5:22pm",
+            "5:27pm",
+            "5:38pm",
+            "5:45pm",
+            "6:05pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "5:35pm",
+            "5:37pm",
+            "5:42pm",
+            "5:53pm",
+            "6:00pm",
+            "6:20pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "5:50pm",
+            "5:52pm",
+            "5:57pm",
+            "6:08pm",
+            "6:15pm",
+            "6:35pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "6:20pm",
+            "6:22pm",
+            "6:27pm",
+            "6:38pm",
+            "6:45pm",
+            "7:05pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "6:50pm",
+            "6:52pm",
+            "6:57pm",
+            "7:08pm",
+            "7:15pm",
+            "7:30pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "7:20pm",
+            "7:22pm",
+            "7:27pm",
+            "7:38pm",
+            "7:45pm",
+            "8:00pm"
+          ]
+        }
+      ]
+
+    },
+    {
+      "name":"12",
+      "MainBusStops": [
+        "41st Ave. & Kings Plaza",
+        "7th Ave. & Bonnie",
+        "Laurel & Pacific",
+        "Bay & Mission",
+        "Science Hill",
+        "Bay & Mission",
+        "Santa Cruz Metro Center"
+      ],
+      "Routes": [
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "7:10am",
+            "7:18am",
+            "7:26am",
+            "7:32am",
+            "7:44am",
+            "7:54am",
+            "8:07am"
+          ]
+        }
+      ]
+    },
+    {
+      "name":"15",
+      "MainBusStops": [
+        "Santa Cruz Metro Lane 1",
+        "Bay & Mission",
+        "Science Hill",
+        "Bay & Mission",
+        "Santa Cruz Metro Center"
+      ],
+      "Routes": [
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "6:40am",
+            "6:46am",
+            "6:58am",
+            "7:08am",
+            "7:25am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "7:38am",
+            "7:44am",
+            "7:56am",
+            "8:06am",
+            "8:23am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "8:12am",
+            "8:18am",
+            "8:30am",
+            "8:40am",
+            "8:57am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "8:35am",
+            "8:41am",
+            "8:53am",
+            "9:03am",
+            "9:20am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "9:25am",
+            "9:31am",
+            "9:43am",
+            "9:53am",
+            "10:10am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "9:52am",
+            "9:58am",
+            "10:10am",
+            "10:20am",
+            "10:37am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "10:45am",
+            "10:51am",
+            "11:03am",
+            "11:13am",
+            "11:30am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "10:52am",
+            "10:58am",
+            "11:10am",
+            "11:20am",
+            "11:37am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "11:00am",
+            "11:06am",
+            "11:18am",
+            "11:28am",
+            "11:45am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "11:20am",
+            "11:26am",
+            "11:38am",
+            "11:48am",
+            "12:05pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "11:38am",
+            "11:44am",
+            "11:56am",
+            "12:06pm",
+            "12:23pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "11:50am",
+            "11:56am",
+            "12:08pm",
+            "12:18pm",
+            "12:35pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "12:00pm",
+            "12:06pm",
+            "12:18pm",
+            "12:28pm",
+            "12:45pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "12:20pm",
+            "12:26pm",
+            "12:38pm",
+            "12:48pm",
+            "1:05pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "12:48pm",
+            "12:54pm",
+            "1:06pm",
+            "1:16pm",
+            "1:33pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "1:30pm",
+            "1:36pm",
+            "1:48pm",
+            "1:58pm",
+            "2:15pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "1:38pm",
+            "1:44pm",
+            "1:56pm",
+            "2:06pm",
+            "2:23pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "1:50pm",
+            "1:56pm",
+            "2:08pm",
+            "2:18pm",
+            "2:35pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "2:00pm",
+            "2:06pm",
+            "2:18pm",
+            "2:28pm",
+            "2:45pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "2:17pm",
+            "2:23pm",
+            "2:35pm",
+            "2:45pm",
+            "3:02pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "2:30pm",
+            "2:36pm",
+            "2:48pm",
+            "2:58pm",
+            "3:15pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "2:38pm",
+            "2:44pm",
+            "2:56pm",
+            "3:06pm",
+            "3:23pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "2:48pm",
+            "2:54pm",
+            "3:06pm",
+            "3:16pm",
+            "3:33pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "3:00pm",
+            "3:06pm",
+            "3:18pm",
+            "3:28pm",
+            "3:45pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "3:08pm",
+            "3:14pm",
+            "3:26pm",
+            "3:36pm",
+            "3:53pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "3:38pm",
+            "3:44pm",
+            "3:56pm",
+            "4:06pm",
+            "4:23pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "3:58pm",
+            "4:04pm",
+            "4:16pm",
+            "4:26pm",
+            "4:43pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "4:08pm",
+            "4:14pm",
+            "4:26pm",
+            "4:36pm",
+            "4:53pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "4:30pm",
+            "4:36pm",
+            "4:48pm",
+            "4:58pm",
+            "5:15pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "4:30pm",
+            "4:36pm",
+            "4:48pm",
+            "4:58pm",
+            "5:15pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "4:35pm",
+            "4:41pm",
+            "4:53pm",
+            "5:03pm",
+            "5:20pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "4:47pm",
+            "4:53pm",
+            "5:05pm",
+            "5:15pm",
+            "5:32pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "5:15pm",
+            "5:21pm",
+            "5:33pm",
+            "5:43pm",
+            "6:00pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "6:03pm",
+            "6:09pm",
+            "6:21pm",
+            "6:31pm",
+            "6:48pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "6:25pm",
+            "6:31pm",
+            "6:43pm",
+            "6:53pm",
+            "7:10pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "6:58pm",
+            "7:04pm",
+            "7:16pm",
+            "7:26pm",
+            "7:43pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "7:20pm",
+            "7:26pm",
+            "7:38pm",
+            "7:48pm",
+            "8:05pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "7:50pm",
+            "7:56pm",
+            "8:08pm",
+            "8:18pm",
+            "8:35pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "8:20pm",
+            "8:26pm",
+            "8:38pm",
+            "8:48pm",
+            "9:05pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "8:50pm",
+            "8:56pm",
+            "9:08pm",
+            "9:18pm",
+            "9:35pm"
+          ]
+        }
+      ]
+
+    },
+    {
+      "name":"16",
+      "MainBusStops": [
+        "Santa Cruz Metro Lane 1",
+        "Bay & Mission",
+        "Science Hill",
+        "Bay & Mission",
+        "Santa Cruz Metro Center"
+      ],
+      "Routes": [
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "6:25am",
+            "6:31am",
+            "6:43am",
+            "6:53am",
+            "7:05am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "7:00am",
+            "7:06am",
+            "7:18am",
+            "7:28am",
+            "7:40am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "7:10am",
+            "7:16am",
+            "7:28am",
+            "7:38am",
+            "7:50am"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "7:30am",
+            "7:35am",
+            "7:45am",
+            "7:55am",
+            "8:05am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "7:40am",
+            "7:46am",
+            "7:58am",
+            "8:08am",
+            "8:20am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "8:10am",
+            "8:16am",
+            "8:28am",
+            "8:38am",
+            "8:50am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "8:40am",
+            "8:46am",
+            "8:58am",
+            "9:08am",
+            "9:25am"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "8:50am",
+            "8:56am",
+            "9:08am",
+            "9:18am",
+            "9:35am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "9:10am",
+            "9:16am",
+            "9:28am",
+            "9:38am",
+            "9:55am"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "9:30am",
+            "9:36am",
+            "9:48am",
+            "9:58am",
+            "10:15am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "9:40am",
+            "9:46am",
+            "9:58am",
+            "10:08am",
+            "10:25am"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "9:50am",
+            "9:56am",
+            "10:08am",
+            "10:18am",
+            "10:35am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "10:10am",
+            "10:16am",
+            "10:28am",
+            "10:38am",
+            "10:55am"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "10:25am",
+            "10:31am",
+            "10:43am",
+            "10:53am",
+            "11:10am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "10:40am",
+            "10:46am",
+            "10:58am",
+            "11:08am",
+            "11:25am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "11:10am",
+            "11:16am",
+            "11:28am",
+            "11:38am",
+            "11:55am"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "11:25am",
+            "11:31am",
+            "11:43am",
+            "11:53am",
+            "12:10pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "11:40am",
+            "11:46am",
+            "11:58am",
+            "12:08pm",
+            "12:25pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "11:50am",
+            "11:56am",
+            "12:08pm",
+            "12:18pm",
+            "12:35pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "12:10pm",
+            "12:16pm",
+            "12:28pm",
+            "12:38pm",
+            "12:55pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "12:25pm",
+            "12:31pm",
+            "12:43pm",
+            "12:53pm",
+            "1:10pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "12:40pm",
+            "12:46pm",
+            "12:58pm",
+            "1:08pm",
+            "1:25pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "12:50pm",
+            "12:56pm",
+            "1:08pm",
+            "1:18pm",
+            "1:35pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "1:10pm",
+            "1:16pm",
+            "1:28pm",
+            "1:38pm",
+            "1:55pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "1:20pm",
+            "1:26pm",
+            "1:38pm",
+            "1:48pm",
+            "2:05pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "1:40pm",
+            "1:46pm",
+            "1:58pm",
+            "2:08pm",
+            "2:25pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "1:50pm",
+            "1:56pm",
+            "2:08pm",
+            "2:18pm",
+            "2:35pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "2:10pm",
+            "2:16pm",
+            "2:28pm",
+            "2:38pm",
+            "2:55pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "2:25pm",
+            "2:31pm",
+            "2:43pm",
+            "2:53pm",
+            "3:10pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "2:35pm",
+            "2:41pm",
+            "2:53pm",
+            "3:03pm",
+            "3:20pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "2:40pm",
+            "2:46pm",
+            "2:58pm",
+            "3:08pm",
+            "3:25pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "2:50pm",
+            "2:56pm",
+            "3:08pm",
+            "3:18pm",
+            "3:35pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "3:10pm",
+            "3:16pm",
+            "3:28pm",
+            "3:38pm",
+            "3:55pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "3:22pm",
+            "3:28pm",
+            "3:40pm",
+            "3:50pm",
+            "4:07pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "3:25pm",
+            "3:31pm",
+            "3:43pm",
+            "3:53pm",
+            "4:10pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "3:40pm",
+            "3:46pm",
+            "3:58pm",
+            "4:08pm",
+            "4:25pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "3:45pm",
+            "3:51pm",
+            "4:03pm",
+            "4:13pm",
+            "4:30pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "3:50pm",
+            "3:56pm",
+            "4:08pm",
+            "4:18pm",
+            "4:35pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "4:10pm",
+            "4:16pm",
+            "4:28pm",
+            "4:38pm",
+            "4:55pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "4:20pm",
+            "4:26pm",
+            "4:38pm",
+            "4:48pm",
+            "5:05pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "4:40pm",
+            "4:46pm",
+            "4:58pm",
+            "5:08pm",
+            "5:25pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "4:50pm",
+            "4:56pm",
+            "5:08pm",
+            "5:18pm",
+            "5:35pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "5:10pm",
+            "5:16pm",
+            "5:28pm",
+            "5:38pm",
+            "5:55pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "5:35pm",
+            "5:41pm",
+            "5:53pm",
+            "6:03pm",
+            "6:20pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "5:40pm",
+            "5:46pm",
+            "5:58pm",
+            "6:08pm",
+            "6:25pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "6:00pm",
+            "6:06pm",
+            "6:18pm",
+            "6:28pm",
+            "6:45pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "6:10pm",
+            "6:16pm",
+            "6:28pm",
+            "6:38pm",
+            "6:50pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "6:40pm",
+            "6:46pm",
+            "6:58pm",
+            "7:08pm",
+            "7:20pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "7:00pm",
+            "7:06pm",
+            "7:18pm",
+            "7:28pm",
+            "7:40pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "7:15pm",
+            "7:21pm",
+            "7:33pm",
+            "7:43pm",
+            "7:55pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "7:30pm",
+            "7:36pm",
+            "7:48pm",
+            "7:58pm",
+            "8:15pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "7:45pm",
+            "7:51pm",
+            "8:03pm",
+            "8:13pm",
+            "8:25pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "8:00pm",
+            "8:06pm",
+            "8:18pm",
+            "8:28pm",
+            "8:40pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "8:15pm",
+            "8:21pm",
+            "8:33pm",
+            "8:43pm",
+            "8:55pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "8:45pm",
+            "8:51pm",
+            "9:03pm",
+            "9:13pm",
+            "9:25pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "9:00pm",
+            "9:06pm",
+            "9:18pm",
+            "9:28pm",
+            "9:40pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "9:15pm",
+            "9:21pm",
+            "9:33pm",
+            "9:43pm",
+            "9:55pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "9:45pm",
+            "9:51pm",
+            "10:03pm",
+            "10:13pm",
+            "10:25pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "10:15pm",
+            "10:21pm",
+            "10:33pm",
+            "10:43pm",
+            "10:55pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "10:45pm",
+            "10:51pm",
+            "11:03pm",
+            "11:13pm",
+            "11:25pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "11:15pm",
+            "11:21pm",
+            "11:33pm",
+            "11:43pm",
+            "11:55pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "12:00am",
+            "12:06am",
+            "12:18am",
+            "12:28am",
+            "12:40am"
+          ]
+        }
+      ]
+
+    },
+    {
+      "name":"19",
+      "MainBusStops": [
+        "Santa Cruz Metro Lane 1",
+        "Bay & Mission",
+        "Science Hill",
+        "Bay & Mission",
+        "Santa Cruz Metro Center"
+      ],
+      "Routes": [
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "7:30am",
+            "7:37am",
+            "7:49am",
+            "7:59am",
+            "8:17am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "8:30am",
+            "8:37am",
+            "8:49am",
+            "8:59am",
+            "9:17am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "9:00am",
+            "9:07am",
+            "9:19am",
+            "9:29am",
+            "9:47am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "9:30am",
+            "9:37am",
+            "9:49am",
+            "9:59am",
+            "10:17am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "10:00am",
+            "10:07am",
+            "10:19am",
+            "10:29am",
+            "10:47am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "10:30am",
+            "10:37am",
+            "10:49am",
+            "10:59am",
+            "11:17am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "11:00am",
+            "11:07am",
+            "11:19am",
+            "11:29am",
+            "11:47am"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "11:30am",
+            "11:37am",
+            "11:49am",
+            "11:59am",
+            "12:17pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "12:00pm",
+            "12:07pm",
+            "12:19pm",
+            "12:29pm",
+            "12:47pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "12:30pm",
+            "12:37pm",
+            "12:49pm",
+            "12:59pm",
+            "1:17pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "1:00pm",
+            "1:07pm",
+            "1:19pm",
+            "1:29pm",
+            "1:47pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "1:30pm",
+            "1:37pm",
+            "1:49pm",
+            "1:59pm",
+            "2:17pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "2:00pm",
+            "2:07pm",
+            "2:19pm",
+            "2:29pm",
+            "2:47pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "2:30pm",
+            "2:37pm",
+            "2:49pm",
+            "2:59pm",
+            "3:17pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "3:00pm",
+            "3:07pm",
+            "3:19pm",
+            "3:29pm",
+            "3:47pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "3:30pm",
+            "3:37pm",
+            "3:49pm",
+            "3:59pm",
+            "4:17pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "4:00pm",
+            "4:07pm",
+            "4:19pm",
+            "4:29pm",
+            "4:47pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "4:30pm",
+            "4:37pm",
+            "4:49pm",
+            "4:59pm",
+            "5:17pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "5:00pm",
+            "5:07pm",
+            "5:19pm",
+            "5:29pm",
+            "5:47pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "5:30pm",
+            "5:37pm",
+            "5:49pm",
+            "5:59pm",
+            "6:17pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "6:00pm",
+            "6:07pm",
+            "6:19pm",
+            "6:29pm",
+            "6:47pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "6:30pm",
+            "6:37pm",
+            "6:49pm",
+            "6:59pm",
+            "7:17pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "7:30pm",
+            "7:37pm",
+            "7:49pm",
+            "7:59pm",
+            "8:17pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "8:30pm",
+            "8:37pm",
+            "8:49pm",
+            "8:59pm",
+            "9:17pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "9:30pm",
+            "9:37pm",
+            "9:49pm",
+            "9:59pm",
+            "10:17pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "10:30pm",
+            "10:37pm",
+            "10:49pm",
+            "10:59pm",
+            "11:17pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "11:30pm",
+            "11:37pm",
+            "11:49pm",
+            "11:59pm",
+            "12:17am"
+          ]
+        }
+      ]
+
+    },
+    {
+      "name":"20",
+      "MainBusStops": [
+        "Santa Cruz Metro Lane 1",
+        "Delaware & Swift",
+        "Pacific Shores",
+        "Bay & High",
+        "Science Hill",
+        "Bay & High",
+        "Pacific Shores",
+        "Delaware & Swift",
+        "Santa Cruz Metro Center"
+      ],
+      "Routes": [
+        {
+          "ExtraInfo": "",
+          "MainBusStopsTimes": [
+            "7:20am",
+            "7:30am",
+            "",
+            "7:40am",
+            "7:50am",
+            "",
+            "7:57am",
+            "8:03am",
+            "8:18am"
+          ]
+        },
+        {
+          "ExtraInfo": "",
+          "MainBusStopsTimes": [
+            "8:20am",
+            "8:30am",
+            "8:33am",
+            "8:43am",
+            "8:53am",
+            "",
+            "9:00am",
+            "9:08am",
+            "9:20am"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "8:50am",
+            "9:00am",
+            "",
+            "9:10am",
+            "9:20am",
+            "9:27am",
+            "",
+            "",
+            ""
+          ]
+        },
+        {
+          "ExtraInfo": "",
+          "MainBusStopsTimes": [
+            "9:20am",
+            "9:30am",
+            "",
+            "9:40am",
+            "9:50am",
+            "",
+            "",
+            "10:03am",
+            "10:15am"
+          ]
+        },
+        {
+          "ExtraInfo": "",
+          "MainBusStopsTimes": [
+            "10:20am",
+            "10:30am",
+            "",
+            "10:40am",
+            "10:50am",
+            "",
+            "",
+            "11:03am",
+            "11:15am"
+          ]
+        },
+        {
+          "ExtraInfo": "",
+          "MainBusStopsTimes": [
+            "11:20am",
+            "11:30am",
+            "",
+            "11:40am",
+            "11:50am",
+            "",
+            "",
+            "12:03pm",
+            "12:15pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "12:20pm",
+            "12:30pm",
+            "",
+            "12:40pm",
+            "12:50pm",
+            "",
+            "",
+            "1:03pm",
+            "1:15pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "1:20pm",
+            "1:30pm",
+            "1:33pm",
+            "1:43pm",
+            "1:53pm",
+            "",
+            "2:00pm",
+            "2:08pm",
+            "2:20pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "2:20pm",
+            "2:30pm",
+            "",
+            "2:40pm",
+            "2:50pm",
+            "",
+            "",
+            "3:03pm",
+            "3:15pm"
+          ]
+        },
+        {
+          "ExtraInfo": "",
+          "MainBusStopsTimes": [
+            "3:20pm",
+            "3:30pm",
+            "",
+            "3:40pm",
+            "3:50pm",
+            "",
+            "",
+            "4:03pm",
+            "4:15pm"
+          ]
+        },
+        {
+          "ExtraInfo": "",
+          "MainBusStopsTimes": [
+            "4:20pm",
+            "4:30pm",
+            "4:33pm",
+            "4:43pm",
+            "4:53pm",
+            "",
+            "5:00pm",
+            "5:08pm",
+            "5:20pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "",
+            "",
+            "",
+            "5:05pm",
+            "5:15pm",
+            "",
+            "",
+            "5:28pm",
+            "5:40pm"
+          ]
+        },
+        {
+          "ExtraInfo": "",
+          "MainBusStopsTimes": [
+            "5:20pm",
+            "5:30pm",
+            "5:33pm",
+            "5:43pm",
+            "5:53pm",
+            "",
+            "6:00pm",
+            "6:08pm",
+            "6:20pm"
+          ]
+        },
+        {
+          "ExtraInfo": "",
+          "MainBusStopsTimes": [
+            "6:20pm",
+            "6:30pm",
+            "",
+            "6:40pm",
+            "6:50pm",
+            "",
+            "",
+            "7:03pm",
+            "7:15pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "7:20pm",
+            "7:30pm",
+            "",
+            "7:40pm",
+            "7:50pm",
+            "",
+            "",
+            "8:03pm",
+            "8:15pm"
+          ]
+        },
+        {
+          "ExtraInfo": "NONE",
+          "MainBusStopsTimes": [
+            "8:20pm",
+            "8:30pm",
+            "",
+            "8:40pm",
+            "8:50pm",
+            "",
+            "",
+            "9:03pm",
+            "9:15pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "9:20pm",
+            "9:30pm",
+            "",
+            "9:40pm",
+            "9:50pm",
+            "",
+            "",
+            "10:03pm",
+            "10:15pm"
+          ]
+        },
+        {
+          "ExtraInfo": "ST",
+          "MainBusStopsTimes": [
+            "10:20pm",
+            "10:30pm",
+            "",
+            "10:40pm",
+            "10:50pm",
+            "",
+            "",
+            "11:03pm",
+            "11:15pm"
+          ]
+        }
+      ]
+
+    }
+  ]
+}

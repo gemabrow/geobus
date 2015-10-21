@@ -1,0 +1,350 @@
+{
+  "allStops": [
+    {
+      "name":"Santa Cruz Metro Lane 1",
+      "latitude":36.970904,
+      "longitude":-122.024789,
+      "busses":[
+        "10",
+        "15",
+        "16",
+        "19",
+        "20"
+      ]
+    },
+    {
+      "name":"Cedar & Walnut",
+      "latitude":36.973509,
+      "longitude":-122.027105,
+      "busses":[
+        "10"
+      ]
+
+    },
+    {
+      "name":"High & Laurent",
+      "latitude":36.977578,
+      "longitude":-122.042175,
+      "busses":[
+        "10"
+      ]
+    },
+    {
+      "name":"Science Hill",
+      "latitude":36.999963,
+      "longitude":-122.062331,
+      "busses":[
+        "10",
+        "12",
+        "15",
+        "16",
+        "19",
+        "20",
+        "outer"
+      ]
+    },
+    {
+      "name":"Santa Cruz Metro Center",
+      "latitude":36.970904,
+      "longitude":-122.024789,
+      "busses":[
+        "10",
+        "12",
+        "15",
+        "16",
+        "19",
+        "20"
+      ]
+    },
+    {
+      "name":"41st Ave. & Kings Plaza",
+      "latitude":36.971703,
+      "longitude":-121.965048,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"7th Ave. & Bonnie",
+      "latitude":36.964243,
+      "longitude":-121.998375,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"Laurel & Pacific",
+      "latitude":36.969341,
+      "longitude":-122.024329,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"Bay & Mission",
+      "latitude":36.966894,
+      "longitude":-122.040605,
+      "busses":[
+        "10",
+        "12",
+        "15",
+        "16",
+        "19",
+        "20"
+      ]
+    },
+    {
+      "name":"Pacific Shores",
+      "latitude":36.960876,
+      "longitude":-122.061747,
+      "busses":[
+        "12",
+        "15",
+        "16",
+        "19"
+      ]
+    },
+    {
+      "name":"Bay & High",
+      "latitude":36.976735,
+      "longitude":-122.053780,
+      "busses":[
+        "20"
+      ]
+    },
+    {
+      "name":"Delaware & Swift",
+      "latitude":36.955686,
+      "longitude":-122.048968,
+      "busses":[
+        "20"
+      ]
+    },
+    {
+      "name":"Heller & Kresge College",
+      "latitude":36.999279,
+      "longitude":-122.064552,
+      "busses":[
+        "outer"
+      ]
+    },
+    {
+      "name":"Heller & Kresge College",
+      "latitude":36.9976704,
+      "longitude":-122.063583,
+      "busses":[
+        "inner"
+      ]
+    },
+    {
+      "name":"Heller & Kresge College",
+      "latitude":36.999210,
+      "longitude":-122.064339,
+      "busses":[
+        "inner"
+      ]
+    },
+    {
+      "name":"Heller & Kresge College",
+      "latitude":36.999210,
+      "longitude":-122.064339,
+      "busses":[
+        "inner"
+      ]
+    },
+    {
+      "name":"McLaughlin & Science Hill ",
+      "latitude":36.999931,
+      "longitude":-122.062050,
+      "busses":[
+        "inner"
+      ]
+    },
+    {
+      "name":"McLaughlin & College 9 & 10 - Health Center",
+      "latitude":36.999706,
+      "longitude":-122.058342,
+      "busses":[
+        "inner"
+      ]
+    },
+    {
+      "name":"McLaughlin & College 9 & 10 - Health Center 2",
+      "latitude":36.999939,
+      "longitude":-122.058350,
+      "busses":[
+        "outer"
+      ]
+    },
+    {
+      "name":"McLaughlin & Crown College",
+      "latitude":36.999023,
+      "longitude":-122.055229,
+      "busses":[
+        "outer"
+      ]
+    },
+    {
+      "name":"Hagar & Bookstore-Stevenson College",
+      "latitude":36.997482,
+      "longitude":-122.055031,
+      "busses":[
+        "outer"
+      ]
+    },
+    {
+      "name":"Hagar & Bookstore",
+      "latitude":36.996662,
+      "longitude":-122.055481,
+      "busses":[
+        "inner"
+      ]
+    },
+    {
+      "name":"Hagar & Field House East",
+      "latitude":36.994247,
+      "longitude":-122.055511,
+      "busses":[
+        "outer"
+      ]
+    },
+    {
+      "name":"Hagar & East Remote",
+      "latitude":36.991299,
+      "longitude":-122.054657,
+      "busses":[
+        "outer"
+      ]
+    },
+    {
+      "name":"Hagar & East Remote",
+      "latitude":36.991257,
+      "longitude":-122.054962,
+      "busses":[
+        "inner"
+      ]
+    },
+    {
+      "name":"Hagar & Lower Quarry Rd",
+      "latitude":36.985912,
+      "longitude":-122.053520,
+      "busses":[
+        "outer"
+      ]
+    },
+    {
+      "name":"Hagar & Lower Quarry Rd",
+      "latitude":36.985523,
+      "longitude":-122.053589,
+      "busses":[
+        "inner"
+      ]
+    },
+    {
+      "name":"Coolidge & Hagar",
+      "latitude":36.981354,
+      "longitude":-122.051971,
+      "busses":[
+        "outer"
+      ]
+    },
+    {
+      "name":"Coolidge & Hagar",
+      "latitude":36.981537,
+      "longitude":-122.052132,
+      "busses":[
+        "inner"
+      ]
+    },
+    {
+      "name":"Coolidge & Main Entrance",
+      "latitude":36.977676,
+      "longitude":-122.053558,
+      "busses":[
+        "outer"
+        ]
+    },
+    {
+      "name":"High & Barn Theater",
+      "latitude":36.977303,
+      "longitude":-122.054329,
+      "busses":[
+        "inner"
+      ]
+    },
+    {
+      "name":"High & Western Dr",
+      "latitude":36.978615,
+      "longitude":-122.057854,
+      "busses":[
+        "outer"
+      ]
+    },
+    {
+      "name":"Empire Grade & Tosca Terrace",
+      "latitude":36.979847,
+      "longitude":-122.059258,
+      "busses":[
+        "outer"
+      ]
+    },
+    {
+      "name":"Empire Grade & Arboretum",
+      "latitude":36.982670,
+      "longitude":-122.062492,
+      "busses":[
+        "inner"
+      ]
+    },
+    {
+      "name":"Empire Grade & Arboretum",
+      "latitude":36.983662,
+      "longitude":-122.064964,
+      "busses":[
+        "outer"
+      ]
+    },
+    {
+      "name":"Heller & Oakes College",
+      "latitude":36.989918,
+      "longitude":-122.067230,
+      "busses":[
+        "outer"
+      ]
+    },
+    {
+      "name":"Heller & Oakes College",
+      "latitude":36.990578,
+      "longitude":-122.066116,
+      "busses":[
+        "inner"
+      ]
+    },
+    {
+      "name":"Heller & Family Student Housing",
+      "latitude":36.991829,
+      "longitude":-122.066833,
+      "busses":[
+        "outer"
+      ]
+    },
+    {
+      "name":"Heller & College 8/Porter",
+      "latitude":36.992977,
+      "longitude":-122.065224,
+      "busses":[
+        "outer"
+      ]
+    },
+    {
+      "name":"Heller & College 8/Porter",
+      "latitude":36.992779,
+      "longitude":-122.064880,
+      "busses":[
+        "inner"
+      ]
+    }
+
+  ]
+
+}
