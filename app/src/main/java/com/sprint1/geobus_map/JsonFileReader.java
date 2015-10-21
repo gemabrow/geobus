@@ -56,8 +56,6 @@ public class JsonFileReader {
 
             BusStops.add(readBusStop(reader));
         }
-        printBusStopList(BusStops);
-
         // reads in a a brace ]
         reader.endArray();
         return BusStops;

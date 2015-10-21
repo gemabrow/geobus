@@ -1,5 +1,6 @@
 package com.sprint1.geobus_map;
 
+
 import android.util.Log;
 import android.util.Xml;
 
@@ -10,96 +11,84 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
 /**
- * Parser to be used to pull information from XML
- * hosted @ http://skynet.cse.ucsc.edu/bts/coord2.xml
- * and send to 'readFeed(foo)' for processing
- * Created by gerald on 10/14/15, heavily derivative of:
- * http://developer.android.com/training/basics/network-ops/xml.html#consume
+ * Created by Jose on 10/21/2015.
  */
+public class XMLParser {
 
-public class TransitInfoXmlParser {
+    // We don't use namespaces
     private static final String ns = null;
-    private static final String TAG = "Parser";
+    private ArrayList<Bus> busses;
 
-    public List parse(InputStream in) throws XmlPullParserException, IOException {
+    XMLParser(){
+
+    }
+    public void parse(InputStream in) throws XmlPullParserException, IOException {
         try {
-            Log.i(TAG, "trying parse");
             XmlPullParser parser = Xml.newPullParser();
-            Log.i(TAG, "new pull parser called");
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            Log.i(TAG, "feature set");
             parser.setInput(in, null);
-            Log.i(TAG, "input set");
-            return readFeed( parser );
+            parser.nextTag();
+            readFeed(parser);
         } finally {
             in.close();
         }
     }
 
-    private List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
-        List<Marker> markers = new ArrayList<Marker>();
-        Log.i(TAG, "in readFeed");
-        int eventType = parser.getEventType();
-        while(eventType != XmlPullParser.END_DOCUMENT) {
-            if(eventType == XmlPullParser.START_DOCUMENT) {
-                Log.i(TAG, "Start document");
-            } else if(eventType == XmlPullParser.START_TAG) {
-                Log.i(TAG, "Start tag "+parser.getName());
-            } else if(eventType == XmlPullParser.END_TAG) {
-                Log.i(TAG, "End tag "+parser.getName());
-            } else if(eventType == XmlPullParser.TEXT) {
-                Log.i(TAG, "Text "+parser.getText());
-            }
-            eventType = parser.nextTag();
-        }
-        Log.i(TAG, "next tag ok");
+
+    // process the feed. It looks for the element tagged "markers" as the starting point for recursively
+    // processing the feed.  If the tag isn't the markers feed it skips it
+    private void readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
+        busses = new ArrayList();
+
         parser.require(XmlPullParser.START_TAG, ns, "coord2");
         while (parser.next() != XmlPullParser.END_TAG) {
-            //if the tag doesn't match, skip to the next line until first valid entry
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
-            String name = parser.getName();
-            // Starts by looking for the entry tag, "marker", for each bus
-            if (name.equals("marker")) {
-                Log.i(TAG, "marker found");
-                markers.add(readMarker(parser));
-            } else {
+
+            // if the next tag contains markers then read in the entry
+            if(parser.getName().equals("markers")){
+
+                parser.require(XmlPullParser.START_TAG, ns, "markers");
+                // Starts by looking for the markers tag, anything else is skipped
+                while (parser.next() != XmlPullParser.END_TAG) {
+
+                    if (parser.getEventType() != XmlPullParser.START_TAG) {
+                        continue;
+                    }
+                    String name = parser.getName();
+
+                    if (name.equals("marker")) {
+                        busses.add(readBus(parser));
+                    } else {
+                        skip(parser);
+                    }
+                }
+            }
+            else{
                 skip(parser);
             }
+
         }
-        return markers;
+
+        printBusList();
+      // return busses;
     }
 
-    // custom marker class to replicate datafields in skynet's XML
-    // COULD PROVE PROBLEMATIC WITH INVOLVING METRO LATER ON
-    public static class Marker {
-        public final double lat;
-        public final double lng;
-        public final int timestamp;
-        public final String route;
-        public final int bus_id;
-        // need to do something for predictions
 
-        private Marker(double latitude, double longitude, int ts, String rt, int bus_id ) {
-            this.lat = latitude;
-            this.lng = longitude;
-            this.timestamp = ts;
-            this.route = rt;
-            this.bus_id = bus_id;
-        }
-    }
-
-    // parses individual marker, initializing each (lat, lng, ts, rt, id)
-    private Marker readMarker(XmlPullParser parser) throws XmlPullParserException, IOException {
+    // From the xml file, the parser finds the entries with the following names: lat for latitude,
+    // lng for longitude, timestamp, route, and bus id. It skips any other entry
+    // such as predictions and index
+    private Bus readBus(XmlPullParser parser) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, ns, "marker");
-        double lat = 0;
-        double lng = 0;
+        int bus_id = 0;
+        double lat = 00;
+        double lng = 00;
         int timestamp = 0;
         String route = null;
-        int bus_id = 0;
+
+
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -115,19 +104,22 @@ public class TransitInfoXmlParser {
                 route = readRoute(parser);
             } else if (name.equals("id")) {
                 bus_id = readId(parser);
-            } else {
+            }
+            else {
                 skip(parser);
             }
         }
-        return new Marker(lat, lng, timestamp, route, bus_id);
+
+        // creates a and returns a new Bus Object
+        return new Bus(lat,lng,timestamp,route,bus_id);
     }
 
-    // processes latitudinal coordinates
+    // processes longitudinal coordinates
     private double readLat(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, ns, "lat");
-        double lat = readDouble(parser);
+        double lng = readDouble(parser);
         parser.require(XmlPullParser.END_TAG, ns, "lat");
-        return lat;
+        return lng;
     }
 
     // processes longitudinal coordinates
@@ -192,12 +184,14 @@ public class TransitInfoXmlParser {
         return result;
     }
 
-    // Allows for the parser to skip irrelevant tags
-    private void skip(XmlPullParser parser) throws IOException, XmlPullParserException {
+
+
+    // Consumes any skipped entries
+    private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
         if (parser.getEventType() != XmlPullParser.START_TAG) {
             throw new IllegalStateException();
         }
-        int depth = 2;
+        int depth = 1;
         while (depth != 0) {
             switch (parser.next()) {
                 case XmlPullParser.END_TAG:
@@ -209,5 +203,15 @@ public class TransitInfoXmlParser {
             }
         }
     }
-}
 
+
+    // prints a list of bus info from the xml file
+    public void  printBusList(){
+        System.out.println(" printing bus list");
+            for (Bus temp: busses){
+                temp.printBus();
+
+
+            }
+    }
+}

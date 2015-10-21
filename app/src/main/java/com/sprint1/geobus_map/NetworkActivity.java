@@ -1,13 +1,25 @@
 package com.sprint1.geobus_map;
 
+import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.MapView;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.util.ArrayList;
 import java.util.List;
 import java.net.URL;
 
@@ -15,92 +27,55 @@ import java.net.URL;
  * of downloading and parsing xml file for updates to main map activity
  * Created by gerald on 10/13/15.
  */
-public class NetworkActivity extends android.app.Activity {
-    private MapsActivity activity;
-    public static final String WIFI = "Wi-Fi";
-    public static final String ANY = "Any";
-    private static final String URL = "http://skynet.cse.ucsc.edu/bts/coord2.xml";
+public class NetworkActivity extends Activity{
+    private static final String URL = "http://skynet.cse.ucsc.edu/bts/coord2.xml";;
+    private static final String TAG = "NetworkActivity";
 
-    // Whether there is a Wi-Fi connection.
-    private static boolean wifiConnected = false;
-    // Whether there is a mobile connection.
-    private static boolean mobileConnected = false;
-    // Whether the display should be refreshed.
-    public static boolean refreshDisplay = true;
-
-    // setting sPref =  null causing app to crash I changed to "" but feel free to change it back
-    // to null
-    public static String sPref = "";
-
-    public NetworkActivity(MapsActivity activity){
-        this.activity = activity;
+    public void load(){
+        new DownloadXmlTask().execute(URL);
     }
 
-    // Uses AsyncTask to download the XML feed from skynet.cse.ucsc.edu.
-    public void loadPage() {
-        if((sPref.equals(ANY)) && (wifiConnected || mobileConnected)) {
-            new DownloadXmlTask().execute(URL);
-        }
-        else if ((sPref.equals(WIFI)) && (wifiConnected)) {
-            new DownloadXmlTask().execute(URL);
-        } else {
-            // show error
-        }
-    }
-
-    // Implementation of AsyncTask to download
-    // XML feed from http://skynet.cse.ucsc.edu/bts/coord2.xml
-    private class DownloadXmlTask extends AsyncTask<String, Void, List<TransitInfoXmlParser.Marker> > {
-        List<TransitInfoXmlParser.Marker> markers;
+    // Implementation of AsyncTask used to download XML feed
+    private class DownloadXmlTask extends AsyncTask<String, Void, List<TransitInfoXmlParser.Marker>> {
         @Override
         protected List doInBackground(String... urls) {
+            Log.i(TAG, String.valueOf(urls));
             try {
-                return markers = loadXmlFromNetwork(urls[0]);
-            } catch ( IOException e ){
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.connection_error), Toast.LENGTH_SHORT);
-            } catch ( XmlPullParserException e ) {
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.xml_error), Toast.LENGTH_SHORT);
+                return loadXmlFromNetwork(urls[0]);
+            } catch (IOException e) {
+                Log.e(TAG, "CONNECTION SNAFU");
+            } catch (XmlPullParserException e) {
+                Log.e(TAG, "XML SNAFU");
             }
-            return markers;
+            return null;
         }
 
         @Override
-        // sends list back to UI thread for drawing to GoogleMap
-        protected void onPostExecute(List<TransitInfoXmlParser.Marker> results) {
-            activity.setList(results);
+        protected void onPostExecute(List result) {
+            MapsActivity.activity.setMarkers(result);
         }
     }
 
-    // Downloads XML from skynet, parses it, and returns it as a List
-    //********************************** NEED TO GUT THIS ******************************************
-    private List loadXmlFromNetwork(String urlString) throws XmlPullParserException, IOException {
+    private List<TransitInfoXmlParser.Marker> loadXmlFromNetwork(String urlString) throws XmlPullParserException, IOException {
         InputStream stream = null;
         // Instantiate the parser
         TransitInfoXmlParser TransitInfoParser = new TransitInfoXmlParser();
         // List of buses
         List<TransitInfoXmlParser.Marker> markers = null;
 
-        /*
-        String title = null;
-        String url = null;
-        String summary = null;
-        Calendar rightNow = Calendar.getInstance();
-        DateFormat formatter = new SimpleDateFormat("MMM dd h:mmaa");
-
-
-        // Checks whether the user set the preference to include summary text
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean pref = sharedPrefs.getBoolean("summaryPref", false);
-
-        StringBuilder htmlString = new StringBuilder();
-        htmlString.append("<h3>" + getResources().getString(R.string.page_title) + "</h3>");
-        htmlString.append("<em>" + getResources().getString(R.string.updated) + " " +
-                formatter.format(rightNow.getTime()) + "</em>");
-        */
-
         try {
             stream = downloadUrl(urlString);
+            BufferedReader r = new BufferedReader(new InputStreamReader(stream));
+            StringBuilder total = new StringBuilder();
+            String line;
+            while ((line = r.readLine()) != null) {
+                total.append(line);
+                Log.i(TAG, line);
+            }
+            Log.i(TAG, total.toString());
             markers = TransitInfoParser.parse(stream);
+            if(markers == null)
+                Log.e(TAG, "MAJOR MALFUNCTION");
             // Makes sure that the InputStream is closed after the app is
             // finished using it.
         } finally {
@@ -117,8 +92,8 @@ public class NetworkActivity extends android.app.Activity {
     private InputStream downloadUrl(String urlString) throws IOException {
         URL url = new URL(urlString);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setReadTimeout(10000 /* milliseconds */);
-        conn.setConnectTimeout(15000 /* milliseconds */);
+        conn.setReadTimeout(100000 /* milliseconds */);
+        conn.setConnectTimeout(150000 /* milliseconds */);
         conn.setRequestMethod("GET");
         conn.setDoInput(true);
         // Starts the query
