@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,6 +29,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final String TAG = "MapsActivity";
     public static MapsActivity activity;
 
+    private Boolean showStops = true;
     private GoogleMap mMap;
     private ArrayList<BusStop> busStops;
     private JsonFileReader test =  new JsonFileReader();
@@ -38,7 +40,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     // Google Maps V2 for Android has no method to uniquely ID
     // a marker according to input
     private Map<String, Marker> busMarkers = new HashMap<String, Marker>();
-
+    private Map<String, Marker> visibleMarkers = new HashMap<String, Marker>();
     /* Given a list of xml_markers (defined in TransitInfoXmlParser),
      * update the map display such that new buses are added as type Marker to mMap,
      * and previously displayed bus markers are moved to their new coordinates
@@ -106,16 +108,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     // draws the busstop markers on the google map
     public void drawBusStopMarkers(){
+        Map<String, Marker> updatedVisibleMarkers = new HashMap<String, Marker>();
 
         for (BusStop temp : busStops){
-            mMap.addMarker(new MarkerOptions()
+            Marker busStop = visibleMarkers.get(Double.toString(temp.getLatitude() + temp.getLongitude()));
+            if (busStop == null) {
+                busStop = mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(temp.getLatitude(), temp.getLongitude()))
                             .title(temp.getTitle())
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop))
-            );
+                            .visible(showStops)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop)));
+            }
+            else {
+                busStop.setVisible(showStops);
+                visibleMarkers.remove(Double.toString(temp.getLatitude() + temp.getLongitude()));
+            }
+            updatedVisibleMarkers.put(Double.toString(temp.getLatitude()+ temp.getLongitude()), busStop);
+
         }
+
+        // remove all values from busMarkers Map (NOT a Google Map)
+        for(Marker marker: visibleMarkers.values()){
+            marker.remove();
+        }
+        // and set to the updatedBusMarkers Map (NOT a Google Map)
+        visibleMarkers = updatedVisibleMarkers;
     }
 
+
+    public void toggleStops(View view) {
+        if (showStops)
+            showStops = false;
+        else
+            showStops = true;
+        drawBusStopMarkers();
+    }
     // loads bus stops specified by json file
     public void loadJsonFromAsset(){
 
