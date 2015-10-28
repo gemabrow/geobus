@@ -33,11 +33,10 @@ public class Bus {
         this.bus_id = bus_id;
         switch (route.toLowerCase()) {
             case "loop":
-                if( items.indexOf("0") == (items.indexOf("15")-1)
-                        || ( items.indexOf("15") == 0 && (items.indexOf("0") == (items.size() -1)))) {
+                if( items.contains("1") && (items.contains("3")) )
+                {
                     route = "Outer Loop";
                     this.color = HUE_AZURE;
-
                 }
                 else {
                     route = "Inner Loop";
