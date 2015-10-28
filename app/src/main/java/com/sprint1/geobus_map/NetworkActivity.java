@@ -28,7 +28,7 @@ import java.net.URL;
  * Created by gerald on 10/13/15.
  */
 public class NetworkActivity extends Activity{
-    private static final String URL = "http://skynet.cse.ucsc.edu/bts/coord2.xml";;
+    private static final String URL = "http://skynet.cse.ucsc.edu/bts/coord2.xml";
     private static final String TAG = "NetworkActivity";
 
     public void load(){
@@ -36,10 +36,9 @@ public class NetworkActivity extends Activity{
     }
 
     // Implementation of AsyncTask used to download XML feed
-    private class DownloadXmlTask extends AsyncTask<String, Void, List<TransitInfoXmlParser.Marker>> {
+    private class DownloadXmlTask extends AsyncTask<String, Void, ArrayList<Bus>> {
         @Override
-        protected List doInBackground(String... urls) {
-            Log.i(TAG, String.valueOf(urls));
+        protected ArrayList<Bus> doInBackground(String... urls) {
             try {
                 return loadXmlFromNetwork(urls[0]);
             } catch (IOException e) {
@@ -51,31 +50,21 @@ public class NetworkActivity extends Activity{
         }
 
         @Override
-        protected void onPostExecute(List result) {
+        protected void onPostExecute(ArrayList<Bus> result) {
             MapsActivity.activity.setMarkers(result);
         }
     }
 
-    private List<TransitInfoXmlParser.Marker> loadXmlFromNetwork(String urlString) throws XmlPullParserException, IOException {
+    private ArrayList<Bus> loadXmlFromNetwork(String urlString) throws XmlPullParserException, IOException {
         InputStream stream = null;
         // Instantiate the parser
         TransitInfoXmlParser TransitInfoParser = new TransitInfoXmlParser();
         // List of buses
-        List<TransitInfoXmlParser.Marker> markers = null;
+        ArrayList<Bus> buses = null;
 
         try {
             stream = downloadUrl(urlString);
-            BufferedReader r = new BufferedReader(new InputStreamReader(stream));
-            StringBuilder total = new StringBuilder();
-            String line;
-            while ((line = r.readLine()) != null) {
-                total.append(line);
-                Log.i(TAG, line);
-            }
-            Log.i(TAG, total.toString());
-            markers = TransitInfoParser.parse(stream);
-            if(markers == null)
-                Log.e(TAG, "MAJOR MALFUNCTION");
+            buses = TransitInfoParser.parse(stream);
             // Makes sure that the InputStream is closed after the app is
             // finished using it.
         } finally {
@@ -84,7 +73,7 @@ public class NetworkActivity extends Activity{
             }
         }
 
-        return markers;
+        return buses;
     }
 
     // Given a string representation of a URL, sets up a connection and gets

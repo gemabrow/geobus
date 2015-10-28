@@ -1,11 +1,10 @@
 package com.sprint1.geobus_map;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -17,8 +16,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.xmlpull.v1.XmlPullParserException;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -28,46 +25,45 @@ import java.util.List;
 import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+    private static final String TAG = "MapsActivity";
     public static MapsActivity activity;
 
     private GoogleMap mMap;
     private ArrayList<BusStop> busStops;
     private JsonFileReader test =  new JsonFileReader();
-    private XMLParser test2 = new XMLParser();
 
     Handler locationHandler = new Handler();
     final static int MARKER_UPDATE_INTERVAL = 2000; // in milliseconds
-    List<TransitInfoXmlParser.Marker> xml_markers;
-
     // Map is used to ensure bus markers are not duplicated, as
     // Google Maps V2 for Android has no method to uniquely ID
     // a marker according to input
     private Map<String, Marker> busMarkers = new HashMap<String, Marker>();
 
-
-
     /* Given a list of xml_markers (defined in TransitInfoXmlParser),
      * update the map display such that new buses are added as type Marker to mMap,
      * and previously displayed bus markers are moved to their new coordinates
      */
-    public void setMarkers(List<TransitInfoXmlParser.Marker> xml_markers){
+    public void setMarkers(List<Bus> buses){
         Map<String, Marker> updatedBusMarkers = new HashMap<String, Marker>();
 
-        for(TransitInfoXmlParser.Marker xml_marker: xml_markers){
+        for(Bus bus: buses){
+            Log.i(TAG, bus.toString());
             // if marker exists, move its location
-            Marker bus_marker = busMarkers.get(Integer.toString(xml_marker.bus_id));
+            Marker bus_marker = busMarkers.get(Integer.toString(bus.bus_id));
             // if not, add new marker
             if(bus_marker == null){
                 bus_marker = mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(xml_marker.lat, xml_marker.lng))
-                        .title(xml_marker.route)
-                        .snippet("Bus ID: " + Integer.toString(xml_marker.bus_id)) );
+                        .position(new LatLng(bus.lat, bus.lng))
+                        .title(bus.route)
+                        .snippet("Bus ID: " + Integer.toString(bus.bus_id))
+                        .draggable(true)
+                        .icon(BitmapDescriptorFactory.defaultMarker(bus.color)));
             }
             else {
-                bus_marker.setPosition(new LatLng(xml_marker.lat, xml_marker.lng));
-                busMarkers.remove(Integer.toString(xml_marker.bus_id));
+                bus_marker.setPosition(new LatLng(bus.lat, bus.lng));
+                busMarkers.remove(Integer.toString(bus.bus_id));
             }
-            updatedBusMarkers.put(Integer.toString(xml_marker.bus_id), bus_marker);
+            updatedBusMarkers.put(Integer.toString(bus.bus_id), bus_marker);
         }
         // remove all values from busMarkers Map (NOT a Google Map)
         for(Marker marker: busMarkers.values()){
@@ -76,11 +72,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // and set to the updatedBusMarkers Map (NOT a Google Map)
         busMarkers = updatedBusMarkers;
     }
-
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +88,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // to create the busstop markers
         loadJsonFromAsset();
 
-       // locationHandler.postDelayed(updateMarkers, MARKER_UPDATE_INTERVAL);
+       locationHandler.postDelayed(updateMarkers, MARKER_UPDATE_INTERVAL);
     }
 
 
@@ -129,26 +120,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void loadJsonFromAsset(){
 
         try{
-
-            InputStream in2 = getAssets().open("bus.xml");
             InputStream in = getAssets().open("UCSC_Westside_Bus_Stops.json");
             test.readBusStopJsonStream(in);
             busStops = new ArrayList<>(test.getBusStops());
             System.out.println("Read Files" + busStops.size());
-            test2.parse(in2);
-
-
-
-
         }
         catch(IOException ex) {
             System.out.println("Error reading file");
         }
-        catch(XmlPullParserException ex){
-            ex.getMessage();
-        }
-
-
     }
 
     Runnable updateMarkers = new Runnable() {
@@ -162,22 +141,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if(busMarkers.isEmpty()) {
                 Context context = getApplicationContext();
                 int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context, "No network connection", duration);
-                toast.show();
-            }
-            else{
-                Context context = getApplicationContext();
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context, "Fetched", duration);
+                Toast toast = Toast.makeText(context, "connecting...", duration);
                 toast.show();
             }
             locationHandler.postDelayed(this, MARKER_UPDATE_INTERVAL);
         }
     };
-//    @Override
-//    protected void onDestroy() {
-//        locationHandler.removeCallbacks(updateMarkers);
-//        super.onDestroy();
-//    }
+
+    @Override
+    protected void onDestroy() {
+        locationHandler.removeCallbacks(updateMarkers);
+        super.onDestroy();
+    }
 
 }

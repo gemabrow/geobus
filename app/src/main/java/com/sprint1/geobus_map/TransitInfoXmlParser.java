@@ -9,7 +9,10 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.Stack;
 
 /**
  * Parser to be used to pull information from XML
@@ -22,104 +25,91 @@ import java.util.List;
 public class TransitInfoXmlParser {
     private static final String ns = null;
     private static final String TAG = "Parser";
+    private ArrayList<Bus> buses;
 
-    public List parse(InputStream in) throws XmlPullParserException, IOException {
+    public ArrayList parse(InputStream in) throws XmlPullParserException, IOException {
         try {
-            Log.i(TAG, "trying parse");
             XmlPullParser parser = Xml.newPullParser();
-            Log.i(TAG, "new pull parser called");
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            Log.i(TAG, "feature set");
             parser.setInput(in, null);
-            Log.i(TAG, "input set");
-            return readFeed( parser );
+            parser.next();
+            readFeed(parser);
         } finally {
             in.close();
         }
+        return buses;
     }
 
-    private List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
-        List<Marker> markers = new ArrayList<Marker>();
-        Log.i(TAG, "in readFeed");
-        int eventType = parser.getEventType();
-        while(eventType != XmlPullParser.END_DOCUMENT) {
-            if(eventType == XmlPullParser.START_DOCUMENT) {
-                Log.i(TAG, "Start document");
-            } else if(eventType == XmlPullParser.START_TAG) {
-                Log.i(TAG, "Start tag "+parser.getName());
-            } else if(eventType == XmlPullParser.END_TAG) {
-                Log.i(TAG, "End tag "+parser.getName());
-            } else if(eventType == XmlPullParser.TEXT) {
-                Log.i(TAG, "Text "+parser.getText());
-            }
-            eventType = parser.nextTag();
-        }
-        Log.i(TAG, "next tag ok");
-        parser.require(XmlPullParser.START_TAG, ns, "coord2");
-        while (parser.next() != XmlPullParser.END_TAG) {
+    private void readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
+        buses = new ArrayList<Bus>();
+        Queue tags = new LinkedList<String>();
+        Stack checkedTags = new Stack<String>();
+
+        tags.add("coord2");
+        tags.add("markers");
+        tags.add("marker");
+        xmlTagChecker(parser, tags, checkedTags);
+    }
+
+    private void xmlTagChecker(XmlPullParser parser, Queue<String> tagsToCheck, Stack<String> checkedTags) throws XmlPullParserException, IOException {
+        String currentTag;
+        checkedTags.add(tagsToCheck.poll());
+        parser.require(XmlPullParser.START_TAG, ns, checkedTags.peek());
+
+        while(parser.next() != XmlPullParser.END_TAG) {
             //if the tag doesn't match, skip to the next line until first valid entry
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String name = parser.getName();
-            // Starts by looking for the entry tag, "marker", for each bus
-            if (name.equals("marker")) {
-                Log.i(TAG, "marker found");
-                markers.add(readMarker(parser));
-            } else {
+            currentTag = tagsToCheck.peek();
+            if(name.equals(currentTag) && tagsToCheck.size() > 1) {
+                xmlTagChecker(parser, tagsToCheck, checkedTags);
+            }
+            else if(name.equals(currentTag) && tagsToCheck.size() == 1) {
+                buses.add(readBus(parser));
+                Log.i(TAG, "Bus added, total buses: " + Integer.toString(buses.size()));
+            }
+            else{
                 skip(parser);
             }
-        }
-        return markers;
-    }
-
-    // custom marker class to replicate datafields in skynet's XML
-    // COULD PROVE PROBLEMATIC WITH INVOLVING METRO LATER ON
-    public static class Marker {
-        public final double lat;
-        public final double lng;
-        public final int timestamp;
-        public final String route;
-        public final int bus_id;
-        // need to do something for predictions
-
-        private Marker(double latitude, double longitude, int ts, String rt, int bus_id ) {
-            this.lat = latitude;
-            this.lng = longitude;
-            this.timestamp = ts;
-            this.route = rt;
-            this.bus_id = bus_id;
         }
     }
 
     // parses individual marker, initializing each (lat, lng, ts, rt, id)
-    private Marker readMarker(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private Bus readBus(XmlPullParser parser) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, ns, "marker");
-        double lat = 0;
-        double lng = 0;
+        double lat = 0.0;
+        double lng = 0.0;
+        int bus_id = 0;
         int timestamp = 0;
         String route = null;
-        int bus_id = 0;
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String name = parser.getName();
-            if (name.equals("lat")) {
-                lat = readLat(parser);
-            } else if (name.equals("lng")) {
-                lng = readLng(parser);
-            } else if (name.equals("timestamp")) {
-                timestamp = readTs(parser);
-            } else if (name.equals("route")) {
-                route = readRoute(parser);
-            } else if (name.equals("id")) {
-                bus_id = readId(parser);
-            } else {
-                skip(parser);
+            switch (name) {
+                case "lat":
+                    lat = readLat(parser);
+                    break;
+                case "lng":
+                    lng = readLng(parser);
+                    break;
+                case "timestamp":
+                    timestamp = readTs(parser);
+                    break;
+                case "route":
+                    route = readRoute(parser);
+                    break;
+                case "id":
+                    bus_id = readId(parser);
+                    break;
+                default:
+                    skip(parser);
             }
         }
-        return new Marker(lat, lng, timestamp, route, bus_id);
+        return new Bus(lat, lng, timestamp, route, bus_id);
     }
 
     // processes latitudinal coordinates
@@ -197,7 +187,7 @@ public class TransitInfoXmlParser {
         if (parser.getEventType() != XmlPullParser.START_TAG) {
             throw new IllegalStateException();
         }
-        int depth = 2;
+        int depth = 1;
         while (depth != 0) {
             switch (parser.next()) {
                 case XmlPullParser.END_TAG:
