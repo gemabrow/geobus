@@ -1,5 +1,8 @@
 package com.sprint1.geobus_map;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Representation of buses. float values are used for colors as per requirements
  * by Google Map Markers
@@ -12,6 +15,7 @@ public class Bus {
     public static final float HUE_ORANGE = 30;
     public static final float HUE_AZURE = 210;
 
+    public final String predictions;
     public final String route;
     public final float color;
     public final double lat;
@@ -19,16 +23,26 @@ public class Bus {
     public final int bus_id;
     public final int timestamp;
 
-    Bus(double lat, double lng, int timestamp, String route, int bus_id)
+    Bus(double lat, double lng, int timestamp, String route, String predictions, int bus_id)
     {
+        List items = Arrays.asList(predictions.split("[\\s,]+"));
         this.lat = lat;
         this.lng = lng;
         this.timestamp =  timestamp;
-        this.route = route;
+        this.predictions = predictions;
         this.bus_id = bus_id;
         switch (route.toLowerCase()) {
             case "loop":
-                this.color = HUE_AZURE;
+                if( items.indexOf("0") == (items.indexOf("15")-1)
+                        || ( items.indexOf("15") == 0 && (items.indexOf("0") == (items.size() -1)))) {
+                    route = "Outer Loop";
+                    this.color = HUE_AZURE;
+
+                }
+                else {
+                    route = "Inner Loop";
+                    this.color = HUE_ORANGE;
+                }
                 break;
             case "upper campus":
                 this.color = HUE_YELLOW;
@@ -37,6 +51,7 @@ public class Bus {
                 this.color = HUE_RED;
                 break;
         }
+        this.route = route;
     }
 
 
@@ -63,11 +78,11 @@ public class Bus {
     public String toString() {
         return("Bus ID: " + this.bus_id + " Current location: Latitude " + this.lat
                 + " Longitude: " + this.lng + "Time Stamp: " + this.timestamp
-                + " Route: " + this.route);
+                + " Route: " + this.route + " Predictions: " + this.predictions);
     }
     public void printBus(){
         System.out.println("Bus ID: " + this.bus_id + " Current location: Latitude " + this.lat + " Longitude: " + this.lng);
-        System.out.println("Time Stamp: " + this.timestamp + " Route: " + this.route);
+        System.out.println("Time Stamp: " + this.timestamp + " Route: " + this.route + " Predictions: " + this.predictions);
     }
 
 

@@ -84,6 +84,7 @@ public class TransitInfoXmlParser {
         int bus_id = 0;
         int timestamp = 0;
         String route = null;
+        String predictions = null;
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -105,11 +106,14 @@ public class TransitInfoXmlParser {
                 case "id":
                     bus_id = readId(parser);
                     break;
+                case "predictions":
+                    predictions = readPredkshns(parser);
+                    break;
                 default:
                     skip(parser);
             }
         }
-        return new Bus(lat, lng, timestamp, route, bus_id);
+        return new Bus(lat, lng, timestamp, route, predictions, bus_id);
     }
 
     // processes latitudinal coordinates
@@ -142,6 +146,14 @@ public class TransitInfoXmlParser {
         String route = readString(parser);
         parser.require(XmlPullParser.END_TAG, ns, "route");
         return route;
+    }
+
+    // processes name of bus route
+    private String readPredkshns(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, ns, "predictions");
+        String predictions = readString(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "predictions");
+        return predictions;
     }
 
     // processes bus id
@@ -177,6 +189,7 @@ public class TransitInfoXmlParser {
         String result = "";
         if (parser.next() == XmlPullParser.TEXT) {
             result = parser.getText();
+            result = result.replaceAll(",+",",");
             parser.nextTag();
         }
         return result;
