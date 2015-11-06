@@ -1,4 +1,4 @@
-package com.sprint1.geobus_map;
+package com.bussquad.geobus;
 
 import java.util.ArrayList;
 
@@ -33,23 +33,14 @@ public class BusStop {
         return title;
     }
 
-    // returns the latitude of the bus stop
-    public double getLatitude() {
-        return latitude;
-    }
-
-    // returns  the longitude of the bus stop
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public ArrayList<String> getBusses(){
-        return busses;
-    }
-
     // sets the name of the bus stop
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    // returns the latitude of the bus stop
+    public double getLatitude() {
+        return latitude;
     }
 
     // sets the latitude of the bus stop location
@@ -57,9 +48,18 @@ public class BusStop {
         this.latitude = latitude;
     }
 
+    // returns  the longitude of the bus stop
+    public double getLongitude() {
+        return longitude;
+    }
+
     // sets the longitude of the bus stop
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public ArrayList<String> getBusses() {
+        return busses;
     }
 
 }

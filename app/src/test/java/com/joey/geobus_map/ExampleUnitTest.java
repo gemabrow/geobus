@@ -1,4 +1,4 @@
-package com.sprint1.geobus_map;
+package com.bussquad.geobus;
 
 import org.junit.Test;
 

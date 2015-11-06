@@ -1,4 +1,4 @@
-package com.sprint1.geobus_map;
+package com.bussquad.geobus;
 
 import android.util.Log;
 import android.util.Xml;
@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 

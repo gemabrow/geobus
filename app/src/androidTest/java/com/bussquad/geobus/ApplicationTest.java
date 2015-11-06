@@ -1,4 +1,4 @@
-package com.sprint1.geobus_map;
+package com.bussquad.geobus;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

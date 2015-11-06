@@ -1,9 +1,9 @@
-package com.sprint1.geobus_map;
+package com.bussquad.geobus;
 
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -20,27 +20,42 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+    final static int MARKER_UPDATE_INTERVAL = 2000; // in milliseconds
     private static final String TAG = "MapsActivity";
     public static MapsActivity activity;
-
-    private Boolean showStops = true;
+    Handler locationHandler = new Handler();
+    private Boolean showStops = false;
     private GoogleMap mMap;
     private ArrayList<BusStop> busStops;
     private JsonFileReader test =  new JsonFileReader();
-
-    Handler locationHandler = new Handler();
-    final static int MARKER_UPDATE_INTERVAL = 2000; // in milliseconds
     // Map is used to ensure bus markers are not duplicated, as
     // Google Maps V2 for Android has no method to uniquely ID
     // a marker according to input
     private Map<String, Marker> busMarkers = new HashMap<String, Marker>();
+    Runnable updateMarkers = new Runnable() {
+        @Override
+        public void run() {
+            //networkInfo = cm.getActiveNetworkInfo();
+            //if(networkInfo != null && networkInfo.isConnected()){
+            NetworkActivity networkActivity = new NetworkActivity();
+            networkActivity.load();
+
+            if (busMarkers.isEmpty()) {
+                Context context = getApplicationContext();
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, "connecting...", duration);
+                toast.show();
+            }
+            locationHandler.postDelayed(this, MARKER_UPDATE_INTERVAL);
+        }
+    };
     private Map<String, Marker> visibleMarkers = new HashMap<String, Marker>();
+
     /* Given a list of xml_markers (defined in TransitInfoXmlParser),
      * update the map display such that new buses are added as type Marker to mMap,
      * and previously displayed bus markers are moved to their new coordinates
@@ -93,7 +108,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
        locationHandler.postDelayed(updateMarkers, MARKER_UPDATE_INTERVAL);
     }
 
-
    // draws map
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -135,14 +149,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         visibleMarkers = updatedVisibleMarkers;
     }
 
-
     public void toggleStops(View view) {
-        if (showStops)
-            showStops = false;
-        else
-            showStops = true;
+        showStops = !showStops;
         drawBusStopMarkers();
     }
+
     // loads bus stops specified by json file
     public void loadJsonFromAsset(){
 
@@ -156,24 +167,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             System.out.println("Error reading file");
         }
     }
-
-    Runnable updateMarkers = new Runnable() {
-        @Override
-        public void run(){
-            //networkInfo = cm.getActiveNetworkInfo();
-            //if(networkInfo != null && networkInfo.isConnected()){
-            NetworkActivity networkActivity = new NetworkActivity();
-            networkActivity.load();
-
-            if(busMarkers.isEmpty()) {
-                Context context = getApplicationContext();
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context, "connecting...", duration);
-                toast.show();
-            }
-            locationHandler.postDelayed(this, MARKER_UPDATE_INTERVAL);
-        }
-    };
 
     @Override
     protected void onDestroy() {
