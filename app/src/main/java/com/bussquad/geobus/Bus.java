@@ -1,8 +1,5 @@
 package com.bussquad.geobus;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Representation of buses. float values are used for colors as per requirements
  * by Google Map Markers
@@ -15,25 +12,24 @@ public class Bus {
     public static final float HUE_ORANGE = 30;
     public static final float HUE_AZURE = 210;
 
-    public final String predictions;
     public final String route;
+    public final String direction;
     public final float color;
     public final double lat;
     public final double lng;
     public final int bus_id;
     public final int timestamp;
 
-    Bus(double lat, double lng, int timestamp, String route, String predictions, int bus_id)
+    Bus(double lat, double lng, int timestamp, String route, String direction, int bus_id)
     {
-        List items = Arrays.asList(predictions.split("[\\s,]+"));
         this.lat = lat;
         this.lng = lng;
         this.timestamp =  timestamp;
-        this.predictions = predictions;
+        this.direction = direction;
         this.bus_id = bus_id;
         switch (route.toLowerCase()) {
             case "loop":
-                if( items.contains("1") && (items.contains("3")) )
+                if (direction.equals("outer"))
                 {
                     route = "Outer Loop";
                     this.color = HUE_AZURE;
@@ -77,11 +73,11 @@ public class Bus {
     public String toString() {
         return("Bus ID: " + this.bus_id + " Current location: Latitude " + this.lat
                 + " Longitude: " + this.lng + "Time Stamp: " + this.timestamp
-                + " Route: " + this.route + " Predictions: " + this.predictions);
+                + " Route: " + this.route + " Direction: " + this.direction);
     }
     public void printBus(){
         System.out.println("Bus ID: " + this.bus_id + " Current location: Latitude " + this.lat + " Longitude: " + this.lng);
-        System.out.println("Time Stamp: " + this.timestamp + " Route: " + this.route + " Predictions: " + this.predictions);
+        System.out.println("Time Stamp: " + this.timestamp + " Route: " + this.route + " Predictions: " + this.direction);
     }
 
 

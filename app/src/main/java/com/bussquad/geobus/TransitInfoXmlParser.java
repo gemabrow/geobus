@@ -105,8 +105,8 @@ public class TransitInfoXmlParser {
                 case "id":
                     bus_id = readId(parser);
                     break;
-                case "predictions":
-                    predictions = readPredkshns(parser);
+                case "direction":
+                    predictions = readDirection(parser);
                     break;
                 default:
                     skip(parser);
@@ -148,11 +148,11 @@ public class TransitInfoXmlParser {
     }
 
     // processes name of bus route
-    private String readPredkshns(XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, ns, "predictions");
-        String predictions = readString(parser);
-        parser.require(XmlPullParser.END_TAG, ns, "predictions");
-        return predictions;
+    private String readDirection(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, ns, "direction");
+        String direction = readString(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "direction");
+        return direction;
     }
 
     // processes bus id
