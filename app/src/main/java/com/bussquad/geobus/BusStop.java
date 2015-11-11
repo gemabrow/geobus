@@ -5,10 +5,10 @@ import java.util.ArrayList;
 /**
  * Created by Jose on 10/14/2015.
  * This is the BusStop class, I hope to add to this further on to the project
- * For now this class is used to store values from the json file witht he bus stops and then later
+ * For now this class is used to store values from the json file with the bus stops and then later
  * can be called from to create markers.
  */
-public class BusStop {
+class BusStop {
 
     //stores the name of the bus stop
     private String title;

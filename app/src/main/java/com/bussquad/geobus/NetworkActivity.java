@@ -1,6 +1,5 @@
 package com.bussquad.geobus;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -16,7 +15,7 @@ import java.util.ArrayList;
  * of downloading and parsing xml file for updates to main map activity
  * Created by gerald on 10/13/15.
  */
-public class NetworkActivity extends Activity{
+class NetworkActivity {
     private static final String URL = "http://skynet.cse.ucsc.edu/bts/coord2.xml";
     private static final String TAG = "NetworkActivity";
 

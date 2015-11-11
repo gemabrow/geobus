@@ -8,14 +8,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.androidmapsextensions.GoogleMap;
+import com.androidmapsextensions.GoogleMap.OnMarkerClickListener;
+import com.androidmapsextensions.Marker;
+import com.androidmapsextensions.MarkerOptions;
+import com.androidmapsextensions.OnMapReadyCallback;
+import com.androidmapsextensions.SupportMapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,43 +25,116 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
-    final static int MARKER_UPDATE_INTERVAL = 2000; // in milliseconds
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, OnMarkerClickListener {
+    private final static int MARKER_UPDATE_INTERVAL = 2000; // in milliseconds
     private static final String TAG = "MapsActivity";
     public static MapsActivity activity;
-    Handler locationHandler = new Handler();
+    private final Handler locationHandler = new Handler();
+    private final JsonFileReader test = new JsonFileReader();
     private Boolean showStops = false;
     private GoogleMap mMap;
     private ArrayList<BusStop> busStops;
-    private JsonFileReader test =  new JsonFileReader();
     // Map is used to ensure bus markers are not duplicated, as
     // Google Maps V2 for Android has no method to uniquely ID
     // a marker according to input
     private Map<String, Marker> busMarkers = new HashMap<String, Marker>();
-    Runnable updateMarkers = new Runnable() {
+    private final Runnable updateMarkers = new Runnable() {
         @Override
         public void run() {
-            //networkInfo = cm.getActiveNetworkInfo();
-            //if(networkInfo != null && networkInfo.isConnected()){
-            NetworkActivity networkActivity = new NetworkActivity();
-            networkActivity.load();
-
-            if (busMarkers.isEmpty()) {
-                Context context = getApplicationContext();
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context, "connecting...", duration);
-                toast.show();
+            Context context = getApplicationContext();
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast;
+            //if data connection exists, fetch bus locations
+            if (NetworkUtil.isConnected(context)) {
+                toast = Toast.makeText(context, "connecting...", duration);
+                NetworkActivity networkActivity = new NetworkActivity();
+                networkActivity.load();
+            } else {
+                if (NetworkUtil.isConnecting(context)) {
+                    toast = Toast.makeText(context, "waiting for connection", duration);
+                } else {
+                    duration = Toast.LENGTH_LONG;
+                    toast = Toast.makeText(context, "no network connection", duration);
+                }
             }
+            if (busMarkers.isEmpty())
+                toast.show();
+
             locationHandler.postDelayed(this, MARKER_UPDATE_INTERVAL);
         }
     };
     private Map<String, Marker> visibleMarkers = new HashMap<String, Marker>();
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        activity = this;
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_maps);
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getExtendedMapAsync(this);
+
+        // loads UCSC_WestSide_Bus_Stops.json file to an array of BusStop Objects which are used
+        // to create the busstop markers
+        loadJsonFromAsset();
+
+        startBackgroundData();
+    }
+
+    @Override
+    protected void onPause() {
+        stopBackgroundData();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        startBackgroundData();
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        stopBackgroundData();
+        super.onDestroy();
+    }
+
+    // draws map
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mMap.setMyLocationEnabled(true); // Enables the My Location Layer on the map so users get their current position
+        mMap.setOnMarkerClickListener(this);
+
+        // set up coordinates for the center of UCSC and move the camera to there with a zoom level of 15 on startup
+        LatLng ucsc = new LatLng(36.991406, -122.060731);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucsc, 15));
+        drawBusStopMarkers();
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        if (busMarkers.containsValue(marker)) {
+            LatLng position = marker.getPosition();
+            Log.i(TAG, position.toString());
+        }
+        return false;
+    }
+
+    public void stopBackgroundData() {
+        locationHandler.removeCallbacks(updateMarkers);
+    }
+
+    public void startBackgroundData() {
+        locationHandler.postDelayed(updateMarkers, MARKER_UPDATE_INTERVAL);
+    }
     /* Given a list of xml_markers (defined in TransitInfoXmlParser),
      * update the map display such that new buses are added as type Marker to mMap,
      * and previously displayed bus markers are moved to their new coordinates
      */
-    public void setMarkers(List<Bus> buses){
+    public void setMarkers(List<Bus> buses) {
         Map<String, Marker> updatedBusMarkers = new HashMap<String, Marker>();
 
         for(Bus bus: buses){
@@ -69,15 +143,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Marker bus_marker = busMarkers.get(Integer.toString(bus.bus_id));
             // if not, add new marker
             if(bus_marker == null){
+                //ToDo: retrieve stops LatLng from relevant bus stops and store as data in marker for drawing routes
+                //PolylineOptions stops = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
                 bus_marker = mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(bus.lat, bus.lng))
                         .title(bus.route)
                         .snippet("Bus ID: " + Integer.toString(bus.bus_id))
-                        .draggable(true)
                         .icon(BitmapDescriptorFactory.defaultMarker(bus.color)));
             }
             else {
-                bus_marker.setPosition(new LatLng(bus.lat, bus.lng));
+                bus_marker.animatePosition(new LatLng(bus.lat, bus.lng));
                 busMarkers.remove(Integer.toString(bus.bus_id));
             }
             updatedBusMarkers.put(Integer.toString(bus.bus_id), bus_marker);
@@ -90,38 +165,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         busMarkers = updatedBusMarkers;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        activity = this;
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
-        // loads UCSC_WestSide_Bus_Stops.json file to an array of BusStop Objects which are used
-        // to create the busstop markers
-        loadJsonFromAsset();
-
-       locationHandler.postDelayed(updateMarkers, MARKER_UPDATE_INTERVAL);
-    }
-
-   // draws map
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setMyLocationEnabled(true); // Enables the My Location Layer on the map so users get their current position
-
-        // set up coordinates for the center of UCSC and move the camera to there with a zoom level of 15 on startup
-        LatLng ucsc = new LatLng(36.991406, -122.060731);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucsc, 15));
+    public void toggleStops(View view) {
+        showStops = !showStops;
         drawBusStopMarkers();
     }
 
     // draws the busstop markers on the google map
-    public void drawBusStopMarkers(){
+    private void drawBusStopMarkers() {
         Map<String, Marker> updatedVisibleMarkers = new HashMap<String, Marker>();
 
         for (BusStop temp : busStops){
@@ -138,7 +188,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 visibleMarkers.remove(Double.toString(temp.getLatitude() + temp.getLongitude()));
             }
             updatedVisibleMarkers.put(Double.toString(temp.getLatitude()+ temp.getLongitude()), busStop);
-
         }
 
         // remove all values from busMarkers Map (NOT a Google Map)
@@ -149,13 +198,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         visibleMarkers = updatedVisibleMarkers;
     }
 
-    public void toggleStops(View view) {
-        showStops = !showStops;
-        drawBusStopMarkers();
-    }
-
     // loads bus stops specified by json file
-    public void loadJsonFromAsset(){
+    private void loadJsonFromAsset() {
 
         try{
             InputStream in = getAssets().open("UCSC_Westside_Bus_Stops.json");
@@ -166,12 +210,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         catch(IOException ex) {
             System.out.println("Error reading file");
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        locationHandler.removeCallbacks(updateMarkers);
-        super.onDestroy();
     }
 
 }

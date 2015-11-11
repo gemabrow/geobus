@@ -21,12 +21,12 @@ import java.util.Stack;
  * http://developer.android.com/training/basics/network-ops/xml.html#consume
  */
 
-public class TransitInfoXmlParser {
+class TransitInfoXmlParser {
     private static final String ns = null;
     private static final String TAG = "Parser";
     private ArrayList<Bus> buses;
 
-    public ArrayList parse(InputStream in) throws XmlPullParserException, IOException {
+    public ArrayList<Bus> parse(InputStream in) throws XmlPullParserException, IOException {
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
@@ -41,8 +41,8 @@ public class TransitInfoXmlParser {
 
     private void readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
         buses = new ArrayList<Bus>();
-        Queue tags = new LinkedList<String>();
-        Stack checkedTags = new Stack<String>();
+        Queue<String> tags = new LinkedList<String>();
+        Stack<String> checkedTags = new Stack<String>();
 
         tags.add("coord2");
         tags.add("markers");
@@ -83,7 +83,7 @@ public class TransitInfoXmlParser {
         int bus_id = 0;
         int timestamp = 0;
         String route = null;
-        String predictions = null;
+        String direction = null;
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -106,13 +106,13 @@ public class TransitInfoXmlParser {
                     bus_id = readId(parser);
                     break;
                 case "direction":
-                    predictions = readDirection(parser);
+                    direction = readDirection(parser);
                     break;
                 default:
                     skip(parser);
             }
         }
-        return new Bus(lat, lng, timestamp, route, predictions, bus_id);
+        return new Bus(lat, lng, timestamp, route, direction, bus_id);
     }
 
     // processes latitudinal coordinates

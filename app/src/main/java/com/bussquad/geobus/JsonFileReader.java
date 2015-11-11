@@ -18,8 +18,7 @@ import java.util.List;
 
 
 // this class will read a json file whether it is located in the assets folder
-public class JsonFileReader {
-    private JsonReader reader;
+class JsonFileReader {
     private ArrayList<BusStop> BusStops;
 
     // construtor
@@ -31,7 +30,7 @@ public class JsonFileReader {
     // reads in the BusStops from UCSC_WestSide_BusStop.json file only
 
     public void readBusStopJsonStream(InputStream in) throws IOException {
-        reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
+        JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
         try {
              readBusStopArray(reader);
         }
@@ -44,7 +43,7 @@ public class JsonFileReader {
 
     // Returns A list of BusStops
     private List readBusStopArray(JsonReader reader) throws IOException {
-        this.BusStops = new ArrayList();
+        this.BusStops = new ArrayList<BusStop>();
 
         // reads in a bracket{
         reader.beginObject();
@@ -66,8 +65,8 @@ public class JsonFileReader {
     // reads in one bus stop from the json file at a time and returns a new BusStop Object
     private BusStop readBusStop(JsonReader reader) throws IOException {
         String stopName = "";
-        double latitude = 00;
-        double longitude = 00;
+        double latitude = 0;
+        double longitude = 0;
         ArrayList<String> busses = new ArrayList<>();
 
         // reads in a bracket {

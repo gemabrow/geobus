@@ -5,12 +5,12 @@ package com.bussquad.geobus;
  * by Google Map Markers
  * Created by Jose on 10/21/2015.
  */
-public class Bus {
-    public static final float HUE_RED = 0;
-    public static final float HUE_BLUE = 240;
-    public static final float HUE_YELLOW = 60;
-    public static final float HUE_ORANGE = 30;
-    public static final float HUE_AZURE = 210;
+class Bus {
+    private static final float HUE_RED = 0;
+    private static final float HUE_BLUE = 240;
+    private static final float HUE_YELLOW = 60;
+    private static final float HUE_ORANGE = 30;
+    private static final float HUE_AZURE = 210;
 
     public final String route;
     public final String direction;
@@ -48,7 +48,6 @@ public class Bus {
         }
         this.route = route;
     }
-
 
     public double getLat() {
         return lat;
