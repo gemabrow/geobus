@@ -71,12 +71,12 @@ class Bus {
 
     public String toString() {
         return("Bus ID: " + this.bus_id + " Current location: Latitude " + this.lat
-                + " Longitude: " + this.lng + "Time Stamp: " + this.timestamp
+                + " Longitude: " + this.lng + " Time Stamp: " + this.timestamp
                 + " Route: " + this.route + " Direction: " + this.direction);
     }
     public void printBus(){
         System.out.println("Bus ID: " + this.bus_id + " Current location: Latitude " + this.lat + " Longitude: " + this.lng);
-        System.out.println("Time Stamp: " + this.timestamp + " Route: " + this.route + " Predictions: " + this.direction);
+        System.out.println(" Time Stamp: " + this.timestamp + " Route: " + this.route + " Predictions: " + this.direction);
     }
 
 
