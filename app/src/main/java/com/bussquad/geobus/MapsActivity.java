@@ -17,8 +17,11 @@ import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.Toast;
 
+import com.androidmapsextensions.AnimationSettings;
 import com.androidmapsextensions.GoogleMap;
 import com.androidmapsextensions.GoogleMap.OnMarkerClickListener;
 import com.androidmapsextensions.Marker;
@@ -37,12 +40,13 @@ import java.util.List;
 import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, OnMarkerClickListener {
-    private final static int MARKER_UPDATE_INTERVAL = 2000; // in milliseconds
     static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1; // int used to identify specific permissions in permission callback methods
+    private final static int MARKER_UPDATE_INTERVAL = 2000; // in milliseconds
     private static final String TAG = "MapsActivity";
     public static MapsActivity activity;
     private final Handler locationHandler = new Handler();
     private final JsonFileReader test = new JsonFileReader();
+    private Interpolator interpolator = new DecelerateInterpolator();
     private Boolean showStops = false;
     private GoogleMap mMap;
     private ArrayList<BusStop> busStops;
@@ -145,11 +149,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the Builder class for convenient dialog construction
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            String title = getResources().getString(R.string.dialog_loc_title);        // we're set these strings to variables so that we
-            String message = getResources().getString(R.string.dialog_loc_permission); // can make use of the HTML formatting set in strings.xml
-            builder.setIcon(R.drawable.ic_room_pink)
-                    .setMessage(Html.fromHtml(message)) // convert CDATA-tagged strings to HTML
-                    .setTitle(Html.fromHtml(title))
+            builder.setMessage(R.string.dialog_loc_permission)
+                    .setTitle(R.string.dialog_loc_title)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             // dismiss the dialog
@@ -203,7 +204,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     public void setMarkers(List<Bus> buses) {
         Map<String, Marker> updatedBusMarkers = new HashMap<String, Marker>();
-
+        AnimationSettings settings = new AnimationSettings()
+                .duration(MARKER_UPDATE_INTERVAL).interpolator(interpolator);
         for(Bus bus: buses){
             Log.i(TAG, bus.toString());
             LatLng newPos = new LatLng(bus.lat, bus.lng);
@@ -215,17 +217,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 bus_marker = mMap.addMarker(new MarkerOptions()
                         .position(newPos)
                         .title(bus.route)
+                        .clusterGroup(bus.clusterGroup)
                         .snippet("Bus ID: " + Integer.toString(bus.bus_id))
                         .icon(BitmapDescriptorFactory.defaultMarker(bus.color)));
             }
             else {
-                // if marker exists, move its location (if it has changed)
-                if (!(bus_marker.getPosition().equals(newPos)))
-                    bus_marker.animatePosition(newPos);
+                // if marker exists, check for changes in position
+                // and for change in bus route from last update
+                int typeChange = bus_marker.getPosition().equals(newPos) ? 0 : 2;
+                typeChange -= bus_marker.getTitle().equals(bus.route) ? 0 : 1;
+                switch (typeChange) {
+                    case (0):
+                        break;
+                    case (1):
+                        bus_marker.setTitle(bus.route);
+                        bus_marker.setClusterGroup(bus.clusterGroup);
+                        bus_marker.setIcon(BitmapDescriptorFactory.defaultMarker(bus.color));
+                    case (2):
+                        bus_marker.animatePosition(newPos, settings);
+                        break;
+                }
                 busMarkers.remove(Integer.toString(bus.bus_id));
             }
+
             updatedBusMarkers.put(Integer.toString(bus.bus_id), bus_marker);
         }
+
         // remove all values from busMarkers Map (NOT a Google Map)
         for(Marker marker: busMarkers.values()){
             marker.remove();

@@ -19,6 +19,7 @@ class Bus {
     public final double lng;
     public final int bus_id;
     public final int timestamp;
+    public final int clusterGroup;
 
     Bus(double lat, double lng, int timestamp, String route, String direction, int bus_id)
     {
@@ -31,18 +32,23 @@ class Bus {
             case "loop":
                 if (direction.equals("outer"))
                 {
+                    this.clusterGroup = 0;
                     route = "Outer Loop";
                     this.color = HUE_AZURE;
                 }
                 else {
+                    this.clusterGroup = 0;
                     route = "Inner Loop";
                     this.color = HUE_ORANGE;
                 }
                 break;
             case "upper campus":
+                this.clusterGroup = 0;
+                route = "Upper Campus";
                 this.color = HUE_YELLOW;
                 break;
             default:
+                this.clusterGroup = 1;
                 this.color = HUE_RED;
                 break;
         }
