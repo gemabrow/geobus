@@ -148,9 +148,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the Builder class for convenient dialog construction
+            String title = getResources().getString(R.string.dialog_loc_title);        // setting strings to separate variables
+            String message = getResources().getString(R.string.dialog_loc_permission); // so that we can apply their HTML formatting
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage(R.string.dialog_loc_permission)
-                    .setTitle(R.string.dialog_loc_title)
+            builder.setIcon(R.drawable.ic_room_pink)
+                    .setMessage(Html.fromHtml(message)) // bada-bing, HTML.
+                    .setTitle(Html.fromHtml(title))
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             // dismiss the dialog
