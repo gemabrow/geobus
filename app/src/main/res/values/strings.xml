@@ -6,6 +6,4 @@
     <string name="xml_error">There was an XML parsing error.</string>
     -->
     <string name="busStops">Toggle Bus Stops</string>
-    <string name="dialog_loc_title"><b>GeoBus</b> can\'t access your location</string>
-    <string name="dialog_loc_permission">To enable and see your current location, navigate to Settings > Apps > GeoBus > Permissions.</string>
 </resources>
