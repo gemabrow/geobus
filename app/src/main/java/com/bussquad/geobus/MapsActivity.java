@@ -191,7 +191,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void startBackgroundData() {
         locationHandler.postDelayed(updateMarkers, MARKER_UPDATE_INTERVAL);
     }
-    /* Given a list of xml_markers (defined in TransitInfoXmlParser),
+
+    /**
+     * Given a list of xml_markers (defined in TransitInfoXmlParser),
      * update the map display such that new buses are added as type Marker to mMap,
      * and previously displayed bus markers are moved to their new coordinates
      */
@@ -200,20 +202,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         for(Bus bus: buses){
             Log.i(TAG, bus.toString());
-            // if marker exists, move its location
+            LatLng newPos = new LatLng(bus.lat, bus.lng);
             Marker bus_marker = busMarkers.get(Integer.toString(bus.bus_id));
-            // if not, add new marker
+            // if marker does not exist, add new marker
             if(bus_marker == null){
                 //ToDo: retrieve stops LatLng from relevant bus stops and store as data in marker for drawing routes
                 //PolylineOptions stops = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
                 bus_marker = mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(bus.lat, bus.lng))
+                        .position(newPos)
                         .title(bus.route)
                         .snippet("Bus ID: " + Integer.toString(bus.bus_id))
                         .icon(BitmapDescriptorFactory.defaultMarker(bus.color)));
             }
             else {
-                bus_marker.animatePosition(new LatLng(bus.lat, bus.lng));
+                // if marker exists, move its location (if it has changed)
+                if (!(bus_marker.getPosition().equals(newPos)))
+                    bus_marker.animatePosition(newPos);
                 busMarkers.remove(Integer.toString(bus.bus_id));
             }
             updatedBusMarkers.put(Integer.toString(bus.bus_id), bus_marker);
