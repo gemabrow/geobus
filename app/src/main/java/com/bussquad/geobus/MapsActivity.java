@@ -133,7 +133,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_ACCESS_FINE_LOCATION);
             else
                 mMap.setMyLocationEnabled(true);
-        }    // for all versions of Android below 6--
+        }    // for all versions of Android below 6:
         else // once the app has been installed, we can assume that location permissions have been granted. Proceed without a care!
             mMap.setMyLocationEnabled(true);
     }
