@@ -204,7 +204,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .icon(BitmapDescriptorFactory.defaultMarker(bus.color)));
             }
             else {
-                // if marker exists, move its location (if it has changed)
+                // if marker exists, check for changes in position
+                // and for change in bus route from last update
                 int typeChange = bus_marker.getPosition().equals(newPos) ? 0 : 2;
                 typeChange -= bus_marker.getTitle().equals(bus.route) ? 0 : 1;
                 switch (typeChange) {
