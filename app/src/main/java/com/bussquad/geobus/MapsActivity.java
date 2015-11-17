@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -144,8 +145,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the Builder class for convenient dialog construction
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage(R.string.dialog_loc_permission)
-                    .setTitle(R.string.dialog_loc_title)
+            String title = getResources().getString(R.string.dialog_loc_title);        // we're set these strings to variables so that we
+            String message = getResources().getString(R.string.dialog_loc_permission); // can make use of the HTML formatting set in strings.xml
+            builder.setIcon(R.drawable.ic_room_pink)
+                    .setMessage(Html.fromHtml(message)) // convert CDATA-tagged strings to HTML
+                    .setTitle(Html.fromHtml(title))
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             // dismiss the dialog
