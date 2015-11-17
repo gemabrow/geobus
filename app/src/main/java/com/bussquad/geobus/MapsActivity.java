@@ -1,9 +1,19 @@
 package com.bussquad.geobus;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -27,6 +37,7 @@ import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, OnMarkerClickListener {
     private final static int MARKER_UPDATE_INTERVAL = 2000; // in milliseconds
+    static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1; // int used to identify specific permissions in permission callback methods
     private static final String TAG = "MapsActivity";
     public static MapsActivity activity;
     private final Handler locationHandler = new Handler();
@@ -105,13 +116,63 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMyLocationEnabled(true); // Enables the My Location Layer on the map so users get their current position
         mMap.setOnMarkerClickListener(this);
-
         // set up coordinates for the center of UCSC and move the camera to there with a zoom level of 15 on startup
         LatLng ucsc = new LatLng(36.991406, -122.060731);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucsc, 15));
         drawBusStopMarkers();
+        checkVersion(); // permissions handling for newer versions of Android (6+)
+    }
+
+    public void checkVersion(){
+        if (Build.VERSION.SDK_INT >= 23) {
+            // for Android 6.0 and above: checks if fine location permission is granted--if it isn't, prompt the user to grant during runtime.
+            // if the user denies the permission, a dialog will appear, letting him/her know how to enable the permission
+            // (this dialog will show on every run if the user ticks the "Never ask again" box, too
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_ACCESS_FINE_LOCATION);
+            else
+                mMap.setMyLocationEnabled(true);
+        }    // for all versions of Android below 6--
+        else // once the app has been installed, we can assume that location permissions have been granted. Proceed without a care!
+            mMap.setMyLocationEnabled(true);
+    }
+
+    // creates dialog for the case of the user denying location permission
+    public static class LocationDialogFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the Builder class for convenient dialog construction
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(R.string.dialog_loc_permission)
+                    .setTitle(R.string.dialog_loc_title)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // dismiss the dialog
+                        }
+                    });
+            // Create the AlertDialog object and return it
+            return builder.create();
+        }
+    }
+
+    @Override // overridden callback for permissions request in order to handle the user denying or accepting location permission
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay!
+                    mMap.setMyLocationEnabled(true); // Enables the My Location Layer on the map so users get their current position
+                } else { // show dialog confirming that the user denied location & brief instructions on how to enable permission
+                    FragmentManager fragmentManager = getFragmentManager();
+                    DialogFragment deniedLocation = new LocationDialogFragment();
+                    deniedLocation.setCancelable(false); // ensure the user can't accidentally dismiss the dialog by tapping outside of the window
+                    deniedLocation.show(fragmentManager, "location"); // show the dialog
+                }
+                return;
+            }
+        }
     }
 
     @Override
