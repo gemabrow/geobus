@@ -706,10 +706,45 @@
         "20"
       ]
     },
+	{
+      "name":"Delaware & Swanton",
+      "latitude":36.954970,
+      "longitude":-122.054375,
+      "busses":[
+        "20"
+      ]
+    },
+	{
+      "name":"Natural Bridges & Delaware, northbound",
+      "latitude":36.954993,
+      "longitude":-122.056948,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+	{
+      "name":"Natural Bridges & Delaware, southbound",
+      "latitude":36.954965,
+      "longitude":-122.057136,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
     {
-      "name":"Natural Bridges & Mission",
+      "name":"Natural Bridges & Mission, southbound",
       "latitude":36.958874,
       "longitude":-122.057587,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+	{
+      "name":"Natural Bridges & Mission, northbound",
+      "latitude":36.959476,
+      "longitude":-122.057437,
       "busses":[
         "20",
         "20D"
