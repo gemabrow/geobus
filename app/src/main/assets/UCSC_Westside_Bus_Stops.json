@@ -1,18 +1,6 @@
 {
   "allStops": [
     {
-      "name":"Santa Cruz Metro Lane 1",
-      "latitude":36.970904,
-      "longitude":-122.024789,
-      "busses":[
-        "10",
-        "15",
-        "16",
-        "19",
-        "20"
-      ]
-    },
-    {
       "name":"Cedar & Walnut",
       "latitude":36.973509,
       "longitude":-122.027105,
@@ -30,16 +18,15 @@
       ]
     },
     {
-      "name":"Science Hill",
+      "name":"McLaughlin & Science Hill, westbound",
       "latitude":36.999963,
       "longitude":-122.062331,
       "busses":[
         "10",
         "12",
-        "15",
         "16",
-        "19",
         "20",
+        "20D"
         "outer"
       ]
     },
@@ -53,7 +40,8 @@
         "15",
         "16",
         "19",
-        "20"
+        "20",
+        "20D"
       ]
     },
     {
@@ -81,22 +69,161 @@
       ]
     },
     {
-      "name":"Bay & Mission",
+      "name":"Bay & Mission, northbound",
       "latitude":36.966894,
       "longitude":-122.040605,
       "busses":[
-        "10",
         "12",
         "15",
         "16",
+        "19"
+      ]
+    },
+    {
+      "name":"Bay & Mission, southbound",
+      "latitude":36.966218,
+      "longitude":-122.039827,
+      "busses":[
+        "19"
+      ]
+    },
+    {
+      "name":"Bay & Seaside, northbound",
+      "latitude":36.965483,
+      "longitude":-122.038547,
+      "busses":[
+        "19"
+      ]
+    },
+    {
+      "name":"Bay & Seaside, northbound",
+      "latitude":36.965218,
+      "longitude":-122.038330,
+      "busses":[
+        "19"
+      ]
+    },
+    {
+      "name":"Bay & Redwood",
+      "latitude":36.963943,
+      "longitude":-122.036438,
+      "busses":[
+        "19"
+      ]
+    },
+    {
+      "name":"Bay & California",
+      "latitude":36.963656,
+      "longitude":-122.035795,
+      "busses":[
+        "19"
+      ]
+    },
+    {
+      "name":"Bay & Garfield Park Village, northbound",
+      "latitude":36.962464,
+      "longitude":-122.033973,
+      "busses":[
+        "19"
+      ]
+    },
+    {
+      "name":"Bay & Garfield Park Village, southbound",
+      "latitude":36.962404,
+      "longitude":-122.034069,
+      "busses":[
+        "19"
+      ]
+    },
+    {
+      "name":"Bay & Laguna",
+      "latitude":36.960572,
+      "longitude":-122.029091,
+      "busses":[
         "19",
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Bay & West Cliff, northbound",
+      "latitude":36.961353,
+      "longitude":-122.025850,
+      "busses":[
+        "19",
+        "20",
+      ]
+    },
+    {
+      "name":"Bay & West Cliff, southbound",
+      "latitude":36.961280,
+      "longitude":-122.025932,
+      "busses":[
+        "19",
+        "20",
+      ]
+    },
+    {
+      "name":"Pacific & Viaduct, southbound",
+      "latitude":36.963402,
+      "longitude":-122.024560,
+      "busses":[
+        "19",
+        "20",
+      ]
+    },
+    {
+      "name":"Pacific & Viaduct, northbound",
+      "latitude":36.963488,
+      "longitude":-122.024535,
+      "busses":[
+        "19",
+        "20",
+      ]
+    },
+    {
+      "name":"Pacific & Center",
+      "latitude":36.965654,
+      "longitude":-122.025341,
+      "busses":[
+        "19",
+        "20",
+      ]
+    },
+    {
+      "name":"Pacific Shores,
+      "latitude":36.960876,
+      "longitude":-122.061747,
+      "busses":[
         "20"
       ]
     },
     {
-      "name":"Pacific Shores",
-      "latitude":36.960876,
-      "longitude":-122.061747,
+      "name":"Bay & Meder",
+      "latitude":36.975428,
+      "longitude":-122.052463,
+      "busses":[
+        "12",
+        "15",
+        "16",
+        "19",
+      ]
+    },
+    {
+      "name":"Bay & Iowa",
+      "latitude":36.974286,
+      "longitude":-122.050409,
+      "busses":[
+        "12",
+        "15",
+        "16",
+        "19"
+      ]
+    },
+    {
+      "name":"Bay & Nobel",
+      "latitude":36.973722,
+      "longitude":-122.050103,
       "busses":[
         "12",
         "15",
@@ -109,22 +236,398 @@
       "latitude":36.976735,
       "longitude":-122.053780,
       "busses":[
-        "20"
+        "12",
+        "15",
+        "16",
+        "19"
       ]
     },
     {
-      "name":"Delaware & Swift",
+      "name":"High & Bay",
+      "latitude":36.977072,
+      "longitude":-122.052865,
+      "busses":[
+        "10"
+      ]
+    },
+    {
+      "name":"High & Cardiff",
+      "latitude":36.977274,
+      "longitude":-122.050233,
+      "busses":[
+        "10"
+      ]
+    },
+    {
+      "name":"High & Moore, eastbound",
+      "latitude":36.977602,
+      "longitude":-122.048609,
+      "busses":[
+        "10"
+      ]
+    },
+    {
+      "name":"High & Moore, westbound",
+      "latitude":36.977852,
+      "longitude":-122.048324,
+      "busses":[
+        "10"
+      ]
+    },
+    {
+      "name":"High & Highland",
+      "latitude":36.977888,
+      "longitude":-122.033668,
+      "busses":[
+        "10"
+      ]
+    },
+    {
+      "name":"Highland & Escalona",
+      "latitude":36.976995,
+      "longitude":-122.032935,
+      "busses":[
+        "10"
+      ]
+    },
+    {
+      "name":"Storey & Escalona",
+      "latitude":36.976196,
+      "longitude":-122.035015,
+      "busses":[
+        "10"
+      ]
+    },
+    {
+      "name":"Mission & Union",
+      "latitude":36.975875,
+      "longitude":-122.032714,
+      "busses":[
+        "10"
+      ]
+    },
+    {
+      "name":"Mission & Sylvar",
+      "latitude":36.977455,
+      "longitude":-122.030076,
+      "busses":[
+        "10"
+      ]
+    },
+    {
+      "name":"Cedar & Center",
+      "latitude":36.976161,
+      "longitude":-122.028074,
+      "busses":[
+        "10"
+      ]
+    },
+    {
+      "name":"Cedar & Walnut",
+      "latitude":36.973529,
+      "longitude":-122.027153,
+      "busses":[
+        "10"
+      ]
+    },
+    {
+      "name":"Front & Pacific",
+      "latitude":36.976382,
+      "longitude":-122.026560,
+      "busses":[
+        "10"
+      ]
+    },
+    {
+      "name":"Front & Soquel",
+      "latitude":36.973527,
+      "longitude":-122.024754,
+      "busses":[
+        "10"
+      ]
+    },
+    {
+      "name":"Cedar & Cathcart",
+      "latitude":36.971594,
+      "longitude":-122.026801,
+      "busses":[
+        "10"
+      ]
+    },
+    {
+      "name":"Laurel & Center",
+      "latitude":36.968929,
+      "longitude":-122.027744,
+      "busses":[
+        "12",
+        "15",
+        "16"
+      ]
+    },
+    {
+      "name":"Laurel & Chestnut",
+      "latitude":36.968676,
+      "longitude":-122.029002,
+      "busses":[
+        "12",
+        "15",
+        "16"
+      ]
+    },
+    {
+      "name":"Laurel & Blackburn",
+      "latitude":36.968551,
+      "longitude":-122.031333,
+      "busses":[
+        "12",
+        "15",
+        "16"
+      ]
+    },
+    {
+      "name":"Mission & Laurel",
+      "latitude":36.969010,
+      "longitude":-122.037763,
+      "busses":[
+        "12",
+        "15",
+        "16"
+      ]
+    },
+    {
+      "name":"Mission & Bay/Trescony",
+      "latitude":36.967309,
+      "longitude":-122.039156,
+      "busses":[
+        "12",
+        "15",
+        "16"
+      ]
+    },
+    {
+      "name":"Delaware & Swift, westbound",
       "latitude":36.955686,
       "longitude":-122.048968,
       "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Delaware & Swift, eastbound",
+      "latitude":36.955651,
+      "longitude":-122.048016,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Delaware & Liberty",
+      "latitude":36.958047,
+      "longitude":-122.030030,
+      "busses":[
         "20"
       ]
     },
     {
-      "name":"Heller & Kresge College",
+      "name":"Natural Bridges & Mission",
+      "latitude":36.958874,
+      "longitude":-122.057587,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Western & Beachview",
+      "latitude":36.961475,
+      "longitude":-122.056610,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Western & Flower, northbound",
+      "latitude":36.964209,
+      "longitude":-122.056650,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Western & Flower, southbound",
+      "latitude":36.964522,
+      "longitude":-122.056724,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Western & Cypress Park",
+      "latitude":36.966557,
+      "longitude":-122.057152,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Western & Western, southbound",
+      "latitude":36.968517,
+      "longitude":-122.058414,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Western & Western, northbound",
+      "latitude":36.968608,
+      "longitude":-122.058357,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Western & Monarch, northbound",
+      "latitude":36.970200,
+      "longitude":-122.058398,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Western & Monarch, southbound",
+      "latitude":36.970361,
+      "longitude":-122.058502,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Western & Meder, northbound",
+      "latitude":36.973770,
+      "longitude":-122.058368,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Western & Meder, southbound",
+      "latitude":36.974792,
+      "longitude":-122.058447,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Delaware & Centennial",
+      "latitude":36.958038,
+      "longitude":-122.030997,
+      "busses":[
+        "20"
+      ]
+    },
+    {
+      "name":"Delaware & Columbia, westbound",
+      "latitude":36.957849,
+      "longitude":-122.032241,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Delaware & Columbia, eastbound",
+      "latitude":36.957459,
+      "longitude":-122.033982,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Delaware & Woodrow, westbound",
+      "latitude":36.957097,
+      "longitude":-122.037640,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Delaware & Woodrow, eastbound",
+      "latitude":36.956925,
+      "longitude":-122.037959,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Delaware & Bethany Curve",
+      "latitude":36.956633,
+      "longitude":-122.040225,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Delaware & Surfside",
+      "latitude":36.956700,
+      "longitude":-122.040793,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Delaware & Almar",
+      "latitude":36.956267,
+      "longitude":-122.043062,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Delaware & Fair, eastbound",
+      "latitude":36.955942,
+      "longitude":-122.045285,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Delaware & Fair, westbound",
+      "latitude":36.955979,
+      "longitude":-122.045859,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Heller & Kresge College, south/westbound",
       "latitude":36.999279,
       "longitude":-122.064552,
       "busses":[
+        "10",
+        "12",
+        "16",
+        "20",
+        "20D",
         "outer"
       ]
     },
@@ -133,38 +636,51 @@
       "latitude": 36.996705,
       "longitude":-122.063583,
       "busses":[
+        "15",
+        "19",
         "inner"
       ]
     },
     {
-      "name":"Heller & Kresge College",
+      "name":"Heller & Kresge College, north/eastbound",
       "latitude":36.999210,
       "longitude":-122.064339,
       "busses":[
+        "15",
+        "19",
         "inner"
       ]
     },
     {
-      "name":"McLaughlin & Science Hill ",
+      "name":"McLaughlin & Science Hill, eastbound",
       "latitude":36.999931,
       "longitude":-122.062050,
       "busses":[
+        "15",
+        "19",
         "inner"
       ]
     },
     {
-      "name":"McLaughlin & College 9 & 10 - Health Center",
+      "name":"McLaughlin & College 9 & 10 - Health Center, eastbound",
       "latitude":36.999706,
       "longitude":-122.058342,
       "busses":[
+        "15",
+        "19",
         "inner"
       ]
     },
     {
-      "name":"McLaughlin & College 9 & 10 - Health Center",
+      "name":"McLaughlin & College 9 & 10 - Health Center, westbound",
       "latitude":36.999939,
       "longitude":-122.058350,
       "busses":[
+        "10",
+        "12",
+        "16",
+        "20",
+        "20D",
         "outer"
       ]
     },
@@ -173,6 +689,11 @@
       "latitude":36.999023,
       "longitude":-122.055229,
       "busses":[
+        "10",
+        "12",
+        "16",
+        "20",
+        "20D",
         "outer"
       ]
     },
@@ -181,6 +702,11 @@
       "latitude":36.997482,
       "longitude":-122.055031,
       "busses":[
+        "10",
+        "12",
+        "16",
+        "20",
+        "20D",
         "outer"
       ]
     },
@@ -189,6 +715,8 @@
       "latitude":36.996662,
       "longitude":-122.055481,
       "busses":[
+        "15",
+        "19",
         "inner"
       ]
     },
@@ -197,54 +725,79 @@
       "latitude":36.994247,
       "longitude":-122.055511,
       "busses":[
+        "10",
+        "12",
+        "16",
+        "20",
+        "20D",
         "outer"
       ]
     },
     {
-      "name":"Hagar & East Remote",
+      "name":"Hagar & East Remote, northbound",
       "latitude":36.991299,
       "longitude":-122.054657,
       "busses":[
+        "10",
+        "12",
+        "16",
+        "20",
+        "20D",
         "outer"
       ]
     },
     {
-      "name":"Hagar & East Remote",
+      "name":"Hagar & East Remote, southbound",
       "latitude":36.991257,
       "longitude":-122.054962,
       "busses":[
+        "15",
+        "19",
         "inner"
       ]
     },
     {
-      "name":"Hagar & Lower Quarry Rd",
+      "name":"Hagar & Lower Quarry Rd, northbound",
       "latitude":36.985912,
       "longitude":-122.053520,
       "busses":[
+        "10",
+        "16",
+        "20",
+        "20D",
         "outer"
       ]
     },
     {
-      "name":"Hagar & Lower Quarry Rd",
+      "name":"Hagar & Lower Quarry Rd, southbound",
       "latitude":36.985523,
       "longitude":-122.053589,
       "busses":[
+        "15",
+        "19",
         "inner"
       ]
     },
     {
-      "name":"Coolidge & Hagar",
+      "name":"Coolidge & Hagar, northbound",
       "latitude":36.981354,
       "longitude":-122.051971,
       "busses":[
+        "10",
+        "12",
+        "16",
+        "20",
+        "20D",
         "outer"
       ]
     },
     {
-      "name":"Coolidge & Hagar",
+      "name":"Coolidge & Hagar, southbound",
       "latitude":36.981537,
       "longitude":-122.052132,
       "busses":[
+        "15",
+        "19",
         "inner"
       ]
     },
@@ -253,6 +806,11 @@
       "latitude":36.977676,
       "longitude":-122.053558,
       "busses":[
+        "10",
+        "12",
+        "16",
+        "20",
+        "20D",
         "outer"
         ]
     },
@@ -261,15 +819,32 @@
       "latitude":36.977303,
       "longitude":-122.054329,
       "busses":[
+        "15",
+        "19",
         "inner"
       ]
     },
     {
-      "name":"High & Western Dr",
+      "name":"High & Western Dr, eastbound",
       "latitude":36.978615,
       "longitude":-122.057854,
       "busses":[
+        "10",
+        "12",
+        "16",
+        "20",
+        "20D",
         "outer"
+      ]
+    },
+      "name":"High & Western Dr, westbound",
+      "latitude":36.978806,
+      "longitude":-122.057739,
+      "busses":[
+        "15",
+        "19",
+        "16",
+        "inner"
       ]
     },
     {
@@ -277,38 +852,57 @@
       "latitude":36.979847,
       "longitude":-122.059258,
       "busses":[
+        "10",
+        "12",
+        "16",
+        "20",
+        "20D",
         "outer"
       ]
     },
     {
-      "name":"Empire Grade & Arboretum",
-      "latitude":36.982670,
-      "longitude":-122.062492,
+      "name":"Empire Grade & Arboretum, westbound",
+      "latitude":36.982765,
+      "longitude":-122.062713,
       "busses":[
+        "15",
+        "19",
         "inner"
       ]
     },
     {
-      "name":"Empire Grade & Arboretum",
+      "name":"Empire Grade & Arboretum, eastbound",
       "latitude":36.983662,
       "longitude":-122.064964,
       "busses":[
+        "10",
+        "12",
+        "16",
+        "20",
+        "20D",
         "outer"
       ]
     },
     {
-      "name":"Heller & Oakes College",
+      "name":"Heller & Oakes College, southbound",
       "latitude":36.989918,
       "longitude":-122.067230,
       "busses":[
+        "10",
+        "12",
+        "16",
+        "20",
+        "20D",
         "outer"
       ]
     },
     {
-      "name":"Heller & Oakes College",
+      "name":"Heller & Oakes College, northbound",
       "latitude":36.990578,
       "longitude":-122.066116,
       "busses":[
+        "15",
+        "19",
         "inner"
       ]
     },
@@ -317,22 +911,34 @@
       "latitude":36.991829,
       "longitude":-122.066833,
       "busses":[
+        "10",
+        "12",
+        "16",
+        "20",
+        "20D",
         "outer"
       ]
     },
     {
-      "name":"Heller & College 8/Porter",
+      "name":"Heller & College 8/Porter, westbound",
       "latitude":36.992977,
       "longitude":-122.065224,
       "busses":[
+        "10",
+        "12",
+        "16",
+        "20",
+        "20D",
         "outer"
       ]
     },
     {
-      "name":"Heller & College 8/Porter",
+      "name":"Heller & College 8/Porter, eastbound",
       "latitude":36.992779,
       "longitude":-122.064880,
       "busses":[
+        "15",
+        "19",
         "inner"
       ]
     }
