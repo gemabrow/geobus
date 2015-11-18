@@ -1,17 +1,17 @@
 {
   "allStops": [
     {
-      "name":"Cedar & Walnut",
-      "latitude":36.973509,
-      "longitude":-122.027105,
+      "name":"High & Laurent, eastbound",
+      "latitude":36.977578,
+      "longitude":-122.042175,
       "busses":[
         "10"
       ]
     },
     {
-      "name":"High & Laurent",
-      "latitude":36.977578,
-      "longitude":-122.042175,
+      "name":"High & Laurent, westbound",
+      "latitude":36.977745,
+      "longitude":-122.042450,
       "busses":[
         "10"
       ]
@@ -44,7 +44,7 @@
       ]
     },
     {
-      "name":"41st Ave. & Kings Plaza",
+      "name":"41st & Kings Plaza",
       "latitude":36.971703,
       "longitude":-121.965048,
       "busses":[
@@ -52,10 +52,186 @@
       ]
     },
     {
-      "name":"7th Ave. & Bonnie",
-      "latitude":36.964243,
-      "longitude":-121.998375,
+      "name":"41st Ave. & Brommer",
+      "latitude":36.969895,
+      "longitude":-121.965026,
       "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"41st Ave. & Gladys",
+      "latitude":36.966772,
+      "longitude":-121.964991,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"Portola & 41st",
+      "latitude":36.963515,
+      "longitude":-121.965913,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"Portola & 37th",
+      "latitude":36.963513,
+      "longitude":-121.968838,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"Portola & 35th",
+      "latitude":36.963531,
+      "longitude":-121.971924,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"Portola & 30th",
+      "latitude":36.963543,
+      "longitude":-121.973894,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"Portola & Corcoran",
+      "latitude":36.962878,
+      "longitude":-121.981432,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"Portola & Coastview",
+      "latitude":36.962479,
+      "longitude":-121.983597,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"Portola & 18th",
+      "latitude":36.962733,
+      "longitude":-121.987169,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"East Cliff & East Cliff Village",
+      "latitude":36.963553,
+      "longitude":-121.990691,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"East Cliff & 13th",
+      "latitude":36.964188,
+      "longitude":-121.992400,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"7th and Bonnie",
+      "latitude":36.964188,
+      "longitude":-121.992400,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"7th and Dolores",
+      "latitude":36.966294,
+      "longitude":-121.998110,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"Eaton & 5th",
+      "latitude":36.967800,
+      "longitude":-121.999178,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"Seabright & Murray",
+      "latitude":36.967535,
+      "longitude":-122.007789,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"Seabright & Hall",
+      "latitude":36.968862,
+      "longitude":-122.007908,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"Seabright & Clinton",
+      "latitude":36.971499,
+      "longitude":-122.007990,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"Seabright & Windsor",
+      "latitude":36.974280,
+      "longitude":-122.008095,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"Broadway & Seabright",
+      "latitude":36.975334,
+      "longitude":-122.008850,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"Broadway & Cayuga",
+      "latitude":36.975192,
+      "longitude":-122.010736,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"Broadway & Branciforte",
+      "latitude":36.974753,
+      "longitude":-122.014651,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"Broadway & Clay",
+      "latitude":36.972785,
+      "longitude":-122.019560,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name": "Broadway & Riverside (Park)",
+      "latitude": 36.971336,
+      "longitude": -122.022051,
+      "busses": [
         "12"
       ]
     },
@@ -71,6 +247,39 @@
       "name":"Bay & Mission, northbound",
       "latitude":36.966894,
       "longitude":-122.040605,
+      "busses":[
+        "12",
+        "15",
+        "16",
+        "19"
+      ]
+    },
+    {
+      "name":"Bay & King, northbound",
+      "latitude":36.968288,
+      "longitude":-122.043320,
+      "busses":[
+        "12",
+        "15",
+        "16",
+        "19"
+      ]
+    },
+    {
+      "name":"Bay & King, southbound",
+      "latitude":36.967924,
+      "longitude":-122.042741,
+      "busses":[
+        "12",
+        "15",
+        "16",
+        "19"
+      ]
+    },
+    {
+      "name":"Bay & Escalona",
+      "latitude":36.969405,
+      "longitude":-122.045914,
       "busses":[
         "12",
         "15",
@@ -135,13 +344,37 @@
       ]
     },
     {
-      "name":"Bay & Laguna",
+      "name":"Bay & National, northbound",
+      "latitude":36.961429,
+      "longitude":-122.032443,
+      "busses":[
+        "19"
+      ]
+    },
+    {
+      "name":"Bay & National, southbound",
+      "latitude":36.961366,
+      "longitude":-122.03278,
+      "busses":[
+        "19"
+      ]
+    },
+    {
+      "name":"Bay & Laguna, northbound",
       "latitude":36.960572,
       "longitude":-122.029091,
       "busses":[
         "19",
         "20",
         "20D"
+      ]
+    },
+    {
+      "name":"Bay & Laguna, southbound",
+      "latitude":36.960468,
+      "longitude":-122.029167,
+      "busses":[
+        "19"
       ]
     },
     {
@@ -163,7 +396,7 @@
       ]
     },
     {
-      "name":"Pacific & Viaduct, southbound",
+      "name":"Pacific & Viaduct",
       "latitude":36.963402,
       "longitude":-122.024560,
       "busses":[
@@ -172,7 +405,7 @@
       ]
     },
     {
-      "name":"Pacific & Viaduct, northbound",
+      "name":"Pacific & Second",
       "latitude":36.963488,
       "longitude":-122.024535,
       "busses":[
@@ -250,9 +483,17 @@
       ]
     },
     {
-      "name":"High & Cardiff",
+      "name":"High & Cardiff, eastbound",
       "latitude":36.977274,
       "longitude":-122.050233,
+      "busses":[
+        "10"
+      ]
+    },
+    {
+      "name":"High & Cardiff, westbound",
+      "latitude":36.977375,
+      "longitude":-122.050276,
       "busses":[
         "10"
       ]
@@ -291,8 +532,8 @@
     },
     {
       "name":"Storey & Escalona",
-      "latitude":36.976196,
-      "longitude":-122.035015,
+      "latitude":36.976212,
+      "longitude":-122.035001,
       "busses":[
         "10"
       ]
@@ -306,9 +547,17 @@
       ]
     },
     {
-      "name":"Mission & Sylvar",
+      "name":"Mission & Sylvar, westbound",
       "latitude":36.977455,
       "longitude":-122.030076,
+      "busses":[
+        "10"
+      ]
+    },
+    {
+      "name":"Mission & Sylvar, eastbound",
+      "latitude":36.977320,
+      "longitude":-122.030234,
       "busses":[
         "10"
       ]
@@ -354,11 +603,20 @@
       ]
     },
     {
-      "name":"Laurel & Center",
+      "name":"Laurel & Center, westbound",
       "latitude":36.968929,
       "longitude":-122.027744,
       "busses":[
         "12",
+        "15",
+        "16"
+      ]
+    },
+    {
+      "name":"Laurel & Center, eastbound",
+      "latitude":36.968848,
+      "longitude":-122.027730,
+      "busses":[
         "15",
         "16"
       ]
@@ -374,9 +632,9 @@
       ]
     },
     {
-      "name":"Laurel & Blackburn",
-      "latitude":36.968551,
-      "longitude":-122.031333,
+      "name":"Laurel & Blackburn, westbound",
+      "latitude":36.968487,
+      "longitude":-122.031930,
       "busses":[
         "12",
         "15",
@@ -384,9 +642,28 @@
       ]
     },
     {
-      "name":"Mission & Laurel",
+      "name":"Laurel & Blackburn, eastbound",
+      "latitude":36.968463,
+      "longitude":-122.031301,
+      "busses":[
+        "15",
+        "16"
+      ]
+    },
+    {
+      "name":"Mission & Laurel, westbound",
       "latitude":36.969010,
       "longitude":-122.037763,
+      "busses":[
+        "12",
+        "15",
+        "16"
+      ]
+    },
+    {
+      "name":"Mission & Laurel, eastbound",
+      "latitude":36.969271,
+      "longitude":-122.037424,
       "busses":[
         "12",
         "15",
@@ -529,17 +806,18 @@
       ]
     },
     {
-      "name":"Delaware & Centennial",
-      "latitude":36.958038,
-      "longitude":-122.030997,
-      "busses":[
-        "20"
-      ]
-    },
-    {
       "name":"Delaware & Columbia, westbound",
       "latitude":36.957849,
       "longitude":-122.032241,
+      "busses":[
+        "20",
+        "20D"
+      ]
+    },
+    {
+      "name":"Delaware & Centennial",
+      "latitude":36.958044,
+      "longitude":-122.030997,
       "busses":[
         "20",
         "20D"
