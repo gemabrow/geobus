@@ -132,25 +132,25 @@
       ]
     },
     {
+      "name":"7th & Bonnie",
+      "latitude":36.964188,
+      "longitude":-121.992400,
+      "busses":[
+        "12"
+      ]
+    },
+    {
+      "name":"7th & Dolores",
+      "latitude":36.966294,
+      "longitude":-121.998110,
+      "busses":[
+        "12"
+      ]
+    },
+    {
       "name":"East Cliff & 13th",
       "latitude":36.964188,
       "longitude":-121.992400,
-      "busses":[
-        "12"
-      ]
-    },
-    {
-      "name":"7th and Bonnie",
-      "latitude":36.964188,
-      "longitude":-121.992400,
-      "busses":[
-        "12"
-      ]
-    },
-    {
-      "name":"7th and Dolores",
-      "latitude":36.966294,
-      "longitude":-121.998110,
       "busses":[
         "12"
       ]
