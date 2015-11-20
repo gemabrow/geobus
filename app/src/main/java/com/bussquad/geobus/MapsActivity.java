@@ -8,6 +8,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,6 +43,7 @@ import java.util.Map;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, OnMarkerClickListener {
     static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1; // int used to identify specific permissions in permission callback methods
     private final static int MARKER_UPDATE_INTERVAL = 2000; // in milliseconds
+    private final static float ICON_DEGREES_OFFSET = 90;
     private static final String TAG = "MapsActivity";
     public static MapsActivity activity;
     private final Handler locationHandler = new Handler();
@@ -143,28 +145,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.setMyLocationEnabled(true);
     }
 
-    // creates dialog for the case of the user denying location permission
-    public static class LocationDialogFragment extends DialogFragment {
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the Builder class for convenient dialog construction
-            String title = getResources().getString(R.string.dialog_loc_title);        // setting strings to separate variables
-            String message = getResources().getString(R.string.dialog_loc_permission); // so that we can apply their HTML formatting
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setIcon(R.drawable.ic_room_pink)
-                    .setMessage(Html.fromHtml(message)) // bada-bing, HTML.
-                    .setTitle(Html.fromHtml(title))
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // dismiss the dialog
-                        }
-                    });
-            // Create the AlertDialog object and return it
-            return builder.create();
-        }
-    }
-
-    @Override // overridden callback for permissions request in order to handle the user denying or accepting location permission
+    @Override
+    // overridden callback for permissions request in order to handle the user denying or accepting location permission
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_ACCESS_FINE_LOCATION: {
@@ -206,6 +188,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * and previously displayed bus markers are moved to their new coordinates
      */
     public void setMarkers(List<Bus> buses) {
+        Location dummyLocation = new Location("Dummy");
         Map<String, Marker> updatedBusMarkers = new HashMap<String, Marker>();
         AnimationSettings settings = new AnimationSettings()
                 .duration(MARKER_UPDATE_INTERVAL).interpolator(interpolator);
@@ -219,6 +202,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //PolylineOptions stops = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
                 bus_marker = mMap.addMarker(new MarkerOptions()
                         .position(newPos)
+                        .flat(true)
                         .title(bus.route)
                         .clusterGroup(bus.clusterGroup)
                         .snippet("Bus ID: " + Integer.toString(bus.bus_id))
@@ -238,6 +222,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         bus_marker.setIcon(BitmapDescriptorFactory.defaultMarker(bus.color));
                     case (2):
                         bus_marker.animatePosition(newPos, settings);
+                        bus_marker.setRotation(bus.updateBearing(bus_marker.getPosition(), bus_marker.getRotation() - ICON_DEGREES_OFFSET) + ICON_DEGREES_OFFSET);
                         break;
                 }
                 busMarkers.remove(Integer.toString(bus.bus_id));
@@ -298,6 +283,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         catch(IOException ex) {
             System.out.println("Error reading file");
+        }
+    }
+
+    // creates dialog for the case of the user denying location permission
+    public static class LocationDialogFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the Builder class for convenient dialog construction
+            String title = getResources().getString(R.string.dialog_loc_title);        // setting strings to separate variables
+            String message = getResources().getString(R.string.dialog_loc_permission); // so that we can apply their HTML formatting
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setIcon(R.drawable.ic_room_pink)
+                    .setMessage(Html.fromHtml(message)) // bada-bing, HTML.
+                    .setTitle(Html.fromHtml(title))
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // dismiss the dialog
+                        }
+                    });
+            // Create the AlertDialog object and return it
+            return builder.create();
         }
     }
 

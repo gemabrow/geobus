@@ -1,5 +1,7 @@
 package com.bussquad.geobus;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Representation of buses. float values are used for colors as per requirements
  * by Google Map Markers
@@ -73,6 +75,32 @@ class Bus {
 
     public int getBus_id() {
         return bus_id;
+    }
+
+    // returns the bearing angle from prevPos to current position of bus
+    public float updateBearing(LatLng prevPos, float prevBearing) {
+        double dLim = 0.0001;
+        double latDelta = (this.lat - prevPos.latitude);
+        double lngDelta = (this.lng - prevPos.longitude);
+
+        // if if the differences in coordinates are significant, update bearing
+        // otherwise, return the previous bearing
+        float bearing = (latDelta < dLim && lngDelta < dLim) ?
+                prevBearing : (float) calcBearing(prevPos);
+
+        return bearing;
+    }
+
+    private double calcBearing(LatLng prevPos) {
+        double prevLng = prevPos.longitude;
+        double currLng = this.lng;
+        double prevLat = Math.toRadians(prevPos.latitude);
+        double currLat = Math.toRadians(this.lat);
+        double lngDelta = Math.toRadians(currLng - prevLng);
+        double y = Math.sin(lngDelta) * Math.cos(currLat);
+        double x = Math.cos(prevLat) * Math.sin(currLat) - Math.sin(prevLat) * Math.cos(currLat) * Math.cos(lngDelta);
+
+        return (Math.toDegrees(Math.atan2(y, x)) + 360) % 360;
     }
 
     public String toString() {
