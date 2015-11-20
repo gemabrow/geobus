@@ -78,6 +78,7 @@ class Bus {
     }
 
     // returns the bearing angle from prevPos to current position of bus
+    // type float as required by marker options
     public float updateBearing(LatLng prevPos, float prevBearing) {
         double dLim = 0.0001;
         double latDelta = (this.lat - prevPos.latitude);
@@ -91,11 +92,13 @@ class Bus {
         return bearing;
     }
 
+    // trig magic to calculate bearing based on two sets of coordinates
+    // returns as degrees as double
     private double calcBearing(LatLng prevPos) {
-        double prevLng = prevPos.longitude;
         double currLng = this.lng;
-        double prevLat = Math.toRadians(prevPos.latitude);
         double currLat = Math.toRadians(this.lat);
+        double prevLng = prevPos.longitude;
+        double prevLat = Math.toRadians(prevPos.latitude);
         double lngDelta = Math.toRadians(currLng - prevLng);
         double y = Math.sin(lngDelta) * Math.cos(currLat);
         double x = Math.cos(prevLat) * Math.sin(currLat) - Math.sin(prevLat) * Math.cos(currLat) * Math.cos(lngDelta);
