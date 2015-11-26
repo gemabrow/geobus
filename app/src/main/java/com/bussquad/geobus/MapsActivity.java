@@ -202,7 +202,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMyLocationEnabled(true); // Enables the My Location Layer on the map so users get their current position
         mMap.setOnMarkerClickListener(this);
 
         // set up coordinates for the center of UCSC and move the camera to there with a zoom level of 15 on startup
@@ -258,11 +257,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     @Override
-    public void onBackPressed() { // if the hamburger menu/sidebar is opened, allow it to be closed with the back button
-        if(mDrawerLayout.isDrawerOpen(Gravity.LEFT)){
-            mDrawerLayout.closeDrawer(Gravity.LEFT);
+    public void onBackPressed() {
+        if(getFragmentManager().getBackStackEntryCount() > 0 && !mDrawerLayout.isDrawerOpen(Gravity.LEFT))
+            getFragmentManager().popBackStack(); // close fragment if ONLY the fragment is open
+        else if(mDrawerLayout.isDrawerOpen(Gravity.LEFT) && getFragmentManager().getBackStackEntryCount() == 0)
+            mDrawerLayout.closeDrawer(Gravity.LEFT); // if both the fragment and the drawer is open, only close the drawer
+        else if(mDrawerLayout.isDrawerOpen(Gravity.LEFT) && getFragmentManager().getBackStackEntryCount() > 0){
+            mDrawerLayout.closeDrawer(Gravity.LEFT); // close the drawer if it's open
         }else{
-            super.onBackPressed();
+            super.onBackPressed(); // close the app otherwise
         }
     }
 
@@ -333,7 +336,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             busScheduleFragment.setBusStopName(busStopName);
             busScheduleFragment.setBusSchedule(database_Helper.getBusStopSchedule(id));
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.fragment_container, busScheduleFragment);
+            fragmentTransaction.add(R.id.fragment_container, busScheduleFragment).addToBackStack("BACK");
             fragmentTransaction.show(busScheduleFragment);
             fragmentTransaction.commit();
             infoWindowActive = true;
@@ -346,7 +349,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             busScheduleFragment.setBusStopName(busStopName);
             busScheduleFragment.setBusSchedule(database_Helper.getBusStopSchedule(id));
 
-            fragmentTransaction.replace(R.id.fragment_container, busScheduleFragment);
+            fragmentTransaction.replace(R.id.fragment_container, busScheduleFragment).addToBackStack("BACK");
             fragmentTransaction.show(busScheduleFragment);
             fragmentTransaction.commit();
         }
@@ -355,7 +358,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             busScheduleFragment = new BusScheduleFragment();
             busScheduleFragment.setBusStopName(busStopName);
-            fragmentTransaction.replace(R.id.fragment_container, busScheduleFragment);
+            fragmentTransaction.replace(R.id.fragment_container, busScheduleFragment).addToBackStack("BACK");
             fragmentTransaction.show(busScheduleFragment);
             fragmentTransaction.commit();
             infoWindowActive = true;
