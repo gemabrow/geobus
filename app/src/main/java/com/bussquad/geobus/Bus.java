@@ -1,6 +1,6 @@
 package com.bussquad.geobus;
 
-import java.util.ArrayList;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Representation of buses. float values are used for colors as per requirements
@@ -21,11 +21,7 @@ class Bus {
     public final double lng;
     public final int bus_id;
     public final int timestamp;
-
-    private String name;
-    private ArrayList<String> times = new ArrayList<>();
-
-
+    public final int clusterGroup;
 
     Bus(double lat, double lng, int timestamp, String route, String direction, int bus_id)
     {
@@ -38,24 +34,28 @@ class Bus {
             case "loop":
                 if (direction.equals("outer"))
                 {
+                    this.clusterGroup = 0;
                     route = "Outer Loop";
                     this.color = HUE_AZURE;
                 }
                 else {
+                    this.clusterGroup = 0;
                     route = "Inner Loop";
                     this.color = HUE_ORANGE;
                 }
                 break;
             case "upper campus":
+                this.clusterGroup = 0;
+                route = "Upper Campus";
                 this.color = HUE_YELLOW;
                 break;
             default:
+                this.clusterGroup = 1;
                 this.color = HUE_RED;
                 break;
         }
         this.route = route;
     }
-
 
     public double getLat() {
         return lat;
@@ -77,18 +77,44 @@ class Bus {
         return bus_id;
     }
 
+    // returns the bearing angle from prevPos to current position of bus
+    // type float as required by marker options
+    public float updateBearing(LatLng prevPos, float prevBearing) {
+        double dLim = 0.0001;
+        double latDelta = (this.lat - prevPos.latitude);
+        double lngDelta = (this.lng - prevPos.longitude);
+
+        // if if the differences in coordinates are significant, update bearing
+        // otherwise, return the previous bearing
+        float bearing = (latDelta < dLim && lngDelta < dLim) ?
+                prevBearing : (float) calcBearing(prevPos);
+
+        return bearing;
+    }
+
+    // trig magic to calculate bearing based on two sets of coordinates
+    // returns as degrees as double
+    private double calcBearing(LatLng prevPos) {
+        double currLng = this.lng;
+        double currLat = Math.toRadians(this.lat);
+        double prevLng = prevPos.longitude;
+        double prevLat = Math.toRadians(prevPos.latitude);
+        double lngDelta = Math.toRadians(currLng - prevLng);
+        double y = Math.sin(lngDelta) * Math.cos(currLat);
+        double x = Math.cos(prevLat) * Math.sin(currLat) - Math.sin(prevLat) * Math.cos(currLat) * Math.cos(lngDelta);
+
+        return (Math.toDegrees(Math.atan2(y, x)) + 360) % 360;
+    }
+
     public String toString() {
         return("Bus ID: " + this.bus_id + " Current location: Latitude " + this.lat
-                + " Longitude: " + this.lng + "Time Stamp: " + this.timestamp
+                + " Longitude: " + this.lng + " Time Stamp: " + this.timestamp
                 + " Route: " + this.route + " Direction: " + this.direction);
     }
     public void printBus(){
         System.out.println("Bus ID: " + this.bus_id + " Current location: Latitude " + this.lat + " Longitude: " + this.lng);
-        System.out.println("Time Stamp: " + this.timestamp + " Route: " + this.route + " Predictions: " + this.direction);
+        System.out.println(" Time Stamp: " + this.timestamp + " Route: " + this.route + " Predictions: " + this.direction);
     }
-
-
-
 
 
 }

@@ -16,8 +16,38 @@
         android:layout_weight="1.02" />
 
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MapsActivity"
+    tools:layout="@layout/activity_maps" />
+    <com.dd.ShadowLayout
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        app:sl_shadowRadius="2dp"
+        app:sl_shadowColor="#A9000000"
+        app:sl_dx="0dp"
+        app:sl_dy="2dp"
+        app:sl_cornerRadius="0dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/hamburgerHelper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="0dp"
+            android:layout_alignParentTop="true"
+            android:onClick="releaseTheBurger"
+            android:background="#80FFFFFF"
+            android:src="@drawable/ic_menu_black_24dp" />
+    </com.dd.ShadowLayout>
+</RelativeLayout>
+    <ListView
+        android:id="@+id/navList"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left|start"
+        android:background="#ffeeeeee"/>
+</android.support.v4.widget.DrawerLayout>        android:layout_height="wrap_content"
         android:id="@+id/fragment_container" />
 
 

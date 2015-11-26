@@ -27,8 +27,7 @@
       "longitude":-122.042175,
       "busses":[
         "10"
-      ],
-      "id":8
+      ]
     },
     {
       "name":"Science Hill",
@@ -42,8 +41,7 @@
         "19",
         "20",
         "outer"
-      ],
-      "id":40
+      ]
     },
     {
       "name":"Santa Cruz Metro Center",
@@ -93,8 +91,7 @@
         "16",
         "19",
         "20"
-      ],
-      "id":42
+      ]
     },
     {
       "name":"Pacific Shores",
@@ -121,8 +118,7 @@
       "longitude":-122.048968,
       "busses":[
         "20"
-      ],
-      "id":38
+      ]
     },
     {
       "name":"Heller & Kresge College",
@@ -154,8 +150,7 @@
       "longitude":-122.062050,
       "busses":[
         "inner"
-      ],
-      "id":41
+      ]
     },
     {
       "name":"McLaughlin & College 9 & 10 - Health Center",
@@ -187,8 +182,7 @@
       "longitude":-122.055031,
       "busses":[
         "outer"
-      ],
-      "id":17
+      ]
     },
     {
       "name":"Hagar & Bookstore",
@@ -204,8 +198,7 @@
       "longitude":-122.055511,
       "busses":[
         "outer"
-      ],
-      "id":14
+      ]
     },
     {
       "name":"Hagar & East Remote",
@@ -213,8 +206,7 @@
       "longitude":-122.054657,
       "busses":[
         "outer"
-      ],
-      "id":15
+      ]
     },
     {
       "name":"Hagar & East Remote",
@@ -262,8 +254,7 @@
       "longitude":-122.053558,
       "busses":[
         "outer"
-        ],
-      "id":10
+        ]
     },
     {
       "name":"High & Barn Theater",
@@ -287,8 +278,7 @@
       "longitude":-122.059258,
       "busses":[
         "outer"
-      ],
-      "id":25
+      ]
     },
     {
       "name":"Empire Grade & Arboretum",
@@ -296,8 +286,7 @@
       "longitude":-122.062492,
       "busses":[
         "inner"
-      ],
-      "id":24
+      ]
     },
     {
       "name":"Empire Grade & Arboretum",
@@ -313,8 +302,7 @@
       "longitude":-122.067230,
       "busses":[
         "outer"
-      ],
-      "id":24
+      ]
     },
     {
       "name":"Heller & Oakes College",
