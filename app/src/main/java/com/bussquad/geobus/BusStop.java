@@ -1,5 +1,7 @@
 package com.bussquad.geobus;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 /**
@@ -109,6 +111,16 @@ class BusStop {
         return  this.busStopID;
     }
 
+
+    public boolean hasBus(String bus) {
+        return this.busses.contains(bus);
+    }
+
+
+
+    public LatLng getLatLng() {
+        return new LatLng(this.latitude, this.longitude);
+    }
 
 
 

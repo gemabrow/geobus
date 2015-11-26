@@ -1,4 +1,5 @@
 package com.bussquad.geobus;
+import android.graphics.Color;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -57,6 +58,24 @@ class Bus {
         this.route = route;
     }
 
+    public static int busColor(String route) {
+        float cVal;
+        switch (route) {
+            case ("Outer Loop"):
+                cVal = HUE_AZURE;
+                break;
+            case ("Inner Loop"):
+                cVal = HUE_ORANGE;
+                break;
+            case ("Upper Campus"):
+                cVal = HUE_YELLOW;
+                break;
+            default:
+                cVal = HUE_RED;
+        }
+        return Color.HSVToColor(new float[]{cVal, 1.0f, 1.0f});
+    }
+
     public double getLat() {
         return lat;
     }
@@ -111,10 +130,10 @@ class Bus {
                 + " Longitude: " + this.lng + " Time Stamp: " + this.timestamp
                 + " Route: " + this.route + " Direction: " + this.direction);
     }
+
     public void printBus(){
         System.out.println("Bus ID: " + this.bus_id + " Current location: Latitude " + this.lat + " Longitude: " + this.lng);
         System.out.println(" Time Stamp: " + this.timestamp + " Route: " + this.route + " Predictions: " + this.direction);
     }
-
 
 }

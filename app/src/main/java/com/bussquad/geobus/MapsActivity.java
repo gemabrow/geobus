@@ -35,20 +35,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.androidmapsextensions.AnimationSettings;
 import com.androidmapsextensions.GoogleMap;
 import com.androidmapsextensions.GoogleMap.OnMarkerClickListener;
 import com.androidmapsextensions.Marker;
 import com.androidmapsextensions.MarkerOptions;
 import com.androidmapsextensions.OnMapReadyCallback;
+import com.androidmapsextensions.Polyline;
+import com.androidmapsextensions.PolylineOptions;
 import com.androidmapsextensions.SupportMapFragment;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,8 +57,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback , GoogleMap.OnMarkerClickListener {
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, OnMarkerClickListener {
+
     static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1; // int used to identify specific permissions in permission callback methods
     private final static int MARKER_UPDATE_INTERVAL = 2000; // in milliseconds
     private final static float ICON_DEGREES_OFFSET = 90;
@@ -70,17 +69,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private final Handler locationHandler = new Handler();
     private final JsonFileReader test = new JsonFileReader();
     private Interpolator interpolator = new DecelerateInterpolator();
-    private Boolean showStops = false;
 
     private Boolean showStops = true;
     private Boolean infoWindowActive = false;
     private GoogleMap mMap;
     private ArrayList<BusStop> busStops;
-    private JsonFileReader test =  new JsonFileReader();
 
 
-    Handler locationHandler = new Handler();
-    final static int MARKER_UPDATE_INTERVAL = 2000; // in milliseconds
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
@@ -96,13 +91,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final float HUE_YELLOW = 60;
     private static final float HUE_ORANGE = 30;
     private static final float HUE_AZURE = 210;
+
+    private Polyline routeLine;
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ArrayAdapter<String> mAdapter;
+
+
     private Map<String, Marker> busMarkers = new HashMap<String, Marker>();
     private Map<Marker,BusStop> busStopMarkers = new HashMap<Marker, BusStop>();
-    private Map<String, Marker> visibleMarkers = new HashMap<String, Marker>();
-    
+
+
+
     private final Runnable updateMarkers = new Runnable() {
         @Override
         public void run() {
@@ -128,12 +128,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             locationHandler.postDelayed(this, MARKER_UPDATE_INTERVAL);
         }
     };
+    private Map<String, Marker> visibleMarkers = new HashMap<String, Marker>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         activity = this;
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_maps);
         mDrawerList = (ListView)findViewById(R.id.navList);
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
@@ -144,37 +144,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        mapFragment.getExtendedMapAsync(this);
 
 
         // sets up the FragmentManager and the  BusScheduleFragment which will be populated with
         // information based on the bus schedule of the specified bus stop
-        if(savedInstanceState == null){
             fragmentManager = getFragmentManager();
             busScheduleFragment = new BusScheduleFragment();
             database_Helper = new DataBaseHelper(MapsActivity.this);
             database_Helper.createDataBase();
-        }
-
-
-
-
 
         // loads UCSC_WestSide_Bus_Stops.json file to an array of BusStop Objects which are used
         // to create the busstop markers
         loadJsonFromAsset();
-
         startBackgroundData();
     }
+
+
+
 
     public void stopBackgroundData() {
         locationHandler.removeCallbacks(updateMarkers);
     }
 
-    public void startBackgroundData() {
-        locationHandler.postDelayed(updateMarkers, MARKER_UPDATE_INTERVAL);
-    }
-    
+
+
+
     @Override
     protected void onSaveInstanceState(Bundle outState)
     {
@@ -213,10 +208,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // set up coordinates for the center of UCSC and move the camera to there with a zoom level of 15 on startup
         LatLng ucsc = new LatLng(36.991406, -122.060731);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucsc, 15));
+
         createBusStopMarkers();
-//        drawBusStopMarkers();
         drawBusStopMarkers();
         checkVersion(); // permissions handling for newer versions of Android (6+)
+
     }
 
     private void addDrawerItems() { // fills the hamburger menu/sidebar with an array of strings!
@@ -258,6 +254,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mDrawerLayout.openDrawer(mDrawerList);
     }
 
+
+
+
     @Override
     public void onBackPressed() { // if the hamburger menu/sidebar is opened, allow it to be closed with the back button
         if(mDrawerLayout.isDrawerOpen(Gravity.LEFT)){
@@ -266,6 +265,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             super.onBackPressed();
         }
     }
+
+
+
 
     public void checkVersion(){
         if (Build.VERSION.SDK_INT >= 23) {
@@ -280,6 +282,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         else // once the app has been installed, we can assume that location permissions have been granted. Proceed without a care!
             mMap.setMyLocationEnabled(true);
     }
+
+
+
 
     @Override
     // overridden callback for permissions request in order to handle the user denying or accepting location permission
@@ -301,35 +306,93 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+
+
+
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if (busMarkers.containsValue(marker)) {
-            LatLng position = marker.getPosition();
-            Log.i(TAG, position.toString());
+        int id;
+        String busStopName;
+
+        if(busStopMarkers.containsKey(marker)) {
+
+            id = busStopMarkers.get(marker).getBusStopID();
+            busStopName = busStopMarkers.get(marker).getTitle();
+
+
+            busStopMarkers.get(marker).setBusStopSchedule(database_Helper.getBusStopSchedule(id));
+        }else {
+            id = -1;
+            busStopName = marker.getTitle();
+        }
+
+
+
+        if (!infoWindowActive) {
+
+            busScheduleFragment.setBusStopName(busStopName);
+            busScheduleFragment.setBusSchedule(database_Helper.getBusStopSchedule(id));
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.fragment_container, busScheduleFragment);
+            fragmentTransaction.show(busScheduleFragment);
+            fragmentTransaction.commit();
+            infoWindowActive = true;
+
+        } else if (infoWindowActive && id != busScheduleFragment.getId() && id != -1){
+
+            fragmentTransaction = fragmentManager.beginTransaction();
+
+            busScheduleFragment = new BusScheduleFragment();
+            busScheduleFragment.setBusStopName(busStopName);
+            busScheduleFragment.setBusSchedule(database_Helper.getBusStopSchedule(id));
+
+            fragmentTransaction.replace(R.id.fragment_container, busScheduleFragment);
+            fragmentTransaction.show(busScheduleFragment);
+            fragmentTransaction.commit();
+        }
+        else if (id == -1){
+            fragmentTransaction = fragmentManager.beginTransaction();
+
+            busScheduleFragment = new BusScheduleFragment();
+            busScheduleFragment.setBusStopName(busStopName);
+            fragmentTransaction.replace(R.id.fragment_container, busScheduleFragment);
+            fragmentTransaction.show(busScheduleFragment);
+            fragmentTransaction.commit();
+            infoWindowActive = true;
+        }
+        else{
+
         }
         return false;
     }
 
-    public void stopBackgroundData() {
-        locationHandler.removeCallbacks(updateMarkers);
-    }
 
 
-    public void createBusStopMarkers(){
+
+    public void createBusStopMarkers() {
 
         for (BusStop temp : busStops) {
             Marker busStopMarker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(temp.getLatitude(), temp.getLongitude()))
                     .title(temp.getTitle())
-                    .visible(true)
+                    .visible(false)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop)));
 
-                    if (temp.hasId()) {
-                        busStopMarkers.put(busStopMarker, temp);
-                    }
+            if (temp.hasId()) {
+                System.out.println("adding bus stop");
+                busStopMarkers.put(busStopMarker, temp);
+            }
+            visibleMarkers.put(Double.toString(temp.getLatitude()+ temp.getLongitude()),busStopMarker);
+        }
+    }
+
+
+
     public void startBackgroundData() {
         locationHandler.postDelayed(updateMarkers, MARKER_UPDATE_INTERVAL);
     }
+
+
 
     /**
      * Given a list of xml_markers (defined in TransitInfoXmlParser),
@@ -402,39 +465,62 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         busMarkers = updatedBusMarkers;
     }
 
+
+
+
     public Bitmap resizeMapIcons(String iconName,int width, int height){ // used to resize marker icons so they don't explode to crazy sizes
         Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier(iconName, "drawable", getPackageName()));
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
         return resizedBitmap;
     }
 
+
+
+    //TODO: Check if simple polylines are working correctly and follow up with snap-to-road lines
+    private void toggleRoute(Marker busMarker) {
+        if (routeLine == null) {
+            Log.i(TAG, "routeLine null");
+            routeLine = mMap.addPolyline(new PolylineOptions()
+                    .addAll((ArrayList<LatLng>) busMarker.getData())
+                    .color(Bus.busColor(busMarker.getTitle())));
+        } else {
+            routeLine.setPoints((ArrayList<LatLng>) busMarker.getData());
+            routeLine.setColor(Bus.busColor(busMarker.getTitle()));
+            routeLine.setVisible(!routeLine.isVisible());
+        }
+
+    }
+
+
+
+
+    private void setPolylineCoords(Marker busMarker) {
+        try {
+            InputStream in = getAssets().open("UCSC_Westside_Busses.json");
+            test.readScheduledStops(in, busMarker.getTitle(), busStops);
+            busMarker.setData(test.getStopLocations());
+        } catch (IOException ex) {
+            System.out.println("Error reading file");
+        }
+    }
+
+
+
     // draws the busstop markers on the google map
     public void drawBusStopMarkers(){
-        Map<String, Marker> updatedVisibleMarkers = new HashMap<String, Marker>();
 
         for (BusStop temp : busStops){
             Marker busStop = visibleMarkers.get(Double.toString(temp.getLatitude() + temp.getLongitude()));
-            if (busStop == null) {
-                busStop = mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(temp.getLatitude(), temp.getLongitude()))
-                        .title(temp.getTitle())
-                        .visible(showStops)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop)));
+            if(busStop.isVisible()){
+                busStop.setVisible(false);
+            } else {
+                busStop.setVisible(true);
             }
-            else {
-                busStop.setVisible(showStops);
-                visibleMarkers.remove(Double.toString(temp.getLatitude() + temp.getLongitude()));
-            }
-            updatedVisibleMarkers.put(Double.toString(temp.getLatitude()+ temp.getLongitude()), busStop);
         }
-
-        // remove all values from busMarkers Map (NOT a Google Map)
-        for(Marker marker: visibleMarkers.values()){
-            marker.remove();
-        }
-        // and set to the updatedBusMarkers Map (NOT a Google Map)
-        visibleMarkers = updatedVisibleMarkers;
     }
+
+
+
 
     // loads bus stops specified by json file
     public void loadJsonFromAsset(){
@@ -449,6 +535,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             System.out.println("Error reading file");
         }
     }
+
+
+
 
     // creates dialog for the case of the user denying location permission
     public static class LocationDialogFragment extends DialogFragment {
@@ -470,5 +559,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return builder.create();
         }
     }
+
+
+
+
+    public void closeBusStopScheduleFragment(){
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.remove(busScheduleFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
 
 }

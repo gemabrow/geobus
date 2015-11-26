@@ -2,6 +2,9 @@ package com.bussquad.geobus;
 
 import android.util.JsonReader;
 import android.util.JsonToken;
+import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +24,7 @@ import java.util.List;
 class JsonFileReader {
     private static String TAG = "JsonFileReader"; // Tag just for the LogCat window
     private ArrayList<BusStop> BusStops;
+    private ArrayList<LatLng> coordinates;
 
     // construtor
     public JsonFileReader(){
@@ -132,7 +136,71 @@ class JsonFileReader {
 
         }
     }
+    //************************************************************************************************//
+    // read in UCSC_Westside_Busses.json file only
+    public void readScheduledStops(InputStream in, String route, ArrayList<BusStop> allStops) throws IOException {
+        JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
+        try {
+            readBuses(reader, route, allStops);
+        } finally {
+            reader.close();
+        }
+    }
 
+    private void readBuses(JsonReader reader, String route, ArrayList<BusStop> allStops) throws IOException {
+        ArrayList<String> scheduledStops = new ArrayList<String>(16);
+        coordinates = new ArrayList<LatLng>(16);
+
+        reader.beginObject();
+        reader.skipValue();
+        reader.beginArray();
+        while (reader.hasNext()) {
+            readBusArray(reader, route, scheduledStops);
+        }
+
+        Log.i(TAG, "Finished JSONing");
+        for (BusStop stop : allStops) {
+            coordinates.add(scheduledStops.indexOf(stop.getTitle()), stop.getLatLng());
+        }
+    }
+
+    // reads in one bus stop from the json file at a time and returns a new BusStop Object
+    private void readBusArray(JsonReader reader, String route, ArrayList<String> scheduledStops) throws IOException {
+        Log.d(TAG, "begin reader");
+        reader.beginObject();
+        while (reader.hasNext()) {
+            Log.i(TAG, reader.peek().toString());
+            String name = reader.nextName();
+            Log.d(TAG, name);
+            if (name.equals("name") && reader.peek().equals(route)) {
+                //found match in schedule, take in bus stop locations
+                reader.skipValue();
+                readStringArray(scheduledStops, reader);
+                Log.i(TAG, "MATCHED");
+            } else {
+                reader.skipValue();
+            }
+        }
+        reader.endObject();
+    }
+
+    // reads in the a list of busses that stop at the specified bus stop
+    private void readStringArray(ArrayList<String> targets, JsonReader reader) throws IOException {
+
+        // reads in a brace [
+        reader.beginArray();
+        while (reader.hasNext()) {
+            targets.add(reader.nextString());
+        }
+
+        // reads in a closing brace ]
+        reader.endArray();
+
+    }
+
+    public ArrayList<LatLng> getStopLocations() {
+        return coordinates;
+    }
 
 }
 
