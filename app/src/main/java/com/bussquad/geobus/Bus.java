@@ -1,6 +1,8 @@
 package com.bussquad.geobus;
 import android.graphics.Color;
 
+import android.graphics.Color;
+
 import com.google.android.gms.maps.model.LatLng;
 
 /**
