@@ -1,151 +1,87 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.bussquad.geobus.BusScheduleFragment">
+    tools:context="com.bussquad.geobus.BusScheduleFragment"
+    android:weightSum="1"
+    android:background="@color/colorPrimaryDark">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TextView
-        android:layout_width="383dp"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="@string/bus_schedule"
-        android:id="@+id/busInfo"
-        android:textIsSelectable="true"
-        android:singleLine="true" />
+        android:weightSum="1"
+        android:id="@+id/busStopNameInfo">
+
+        <TextView
+            android:layout_width="282dp"
+            android:layout_height="match_parent"
+            android:text="@string/bus_schedule"
+            android:id="@+id/busInfo"
+            android:textIsSelectable="false"
+            android:singleLine="false"
+            android:textColor="@color/colorYellowMetro"
+            android:textSize="20sp"
+            android:background="@color/colorDarkBlueMetro"
+            android:gravity="center"
+            android:layout_weight="0.52"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/close_fragment"
+            android:id="@+id/fragClose"
+            android:textIsSelectable="false"
+            android:singleLine="false"
+            android:textColor="@color/colorYellowMetro"
+            android:textSize="20sp"
+            android:background="@color/colorDarkBlueMetro"
+            android:gravity="center"
+            android:layout_weight="0.48"
+            android:onClick="closeBusSchedule"
+            android:clickable="true" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:text="@string/Bus_Name"
+            android:id="@+id/textView"
+            android:textIsSelectable="false"
+            android:singleLine="false"
+            android:textColor="@color/colorYellowMetro"
+            android:textSize="20sp"
+            android:background="@color/colorDarkBlueMetro"
+            android:gravity="center_horizontal"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/depart_Time"
+            android:id="@+id/textView2"
+            android:textIsSelectable="false"
+            android:singleLine="false"
+            android:textColor="@color/colorYellowMetro"
+            android:textSize="20sp"
+            android:background="@color/colorDarkBlueMetro"
+            android:gravity="center_horizontal"/>
+
+    </LinearLayout>
 
     <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="214dp"
-        android:id="@+id/scrollView" >
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:id="@+id/BusScheduleScrollView">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="65dp"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/Bus_10"
-                    android:id="@+id/textView" />
-
-                <HorizontalScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/horizontalScrollView" >
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:layout_width="90dp"
-                            android:layout_height="65dp"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="9:00am"
-                            android:id="@+id/textView2" />
-
-                        <TextView
-                            android:layout_width="90dp"
-                            android:layout_height="65dp"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="10:00am"
-                            android:id="@+id/textView5" />
-
-                        <TextView
-                            android:layout_width="90dp"
-                            android:layout_height="65dp"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="10:30am"
-                            android:id="@+id/textView11" />
-
-                        <TextView
-                            android:layout_width="90dp"
-                            android:layout_height="65dp"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="10:00pm"
-                            android:id="@+id/textView4" />
-
-                        <TextView
-                            android:layout_width="90dp"
-                            android:layout_height="65dp"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="@string/Bus_10"
-                            android:id="@+id/textView3" />
-                    </LinearLayout>
-                </HorizontalScrollView>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="65dp"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Bus 12"
-                    android:id="@+id/textView6" />
-
-                <HorizontalScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/horizontalScrollView2" >
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" >
-
-                        <TextView
-                            android:layout_width="90dp"
-                            android:layout_height="65dp"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="9:00am"
-                            android:id="@+id/textView7" />
-
-                        <TextView
-                            android:layout_width="90dp"
-                            android:layout_height="65dp"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="10:00am"
-                            android:id="@+id/textView8" />
-
-                        <TextView
-                            android:layout_width="90dp"
-                            android:layout_height="65dp"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="10:30am"
-                            android:id="@+id/textView9" />
-
-                        <TextView
-                            android:layout_width="90dp"
-                            android:layout_height="65dp"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="10:00pm"
-                            android:id="@+id/textView10" />
-
-                        <TextView
-                            android:layout_width="90dp"
-                            android:layout_height="65dp"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="@string/Bus_10"
-                            android:id="@+id/textView12" />
-                    </LinearLayout>
-                </HorizontalScrollView>
-            </LinearLayout>
-        </LinearLayout>
     </ScrollView>
 
 

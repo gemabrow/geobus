@@ -1,5 +1,7 @@
 package com.bussquad.geobus;
 
+import java.util.ArrayList;
+
 /**
  * Representation of buses. float values are used for colors as per requirements
  * by Google Map Markers
@@ -19,6 +21,11 @@ class Bus {
     public final double lng;
     public final int bus_id;
     public final int timestamp;
+
+    private String name;
+    private ArrayList<String> times = new ArrayList<>();
+
+
 
     Bus(double lat, double lng, int timestamp, String route, String direction, int bus_id)
     {
@@ -49,6 +56,7 @@ class Bus {
         this.route = route;
     }
 
+
     public double getLat() {
         return lat;
     }
@@ -78,6 +86,9 @@ class Bus {
         System.out.println("Bus ID: " + this.bus_id + " Current location: Latitude " + this.lat + " Longitude: " + this.lng);
         System.out.println("Time Stamp: " + this.timestamp + " Route: " + this.route + " Predictions: " + this.direction);
     }
+
+
+
 
 
 }

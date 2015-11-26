@@ -19,6 +19,7 @@ import java.util.List;
 
 // this class will read a json file whether it is located in the assets folder
 class JsonFileReader {
+    private static String TAG = "JsonFileReader"; // Tag just for the LogCat window
     private ArrayList<BusStop> BusStops;
 
     // construtor
@@ -43,7 +44,7 @@ class JsonFileReader {
 
     // Returns A list of BusStops
     private List readBusStopArray(JsonReader reader) throws IOException {
-        this.BusStops = new ArrayList<BusStop>();
+        this.BusStops = new ArrayList<>();
 
         // reads in a bracket{
         reader.beginObject();
@@ -67,6 +68,7 @@ class JsonFileReader {
         String stopName = "";
         double latitude = 0;
         double longitude = 0;
+        int id = -1;
         ArrayList<String> busses = new ArrayList<>();
 
         // reads in a bracket {
@@ -84,13 +86,16 @@ class JsonFileReader {
                 longitude = reader.nextDouble();
             } else if (name.equals("busses") && reader.peek() != JsonToken.NULL) {
                 readBusArray(busses, reader);
+            } else if (name.equals("id")){
+                id = reader.nextInt();
+
             } else {
                 reader.skipValue();
             }
         }
         //reads in a closing bracket }
         reader.endObject();
-        return new BusStop(stopName,latitude,longitude,busses);
+        return new BusStop(stopName,latitude,longitude,busses, id);
     }
 
 

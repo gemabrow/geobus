@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -39,22 +40,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<BusStop> busStops;
     private JsonFileReader test =  new JsonFileReader();
 
+
     Handler locationHandler = new Handler();
     final static int MARKER_UPDATE_INTERVAL = 2000; // in milliseconds
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
 
+    private DataBaseHelper database_Helper;
 
     // Map is used to ensure bus markers are not duplicated, as
     // Google Maps V2 for Android has no method to uniquely ID
     // a marker according to input
     private Map<String, Marker> busMarkers = new HashMap<String, Marker>();
+    private Map<Marker,BusStop> busStopMarkers = new HashMap<Marker, BusStop>();
     private Map<String, Marker> visibleMarkers = new HashMap<String, Marker>();
     /* Given a list of xml_markers (defined in TransitInfoXmlParser),
      * update the map display such that new buses are added as type Marker to mMap,
      * and previously displayed bus markers are moved to their new coordinates
      */
+
+
 
     public void stopBackgroundData() {
         locationHandler.removeCallbacks(updateMarkers);
@@ -99,25 +105,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         activity = this;
         super.onCreate(savedInstanceState);
 
+
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        fragmentManager = getFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        busScheduleFragment = new BusScheduleFragment();
-        fragmentTransaction.add(R.id.fragment_container, busScheduleFragment);
-        fragmentTransaction.hide(busScheduleFragment);
-        fragmentTransaction.commit();
+
+
+        // sets up the FragmentManager and the  BusScheduleFragment which will be populated with
+        // information based on the bus schedule of the specified bus stop
+        if(savedInstanceState == null){
+            fragmentManager = getFragmentManager();
+            busScheduleFragment = new BusScheduleFragment();
+            database_Helper = new DataBaseHelper(MapsActivity.this);
+            database_Helper.createDataBase();
+        }
+
+
+
 
 
         // loads UCSC_WestSide_Bus_Stops.json file to an array of BusStop Objects which are used
         // to create the busstop markers
         loadJsonFromAsset();
 
-       locationHandler.postDelayed(updateMarkers, MARKER_UPDATE_INTERVAL);
+    //   locationHandler.postDelayed(updateMarkers, MARKER_UPDATE_INTERVAL);
     }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+
+    }
+
+
+
 
     @Override
     protected void onPause() {
@@ -125,17 +150,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onPause();
     }
 
+
+
+
     @Override
     protected void onResume() {
         startBackgroundData();
         super.onResume();
     }
 
+
+
+
     @Override
     protected void onDestroy() {
         stopBackgroundData();
         super.onDestroy();
     }
+
+
+
 
    // draws map
     @Override
@@ -147,8 +181,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // set up coordinates for the center of UCSC and move the camera to there with a zoom level of 15 on startup
         LatLng ucsc = new LatLng(36.991406, -122.060731);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucsc, 15));
-        drawBusStopMarkers();
+        createBusStopMarkers();
+//        drawBusStopMarkers();
     }
+
+
+
+
+    public void createBusStopMarkers(){
+
+        for (BusStop temp : busStops) {
+            Marker busStopMarker = mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(temp.getLatitude(), temp.getLongitude()))
+                    .title(temp.getTitle())
+                    .visible(true)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop)));
+
+                    if (temp.hasId()) {
+                        busStopMarkers.put(busStopMarker, temp);
+                    }
+            }
+
+
+
+    }
+
+
+
 
     // draws the busstop markers on the google map
     public void drawBusStopMarkers(){
@@ -158,10 +217,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Marker busStop = visibleMarkers.get(Double.toString(temp.getLatitude() + temp.getLongitude()));
             if (busStop == null) {
                 busStop = mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(temp.getLatitude(), temp.getLongitude()))
-                            .title(temp.getTitle())
-                            .visible(showStops)
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop)));
+                        .position(new LatLng(temp.getLatitude(), temp.getLongitude()))
+                        .title(temp.getTitle())
+                        .visible(showStops)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop)));
             }
             else {
                 busStop.setVisible(showStops);
@@ -180,6 +239,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+
+
     public void toggleStops(View view) {
         if (showStops)
             showStops = false;
@@ -187,6 +248,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             showStops = true;
         drawBusStopMarkers();
     }
+
+
     // loads bus stops specified by json file
     public void loadJsonFromAsset(){
 
@@ -219,25 +282,71 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     };
 
+
+
+
+
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if (busMarkers.containsValue(marker)) {
-            LatLng position = marker.getPosition();
-            Log.i(TAG, position.toString());
+
+        int id;
+        String busStopName;
+
+        if(busStopMarkers.containsKey(marker)) {
+
+            id = busStopMarkers.get(marker).getBusStopID();
+            busStopName = busStopMarkers.get(marker).getTitle();
+
+
+            busStopMarkers.get(marker).setBusStopSchedule(database_Helper.getBusStopSchedule(id));
+        }else {
+            id = -1;
+            busStopName = marker.getTitle();
         }
 
-        if(!infoWindowActive) {
 
-            busScheduleFragment.setBusSchedule(marker.getTitle());
-            fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.show(busScheduleFragment);
-            fragmentTransaction.commit();
-            infoWindowActive = true;
-        }
-        else{
-            busScheduleFragment.setBusSchedule(marker.getTitle());
-        }
+
+            if (!infoWindowActive) {
+
+                busScheduleFragment.setBusStopName(busStopName);
+                busScheduleFragment.setBusSchedule(database_Helper.getBusStopSchedule(id));
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.add(R.id.fragment_container, busScheduleFragment);
+                fragmentTransaction.show(busScheduleFragment);
+                fragmentTransaction.commit();
+                infoWindowActive = true;
+            } else if (infoWindowActive && id != busScheduleFragment.getId() && id != -1){
+
+                fragmentTransaction = fragmentManager.beginTransaction();
+
+                busScheduleFragment = new BusScheduleFragment();
+                busScheduleFragment.setBusStopName(busStopName);
+                busScheduleFragment.setBusSchedule(database_Helper.getBusStopSchedule(id));
+
+                fragmentTransaction.replace(R.id.fragment_container, busScheduleFragment);
+                fragmentTransaction.show(busScheduleFragment);
+                fragmentTransaction.commit();
+            }
+            else if (id == -1){
+                fragmentTransaction = fragmentManager.beginTransaction();
+
+                busScheduleFragment = new BusScheduleFragment();
+                busScheduleFragment.setBusStopName(busStopName);
+                fragmentTransaction.replace(R.id.fragment_container, busScheduleFragment);
+                fragmentTransaction.show(busScheduleFragment);
+                fragmentTransaction.commit();
+                infoWindowActive = true;
+            }
+
+
         return false;
+    }
+
+    public void closeBusStopScheduleFragment(){
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.remove(busScheduleFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
 

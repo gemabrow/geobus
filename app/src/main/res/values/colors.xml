@@ -2,5 +2,10 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorDarkBlueMetro">#003e6d</color>
+    <color name="colorDarkBabyBLueMetro">#0098d3</color>
+    <color name="colorLightBabyBLueMetro">#0076d0</color>
+    <color name="colorGoldYellowMetro">#f6af2c</color>
+    <color name="colorYellowMetro">#f6af2c</color>
     <color name="colorAccent">#FF4081</color>
 </resources>
