@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -64,6 +66,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     // Google Maps V2 for Android has no method to uniquely ID
     // a marker according to input
     public final static String EXTRA_INFO = "com.bussquad.geobus.INFO";
+    private static final float HUE_RED = 0;
+    private static final float HUE_BLUE = 240;
+    private static final float HUE_YELLOW = 60;
+    private static final float HUE_ORANGE = 30;
+    private static final float HUE_AZURE = 210;
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ArrayAdapter<String> mAdapter;
@@ -100,9 +107,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         activity = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-       /* ImageButton hamburger = (ImageButton)findViewById(R.id.hamburgerHelper);
-        hamburger.setX(35);
-        hamburger.setY(35);*/
         mDrawerList = (ListView)findViewById(R.id.navList);
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         LayoutInflater inflater = getLayoutInflater(); // used to display a header at the top of the drawer
@@ -160,29 +164,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             Intent intent = new Intent(MapsActivity.this, InfoActivity.class);
             Intent schedIntent = new Intent(MapsActivity.this, NightOwlActivity.class);
+
             @Override // depending on the string's array index, perform an action
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 1) {
                     showStops = !showStops;
                     drawBusStopMarkers(); // Toggle stops
                     mDrawerLayout.closeDrawer(Gravity.LEFT); // and close the drawer
-                }
-                else if (position == 2) { // if the user tapped on Loop and Upper Campus Info
+                } else if (position == 2) { // if the user tapped on Loop and Upper Campus Info
                     intent.putExtra(EXTRA_INFO, "1"); // using extras in an intent in order to set an appropriate textview in the next activity
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
                     startActivity(intent); // start info activity
-                }
-                else if (position == 3) { // if the user tapped on Night Core Info
+                } else if (position == 3) { // if the user tapped on Night Core Info
                     intent.putExtra(EXTRA_INFO, "2");
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
                     startActivity(intent);
-                }
-                else if (position == 4) { // if the user tapped on Night Owl Info
+                } else if (position == 4) { // if the user tapped on Night Owl Info
                     intent.putExtra(EXTRA_INFO, "3");
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
                     startActivity(intent);
-                }
-                else if (position == 5) { // if the user tapped on Night Owl Schedule
+                } else if (position == 5) { // if the user tapped on Night Owl Schedule
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
                     startActivity(schedIntent);
                 }
@@ -277,8 +278,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .flat(true)
                         .title(bus.route)
                         .clusterGroup(bus.clusterGroup)
-                        .snippet("Bus ID: " + Integer.toString(bus.bus_id))
-                        .icon(BitmapDescriptorFactory.defaultMarker(bus.color)));
+                        .snippet("Bus ID: " + Integer.toString(bus.bus_id)));
+                        if (bus.color == HUE_AZURE)
+                            bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("blue_marker", 64, 111)));
+                        else if (bus.color == HUE_ORANGE)
+                            bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("orange_marker", 64, 111)));
+                        else if (bus.color == HUE_YELLOW)
+                            bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("yellow_marker", 64, 111)));
+                        else
+                            bus_marker.setIcon(BitmapDescriptorFactory.defaultMarker(bus.color));
             }
             else {
                 // if marker exists, check for changes in position
@@ -291,7 +299,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     case (1):
                         bus_marker.setTitle(bus.route);
                         bus_marker.setClusterGroup(bus.clusterGroup);
-                        bus_marker.setIcon(BitmapDescriptorFactory.defaultMarker(bus.color));
+                        if (bus.color == HUE_AZURE)
+                            bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("blue_marker", 64, 111)));
+                        else if (bus.color == HUE_ORANGE)
+                            bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("orange_marker", 64, 111)));
+                        else if (bus.color == HUE_YELLOW)
+                            bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("yellow_marker", 64, 111)));
+                        else
+                            bus_marker.setIcon(BitmapDescriptorFactory.defaultMarker(bus.color));
                     case (2):
                         bus_marker.animatePosition(newPos, settings);
                         bus_marker.setRotation(bus.updateBearing(bus_marker.getPosition(), bus_marker.getRotation() - ICON_DEGREES_OFFSET) + ICON_DEGREES_OFFSET);
@@ -309,6 +324,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         // and set to the updatedBusMarkers Map (NOT a Google Map)
         busMarkers = updatedBusMarkers;
+    }
+
+    public Bitmap resizeMapIcons(String iconName,int width, int height){ // used to resize marker icons so they don't explode to crazy sizes
+        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier(iconName, "drawable", getPackageName()));
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
+        return resizedBitmap;
     }
 
     // draws the busstop markers on the google map
