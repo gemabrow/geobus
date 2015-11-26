@@ -1,5 +1,7 @@
 package com.bussquad.geobus;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 /**
@@ -56,6 +58,14 @@ class BusStop {
     // sets the longitude of the bus stop
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public boolean hasBus(String bus) {
+        return this.busses.contains(bus);
+    }
+
+    public LatLng getLatLng() {
+        return new LatLng(this.latitude, this.longitude);
     }
 
     public ArrayList<String> getBusses() {

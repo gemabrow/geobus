@@ -38,6 +38,8 @@ import com.androidmapsextensions.GoogleMap.OnMarkerClickListener;
 import com.androidmapsextensions.Marker;
 import com.androidmapsextensions.MarkerOptions;
 import com.androidmapsextensions.OnMapReadyCallback;
+import com.androidmapsextensions.Polyline;
+import com.androidmapsextensions.PolylineOptions;
 import com.androidmapsextensions.SupportMapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -51,10 +53,19 @@ import java.util.List;
 import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, OnMarkerClickListener {
+    // Map is used to ensure bus markers are not duplicated, as
+    // Google Maps V2 for Android has no method to uniquely ID
+    // a marker according to input
+    public final static String EXTRA_INFO = "com.bussquad.geobus.INFO";
     static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1; // int used to identify specific permissions in permission callback methods
     private final static int MARKER_UPDATE_INTERVAL = 2000; // in milliseconds
     private final static float ICON_DEGREES_OFFSET = 90;
     private static final String TAG = "MapsActivity";
+    private static final float HUE_RED = 0;
+    private static final float HUE_BLUE = 240;
+    private static final float HUE_YELLOW = 60;
+    private static final float HUE_ORANGE = 30;
+    private static final float HUE_AZURE = 210;
     public static MapsActivity activity;
     private final Handler locationHandler = new Handler();
     private final JsonFileReader test = new JsonFileReader();
@@ -62,15 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Boolean showStops = false;
     private GoogleMap mMap;
     private ArrayList<BusStop> busStops;
-    // Map is used to ensure bus markers are not duplicated, as
-    // Google Maps V2 for Android has no method to uniquely ID
-    // a marker according to input
-    public final static String EXTRA_INFO = "com.bussquad.geobus.INFO";
-    private static final float HUE_RED = 0;
-    private static final float HUE_BLUE = 240;
-    private static final float HUE_YELLOW = 60;
-    private static final float HUE_ORANGE = 30;
-    private static final float HUE_AZURE = 210;
+    private Polyline routeLine;
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ArrayAdapter<String> mAdapter;
@@ -241,8 +244,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (busMarkers.containsValue(marker)) {
-            LatLng position = marker.getPosition();
-            Log.i(TAG, position.toString());
+            Log.i(TAG, "NOT setting PolylineCoords");
+            //setPolylineCoords(marker);
+            //Log.i(TAG, "coords set");
+            //toggleRoute(marker);
         }
         return false;
     }
@@ -290,7 +295,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             else {
                 // if marker exists, check for changes in position
-                // and for change in bus route from last update
+                // and for change in bus route name from last update
                 int typeChange = bus_marker.getPosition().equals(newPos) ? 0 : 2;
                 typeChange -= bus_marker.getTitle().equals(bus.route) ? 0 : 1;
                 switch (typeChange) {
@@ -332,6 +337,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return resizedBitmap;
     }
 
+    //TODO: Check if simple polylines are working correctly and follow up with snap-to-road lines
+    private void toggleRoute(Marker busMarker) {
+        if (routeLine == null) {
+            Log.i(TAG, "routeLine null");
+            routeLine = mMap.addPolyline(new PolylineOptions()
+                    .addAll((ArrayList<LatLng>) busMarker.getData())
+                    .color(Bus.busColor(busMarker.getTitle())));
+        } else {
+            routeLine.setPoints((ArrayList<LatLng>) busMarker.getData());
+            routeLine.setColor(Bus.busColor(busMarker.getTitle()));
+            routeLine.setVisible(!routeLine.isVisible());
+        }
+
+    }
+
+    private void setPolylineCoords(Marker busMarker) {
+        try {
+            InputStream in = getAssets().open("UCSC_Westside_Busses.json");
+            test.readScheduledStops(in, busMarker.getTitle(), busStops);
+            busMarker.setData(test.getStopLocations());
+        } catch (IOException ex) {
+            System.out.println("Error reading file");
+        }
+    }
     // draws the busstop markers on the google map
     private void drawBusStopMarkers() {
         Map<String, Marker> updatedVisibleMarkers = new HashMap<String, Marker>();
@@ -372,6 +401,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         catch(IOException ex) {
             System.out.println("Error reading file");
         }
+
     }
 
     // creates dialog for the case of the user denying location permission

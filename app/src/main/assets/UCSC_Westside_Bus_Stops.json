@@ -1,6 +1,30 @@
 {
   "allStops": [
     {
+      "name": "West Remote Interior",
+      "latitude": 36.988527,
+      "longitude": -122.064754,
+      "busses": [
+        "Upper Campus"
+      ]
+    },
+    {
+      "name": "West Remote Entrance",
+      "latitude": 36.988750,
+      "longitude": -122.066945,
+      "busses": [
+        "Upper Campus"
+      ]
+    },
+    {
+      "name": "East Remote Interior",
+      "latitude": 36.990756,
+      "longitude": -122.052097,
+      "busses": [
+        "Upper Campus"
+      ]
+    },
+    {
       "name":"High & Laurent, eastbound",
       "latitude":36.977578,
       "longitude":-122.042175,
@@ -26,7 +50,7 @@
         "16",
         "20",
         "20D",
-        "outer"
+        "Outer Loop"
       ]
     },
     {
@@ -940,7 +964,7 @@
         "16",
         "20",
         "20D",
-        "outer"
+        "Outer Loop"
       ]
     },
     {
@@ -950,7 +974,7 @@
       "busses":[
         "15",
         "19",
-        "inner"
+        "Inner Loop"
       ]
     },
     {
@@ -960,7 +984,7 @@
       "busses":[
         "15",
         "19",
-        "inner"
+        "Inner Loop"
       ]
     },
     {
@@ -970,7 +994,7 @@
       "busses":[
         "15",
         "19",
-        "inner"
+        "Inner Loop"
       ]
     },
     {
@@ -980,7 +1004,7 @@
       "busses":[
         "15",
         "19",
-        "inner"
+        "Inner Loop"
       ]
     },
     {
@@ -993,7 +1017,7 @@
         "16",
         "20",
         "20D",
-        "outer"
+        "Outer Loop"
       ]
     },
     {
@@ -1006,7 +1030,7 @@
         "16",
         "20",
         "20D",
-        "outer"
+        "Outer Loop"
       ]
     },
     {
@@ -1019,7 +1043,7 @@
         "16",
         "20",
         "20D",
-        "outer"
+        "Outer Loop"
       ]
     },
     {
@@ -1029,7 +1053,7 @@
       "busses":[
         "15",
         "19",
-        "inner"
+        "Inner Loop"
       ]
     },
     {
@@ -1042,7 +1066,7 @@
         "16",
         "20",
         "20D",
-        "outer"
+        "Outer Loop"
       ]
     },
     {
@@ -1055,7 +1079,7 @@
         "16",
         "20",
         "20D",
-        "outer"
+        "Outer Loop"
       ]
     },
     {
@@ -1065,7 +1089,7 @@
       "busses":[
         "15",
         "19",
-        "inner"
+        "Inner Loop"
       ]
     },
     {
@@ -1077,7 +1101,7 @@
         "16",
         "20",
         "20D",
-        "outer"
+        "Outer Loop"
       ]
     },
     {
@@ -1087,7 +1111,7 @@
       "busses":[
         "15",
         "19",
-        "inner"
+        "Inner Loop"
       ]
     },
     {
@@ -1100,7 +1124,7 @@
         "16",
         "20",
         "20D",
-        "outer"
+        "Outer Loop"
       ]
     },
     {
@@ -1110,7 +1134,7 @@
       "busses":[
         "15",
         "19",
-        "inner"
+        "Inner Loop"
       ]
     },
     {
@@ -1123,7 +1147,7 @@
         "16",
         "20",
         "20D",
-        "outer"
+        "Outer Loop"
         ]
     },
     {
@@ -1133,7 +1157,7 @@
       "busses":[
         "15",
         "19",
-        "inner"
+        "Inner Loop"
       ]
     },
     {
@@ -1146,7 +1170,7 @@
         "16",
         "20",
         "20D",
-        "outer"
+        "Outer Loop"
       ]
     },
     {
@@ -1157,7 +1181,7 @@
         "15",
         "19",
         "16",
-        "inner"
+        "Inner Loop"
       ]
     },
     {
@@ -1170,7 +1194,7 @@
         "16",
         "20",
         "20D",
-        "outer"
+        "Outer Loop"
       ]
     },
     {
@@ -1180,7 +1204,7 @@
       "busses":[
         "15",
         "19",
-        "inner"
+        "Inner Loop"
       ]
     },
     {
@@ -1193,7 +1217,7 @@
         "16",
         "20",
         "20D",
-        "outer"
+        "Outer Loop"
       ]
     },
     {
@@ -1206,7 +1230,7 @@
         "16",
         "20",
         "20D",
-        "outer"
+        "Outer Loop"
       ]
     },
     {
@@ -1216,7 +1240,7 @@
       "busses":[
         "15",
         "19",
-        "inner"
+        "Inner Loop"
       ]
     },
     {
@@ -1229,7 +1253,7 @@
         "16",
         "20",
         "20D",
-        "outer"
+        "Outer Loop"
       ]
     },
     {
@@ -1242,7 +1266,7 @@
         "16",
         "20",
         "20D",
-        "outer"
+        "Outer Loop"
       ]
     },
     {
@@ -1252,7 +1276,7 @@
       "busses":[
         "15",
         "19",
-        "inner"
+        "Inner Loop"
       ]
     }
   ]

@@ -1,6 +1,122 @@
 {
   "all": [
     {
+      "name": "Outer Loop",
+      "MainBusStops": [
+        "Coolidge & Main Entrance",
+        "Coolidge & Hagar, northbound",
+        "Hagar & Lower Quarry Rd, northbound",
+        "Hagar & East Remote, northbound",
+        "Hagar & Field House East",
+        "Hagar & Bookstore-Stevenson College",
+        "McLaughlin & Crown College",
+        "McLaughlin & College 9 & 10 - Health Center, westbound",
+        "McLaughlin & Science Hill, westbound",
+        "Heller & Kresge College, south/westbound",
+        "Heller & College 8/Porter, westbound",
+        "Heller & Family Student Housing",
+        "Heller & Oakes College, southbound",
+        "Empire Grade & Arboretum, eastbound",
+        "Empire Grade & Tosca Terrace",
+        "High & Western Dr, eastbound"
+      ],
+      "Routes": [
+        {
+          "ExtraInfo": "MF",
+          "MainBusStopsTimes": [
+            "7:25am",
+            "7:26am",
+            "7:27am",
+            "7:29am",
+            "7:30am",
+            "7:31am",
+            "7:31am",
+            "7:32am",
+            "7:33am",
+            "7:33am",
+            "7:34am",
+            "7:34am",
+            "7:34am",
+            "7:36am",
+            "7:37am",
+            "7:37am"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Inner Loop",
+      "MainBusStops": [
+        "High & Barn Theater",
+        "High & Western Dr, westbound",
+        "Empire Grade & Arboretum, westbound",
+        "Heller & Oakes College, northbound",
+        "Heller & College 8/Porter, eastbound",
+        "Heller & Kerr Hall",
+        "Heller & Kresge College, north/eastbound",
+        "McLaughlin & Science Hill, eastbound",
+        "McLaughlin & College 9 & 10 - Health Center, eastbound",
+        "Hagar & Bookstore",
+        "Hagar & East Remote, southbound",
+        "Hagar & Lower Quarry Rd, southbound",
+        "Coolidge & Hagar, southbound"
+      ],
+      "Routes": [
+        {
+          "ExtraInfo": "MF",
+          "MainBusStopsTimes": [
+            "7:25am",
+            "7:26am",
+            "7:27am",
+            "7:30am",
+            "7:31am",
+            "7:32am",
+            "7:32am",
+            "7:33am",
+            "7:34am",
+            "7:35am",
+            "7:36am",
+            "7:37am",
+            "7:38am"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Upper Campus",
+      "MainBusStops": [
+        "West Remote Interior",
+        "West Remote Entrance",
+        "Heller & Oakes College, northbound",
+        "Heller & College 8/Porter, eastbound",
+        "Heller & Kerr Hall",
+        "Heller & Kresge College, north/eastbound",
+        "McLaughlin & Science Hill, eastbound",
+        "McLaughlin & College 9 & 10 - Health Center, eastbound",
+        "Hagar & Bookstore",
+        "Hagar & East Remote, southbound",
+        "East Remote Interior"
+      ],
+      "Routes": [
+        {
+          "ExtraInfo": "MF",
+          "MainBusStopsTimes": [
+            "7:40am",
+            "7:40am",
+            "7:42am",
+            "7:43am",
+            "7:44am",
+            "7:44am",
+            "7:45am",
+            "7:46am",
+            "7:47am",
+            "7:48am",
+            "7:49am"
+          ]
+        }
+      ]
+    },
+    {
       "name":"10",
       "MainBusStops": [
         "Santa Cruz Metro Center",
@@ -14,7 +130,7 @@
         "High & Moore, westbound",
         "High & Cardiff, westbound",
         "Coolidge & Main Entrance",
-        "Coolidge & Lower Campus, northbound",
+        "Coolidge & Hagar, northbound",
         "Hagar & Lower Quarry Rd, northbound",
         "Hagar & East Remote, northbound",
         "Hagar & Field House East",
