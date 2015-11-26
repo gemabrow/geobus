@@ -6,6 +6,87 @@
     <string name="xml_error">There was an XML parsing error.</string>
     -->
     <string name="busStops">Toggle Bus Stops</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
     <string name="dialog_loc_title"><![CDATA[<font color=#212121>GeoBus</font> <font color=#757575>can\'t access your location</font>]]></string>
     <string name="dialog_loc_permission"><![CDATA[<font color=#757575>To enable and see your current location, navigate to Settings > Apps > GeoBus > Permissions.]]></string>
+    <string name="title_activity_info">UCSC Shuttle Info</string>
+    <string name="loop_upper">
+        <![CDATA[
+        <font color=#003399><b>CAMPUS LOOP</b></font><br/>
+        <b>Weekdays</b><br/>
+        Loop shuttles usually run every 10 minutes or less until 6pm, and every 10-20 minutes after 6pm.<br/><hr/><br/>
+
+        <i>CW</i>:<br/>
+        First run departs Barn Theater at <b>7:25am</b>.<br/>
+        Last run departs Barn Theater at <b>11:00pm</b>.<br/><br/>
+
+        <i>CCW</i>:<br/>
+        First run departs Main Entrance at <b>7:25am</b>.<br/>
+        Last run departs Main Entrance at <b>11:30pm</b>.<br/><br/>
+
+        <b>Weekends</b><br/>
+        <i>CW</i>:<br/>
+        First run departs Barn Theater at <b>6:10pm</b>.<br/>
+        Last run <b>Saturday</b> departs Barn Theater at <b>10:40pm</b>.<br/>
+        Last run <b>Sunday</b> departs Barn Theater at <b>11:30pm</b>.<br/><br/>
+
+        <i>CCW</i>:<br/>
+        First run departs Main entrance at <b>6:00pm</b>.<br/>
+        Last run <b>Saturday</b> departs Main Entrance at <b>10:40pm</b>.<br/>
+        Last run <b>Sunday</b> departs Main Entrance at <b>11:20pm</b>.<br/><br/>
+
+        <font color=#cc2900><b>UPPER CAMPUS</b></font><br/>
+        <b>Weekdays</b><br/>
+        Upper campus shuttles travel between East and West Remote parking lots every 15 minutes.<br/><br/>
+
+        Departs East and West Remote lots every 15 minutes, <b>7:40am-7:55pm</b> (at :40, :55, :10, and :25 after the hour).<br/><br/>
+
+        Final West Remote departure at <b>8:10pm</b> on <b>Tuesdays</b> and <b>Thursdays</b>.]]>
+    </string>
+    <string name="night_core">
+        <![CDATA[
+        <font color=#660033><b>EAST NIGHT CORE</b></font><br/>
+        <b>Weekdays</b><br/>
+        <i>Additional lines continue every 30 minutes after the initial run until midnight.</i><br/>
+        Quarry Plaza:&#160;&#160;&#160;&#160;&#160;&#160; 7:00pm &#8230 11:30pm 12:00am<br/>
+        East Remote:&#160;&#160;&#160;&#160;&#160;&#160; 7:02pm &#8230 11:32pm 12:02am<br/>
+        Crown Circle:&#160;&#160;&#160;&#160;&#160;&#160; 7:06pm &#8230 11:36pm 12:06am (end)<br/>
+        Science Hill:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 7:09pm &#8230 11:39pm<br/>
+        West Remote:&#160;&#160;&#160;&#160;&#160; 7:20pm &#8230 11:50pm<br/>
+        Media Theater:&#160;&#160;&#160; 7:22pm &#8230 11:52pm<br/>
+        McHenry Library: 7:24pm &#8230 11:54pm<br/><br/>
+        <b>Weekends</b><br/>
+        <i>Same schedule, same end time, but starts 30 minutes earlier at 6:30pm.</i><br/><br/>
+        <font color=#446600><b>WEST NIGHT CORE</b></font><br/>
+        <b>Weekdays</b><br/>
+        <i>Additional lines continue every 30 minutes after the initial run until midnight.</i><br/>
+        Quarry Plaza:&#160;&#160;&#160;&#160;&#160;&#160;&#160; 7:00pm &#8230 11:30pm 12:00am<br/>
+        Music Center:&#160;&#160;&#160;&#160;&#160;&#160; 7:03pm &#8230 11:33pm 12:03am<br/>
+        West Remote:&#160;&#160;&#160;&#160;&#160;&#160; 7:10pm &#8230 11:40pm 12:10am (end)<br/>
+        Kresge Bridge:&#160;&#160;&#160;&#160;&#160; 7:12pm &#8230 11:42pm<br/>
+        Science Hill:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 7:13pm &#8230 11:43pm<br/>
+        Crown Circle:&#160;&#160;&#160;&#160;&#160;&#160;&#160; 7:16pm &#8230 11:46pm<br/>
+        Stevenson Circle: 7:20pm &#8230 11:50pm<br/><br/>
+        <b>Weekends</b><br/>
+        <i>Same schedule, same end time, but starts 30 minutes earlier at 6:30pm.</i>]]>
+    </string>
+    <string name="night_owl">
+        <![CDATA[
+        <font color=#4c0099><b>NIGHT OWL</b></font><br/>
+        Night Owl buses pick up and drop off riders on Cathcart at Pacific, next to Old School shoes
+        and across from the University Town Center in downtown Santa Cruz.<br/><br/>
+
+        Buses stop at all off-campus Metro bus stops along the route, and at Loop bus stops on campus.<br/><br/>
+
+        Most buses travel through campus in a counterclockwise (east to west) direction; <b><i>those
+        that travel in a clockwise direction are lsited in italics in the schedule below</b> (note that
+        some on campus stops are served in one direction only).</i><br/><br/>
+
+        Night Owl service operates during fall, winter and spring school terms only; a valid UCSC ID must be presented to board.<br/><br/>
+        
+        Tap on Night Owl Schedule from the previous menu to see the schedule.
+        ]]>
+    </string>
+    <string name="title_activity_night_owl">Night Owl Schedule</string>
 </resources>

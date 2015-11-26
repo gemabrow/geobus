@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -15,11 +16,18 @@ import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.androidmapsextensions.AnimationSettings;
@@ -55,6 +63,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     // Map is used to ensure bus markers are not duplicated, as
     // Google Maps V2 for Android has no method to uniquely ID
     // a marker according to input
+    public final static String EXTRA_INFO = "com.bussquad.geobus.INFO";
+    private ListView mDrawerList;
+    private DrawerLayout mDrawerLayout;
+    private ArrayAdapter<String> mAdapter;
     private Map<String, Marker> busMarkers = new HashMap<String, Marker>();
     private final Runnable updateMarkers = new Runnable() {
         @Override
@@ -87,12 +99,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         activity = this;
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_maps);
+       /* ImageButton hamburger = (ImageButton)findViewById(R.id.hamburgerHelper);
+        hamburger.setX(35);
+        hamburger.setY(35);*/
+        mDrawerList = (ListView)findViewById(R.id.navList);
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        LayoutInflater inflater = getLayoutInflater(); // used to display a header at the top of the drawer
+        ViewGroup header = (ViewGroup)inflater.inflate(R.layout.nav_header_main, mDrawerList, false);
+        mDrawerList.addHeaderView(header, null, false);
+        addDrawerItems(); // adds elements to drawer
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getExtendedMapAsync(this);
+
 
         // loads UCSC_WestSide_Bus_Stops.json file to an array of BusStop Objects which are used
         // to create the busstop markers
@@ -129,6 +150,57 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucsc, 15));
         drawBusStopMarkers();
         checkVersion(); // permissions handling for newer versions of Android (6+)
+    }
+
+    private void addDrawerItems() { // fills the hamburger menu/sidebar with an array of strings!
+        String[] osArray = { "Toggle Bus Stops", "Loop and Upper Campus Info", "Night Core Info", "Night Owl Info", "Night Owl Schedule" };
+        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
+        mDrawerList.setAdapter(mAdapter);
+
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            Intent intent = new Intent(MapsActivity.this, InfoActivity.class);
+            Intent schedIntent = new Intent(MapsActivity.this, NightOwlActivity.class);
+            @Override // depending on the string's array index, perform an action
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 1) {
+                    showStops = !showStops;
+                    drawBusStopMarkers(); // Toggle stops
+                    mDrawerLayout.closeDrawer(Gravity.LEFT); // and close the drawer
+                }
+                else if (position == 2) { // if the user tapped on Loop and Upper Campus Info
+                    intent.putExtra(EXTRA_INFO, "1"); // using extras in an intent in order to set an appropriate textview in the next activity
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                    startActivity(intent); // start info activity
+                }
+                else if (position == 3) { // if the user tapped on Night Core Info
+                    intent.putExtra(EXTRA_INFO, "2");
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                    startActivity(intent);
+                }
+                else if (position == 4) { // if the user tapped on Night Owl Info
+                    intent.putExtra(EXTRA_INFO, "3");
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                    startActivity(intent);
+                }
+                else if (position == 5) { // if the user tapped on Night Owl Schedule
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                    startActivity(schedIntent);
+                }
+            }
+        });
+    }
+
+    public void releaseTheBurger(View view) { // opens hamburger/sidebar menu
+        mDrawerLayout.openDrawer(mDrawerList);
+    }
+
+    @Override
+    public void onBackPressed() { // if the hamburger menu/sidebar is opened, allow it to be closed with the back button
+        if(mDrawerLayout.isDrawerOpen(Gravity.LEFT)){
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
+        }else{
+            super.onBackPressed();
+        }
     }
 
     public void checkVersion(){
@@ -237,11 +309,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         // and set to the updatedBusMarkers Map (NOT a Google Map)
         busMarkers = updatedBusMarkers;
-    }
-
-    public void toggleStops(View view) {
-        showStops = !showStops;
-        drawBusStopMarkers();
     }
 
     // draws the busstop markers on the google map
