@@ -6,7 +6,6 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.content.DialogInterface;
@@ -19,7 +18,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
@@ -28,6 +26,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.AdapterView;
@@ -135,6 +134,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         activity = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        //setStatusBarTranslucent(true);
         mDrawerList = (ListView)findViewById(R.id.navList);
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         LayoutInflater inflater = getLayoutInflater(); // used to display a header at the top of the drawer
@@ -162,12 +162,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
-
     public void stopBackgroundData() {
         locationHandler.removeCallbacks(updateMarkers);
     }
 
-
+    protected void setStatusBarTranslucent(boolean makeTranslucent) {
+        if (makeTranslucent) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+    }
 
 
     @Override
@@ -259,13 +264,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onBackPressed() {
         if(getFragmentManager().getBackStackEntryCount() > 0 && !mDrawerLayout.isDrawerOpen(Gravity.LEFT))
-            getFragmentManager().popBackStack(); // close fragment if ONLY the fragment is open
+            getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE); // close fragment if ONLY the fragment is open
         else if(mDrawerLayout.isDrawerOpen(Gravity.LEFT) && getFragmentManager().getBackStackEntryCount() == 0)
             mDrawerLayout.closeDrawer(Gravity.LEFT); // if both the fragment and the drawer is open, only close the drawer
         else if(mDrawerLayout.isDrawerOpen(Gravity.LEFT) && getFragmentManager().getBackStackEntryCount() > 0){
             mDrawerLayout.closeDrawer(Gravity.LEFT); // close the drawer if it's open
         }else{
-            super.onBackPressed(); // close the app otherwise
+            this.finish(); // close the app otherwise
         }
     }
 
@@ -336,7 +341,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             busScheduleFragment.setBusStopName(busStopName);
             busScheduleFragment.setBusSchedule(database_Helper.getBusStopSchedule(id));
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.fragment_container, busScheduleFragment).addToBackStack("BACK");
+            fragmentTransaction.add(R.id.fragment_container, busScheduleFragment).addToBackStack(null);
             fragmentTransaction.show(busScheduleFragment);
             fragmentTransaction.commit();
             infoWindowActive = true;
@@ -349,7 +354,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             busScheduleFragment.setBusStopName(busStopName);
             busScheduleFragment.setBusSchedule(database_Helper.getBusStopSchedule(id));
 
-            fragmentTransaction.replace(R.id.fragment_container, busScheduleFragment).addToBackStack("BACK");
+            fragmentTransaction.replace(R.id.fragment_container, busScheduleFragment).addToBackStack(null);
             fragmentTransaction.show(busScheduleFragment);
             fragmentTransaction.commit();
         }
@@ -358,7 +363,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             busScheduleFragment = new BusScheduleFragment();
             busScheduleFragment.setBusStopName(busStopName);
-            fragmentTransaction.replace(R.id.fragment_container, busScheduleFragment).addToBackStack("BACK");
+            fragmentTransaction.replace(R.id.fragment_container, busScheduleFragment).addToBackStack(null);
             fragmentTransaction.show(busScheduleFragment);
             fragmentTransaction.commit();
             infoWindowActive = true;
@@ -566,12 +571,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
-    public void closeBusStopScheduleFragment(){
+    /*public void closeBusStopScheduleFragment(){
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.remove(busScheduleFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-    }
+    }*/
 
 
 }

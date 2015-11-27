@@ -2,6 +2,7 @@ package com.bussquad.geobus;
 
 import android.os.Bundle;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -255,7 +256,8 @@ public class BusScheduleFragment extends Fragment {
 
     // Calls the closeBusStopScheduleFragment() from the MapsActivity and then closes the Fragment
     public void closeBusSchedule(){
-        ((MapsActivity)getActivity()).closeBusStopScheduleFragment();
+        //((MapsActivity)getActivity()).closeBusStopScheduleFragment();
+        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
 
