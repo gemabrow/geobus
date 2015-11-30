@@ -20,10 +20,10 @@ import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +36,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.androidmapsextensions.AnimationSettings;
+import com.androidmapsextensions.ClusterGroup;
+import com.androidmapsextensions.ClusteringSettings;
+import com.androidmapsextensions.DefaultClusterOptionsProvider;
 import com.androidmapsextensions.GoogleMap;
 import com.androidmapsextensions.GoogleMap.OnMarkerClickListener;
 import com.androidmapsextensions.Marker;
@@ -68,11 +71,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private final static int MARKER_UPDATE_INTERVAL = 2000; // in milliseconds
     private final static float ICON_DEGREES_OFFSET = 90;
     private static final String TAG = "MapsActivity";
-    private static final float HUE_RED = 0;
-    private static final float HUE_BLUE = 240;
-    private static final float HUE_YELLOW = 60;
-    private static final float HUE_ORANGE = 30;
-    private static final float HUE_AZURE = 210;
     public static MapsActivity activity;
     private final Handler locationHandler = new Handler();
     private final JsonFileReader test = new JsonFileReader();
@@ -173,13 +171,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-    }
-
     @Override
     protected void onDestroy() {
         stopBackgroundData();
@@ -191,6 +182,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setOnMarkerClickListener(this);
+        mMap.setClustering(new ClusteringSettings()
+                .clusterSize(73)
+                .clusterOptionsProvider(
+                        new DefaultClusterOptionsProvider(getResources())));
 
         // set up coordinates for the center of UCSC and move the camera to there with a zoom level of 15 on startup
         LatLng ucsc = new LatLng(36.991406, -122.060731);
@@ -215,25 +210,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 1) {
                     drawBusStopMarkers(); // Toggle stops
-                    mDrawerLayout.closeDrawer(Gravity.LEFT); // and close the drawer
+                    mDrawerLayout.closeDrawer(GravityCompat.START); // and close the drawer
                 } else if (position == 2) { // if the user tapped on Loop and Upper Campus Info
                     intent.putExtra(EXTRA_INFO, "1"); // using extras in an intent in order to set an appropriate textview in the next activity
-                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
                     startActivity(intent); // start info activity
                 } else if (position == 3) { // if the user tapped on Night Core Info
                     intent.putExtra(EXTRA_INFO, "2");
-                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
                     startActivity(intent);
                 } else if (position == 4) { // if the user tapped on Night Owl Info
                     intent.putExtra(EXTRA_INFO, "3");
-                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
                     startActivity(intent);
                 } else if (position == 5) { // if the user tapped on Night Owl Schedule
-                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
                     startActivity(schedIntent);
                 } else if (position == 6) {
                     startBackgroundData();
-                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
         });
@@ -246,12 +241,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 0 && !mDrawerLayout.isDrawerOpen(Gravity.LEFT))
+        if (getFragmentManager().getBackStackEntryCount() > 0 && !mDrawerLayout.isDrawerOpen(GravityCompat.START))
             getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE); // close fragment if ONLY the fragment is open
-        else if (mDrawerLayout.isDrawerOpen(Gravity.LEFT) && getFragmentManager().getBackStackEntryCount() == 0)
-            mDrawerLayout.closeDrawer(Gravity.LEFT); // if both the fragment and the drawer is open, only close the drawer
-        else if (mDrawerLayout.isDrawerOpen(Gravity.LEFT) && getFragmentManager().getBackStackEntryCount() > 0) {
-            mDrawerLayout.closeDrawer(Gravity.LEFT); // close the drawer if it's open
+        else if (mDrawerLayout.isDrawerOpen(GravityCompat.START) && getFragmentManager().getBackStackEntryCount() == 0)
+            mDrawerLayout.closeDrawer(GravityCompat.START); // if both the fragment and the drawer is open, only close the drawer
+        else if (mDrawerLayout.isDrawerOpen(GravityCompat.START) && getFragmentManager().getBackStackEntryCount() > 0) {
+            mDrawerLayout.closeDrawer(GravityCompat.START); // close the drawer if it's open
         } else {
             this.finish(); // close the app otherwise
         }
@@ -355,6 +350,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .position(new LatLng(temp.getLatitude(), temp.getLongitude()))
                     .title(temp.getTitle())
                     .visible(false)
+                    .clusterGroup(BusStop.BUSSTOP_CLUSTERGROUP)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop)));
 
             if (temp.hasId()) {
@@ -394,13 +390,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .position(newPos)
                         .flat(true)
                         .title(bus.route)
-                        .clusterGroup(bus.clusterGroup)
+                        .clusterGroup(ClusterGroup.NOT_CLUSTERED)
                         .snippet("Bus ID: " + Integer.toString(bus.bus_id)));
-                if (bus.color == HUE_AZURE)
+                if (bus.color == Bus.HUE_AZURE)
                     bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("blue_marker", 64, 111)));
-                else if (bus.color == HUE_ORANGE)
+                else if (bus.color == Bus.HUE_ORANGE)
                     bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("orange_marker", 64, 111)));
-                else if (bus.color == HUE_YELLOW)
+                else if (bus.color == Bus.HUE_YELLOW)
                     bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("yellow_marker", 64, 111)));
                 else
                     bus_marker.setIcon(BitmapDescriptorFactory.defaultMarker(bus.color));
@@ -415,11 +411,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     case (1):
                         bus_marker.setTitle(bus.route);
                         bus_marker.setClusterGroup(bus.clusterGroup);
-                        if (bus.color == HUE_AZURE)
+                        if (bus.color == Bus.HUE_AZURE)
                             bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("blue_marker", 64, 111)));
-                        else if (bus.color == HUE_ORANGE)
+                        else if (bus.color == Bus.HUE_ORANGE)
                             bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("orange_marker", 64, 111)));
-                        else if (bus.color == HUE_YELLOW)
+                        else if (bus.color == Bus.HUE_YELLOW)
                             bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("yellow_marker", 64, 111)));
                         else
                             bus_marker.setIcon(BitmapDescriptorFactory.defaultMarker(bus.color));
@@ -482,17 +478,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         for (BusStop temp : busStops) {
             Marker busStop = visibleMarkers.get(Double.toString(temp.getLatitude() + temp.getLongitude()));
-            if (busStop.isVisible()) {
-                busStop.setVisible(false);
-            } else {
-                busStop.setVisible(true);
-            }
+            busStop.setVisible(!busStop.isVisible());
         }
     }
 
 
     // loads bus stops specified by json file
-    public void loadJsonFromAsset() {
+    private void loadJsonFromAsset() {
 
         try {
             InputStream in = getAssets().open("UCSC_Westside_Bus_Stops.json");

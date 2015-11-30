@@ -35,12 +35,8 @@ class JsonFileReader {
     // reads in the BusStops from UCSC_WestSide_BusStop.json file only
 
     public void readBusStopJsonStream(InputStream in) throws IOException {
-        JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
-        try {
-             readBusStopArray(reader);
-        }
-        finally{
-                reader.close();
+        try (JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"))) {
+            readBusStopArray(reader);
         }
 
     }
@@ -139,11 +135,8 @@ class JsonFileReader {
     //************************************************************************************************//
     // read in UCSC_Westside_Busses.json file only
     public void readScheduledStops(InputStream in, String route, ArrayList<BusStop> allStops) throws IOException {
-        JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
-        try {
+        try (JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"))) {
             readBuses(reader, route, allStops);
-        } finally {
-            reader.close();
         }
     }
 

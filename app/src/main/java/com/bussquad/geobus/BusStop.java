@@ -12,6 +12,7 @@ import java.util.ArrayList;
  */
 class BusStop {
 
+    public final static int BUSSTOP_CLUSTERGROUP = 10;
     //stores the name of the bus stop
     private String title;
     private int busStopID = -1;

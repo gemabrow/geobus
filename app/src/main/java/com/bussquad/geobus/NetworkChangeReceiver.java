@@ -11,11 +11,10 @@ import android.util.Log;
  * Created by gerald on 11/8/15.
  */
 public class NetworkChangeReceiver extends BroadcastReceiver {
-    private Context mContext;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        mContext = context;
+        Context mContext = context;
         int status = NetworkUtil.getConnectivityStatus(context);
 
         Log.e("Receiver ", "NetworkStatus = " + Integer.toString(status));

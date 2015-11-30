@@ -1,5 +1,4 @@
 package com.bussquad.geobus;
-import android.graphics.Color;
 
 import android.graphics.Color;
 
@@ -11,11 +10,13 @@ import com.google.android.gms.maps.model.LatLng;
  * Created by Jose on 10/21/2015.
  */
 class Bus {
-    private static final float HUE_RED = 0;
-    private static final float HUE_BLUE = 240;
-    private static final float HUE_YELLOW = 60;
-    private static final float HUE_ORANGE = 30;
-    private static final float HUE_AZURE = 210;
+    public static final float HUE_RED = 0;
+    public static final float HUE_BLUE = 240;
+    public static final float HUE_YELLOW = 60;
+    public static final float HUE_ORANGE = 30;
+    public static final float HUE_AZURE = 210;
+    public static final int UCSC_CLUSTERGROUP = 1;
+    public static final int SCMETRO_CLUSTERGROUP = 0;
 
     public final String route;
     public final String direction;
@@ -37,23 +38,23 @@ class Bus {
             case "loop":
                 if (direction.equals("outer"))
                 {
-                    this.clusterGroup = 0;
+                    this.clusterGroup = UCSC_CLUSTERGROUP;
                     route = "Outer Loop";
                     this.color = HUE_AZURE;
                 }
                 else {
-                    this.clusterGroup = 0;
+                    this.clusterGroup = UCSC_CLUSTERGROUP + 1;
                     route = "Inner Loop";
                     this.color = HUE_ORANGE;
                 }
                 break;
             case "upper campus":
-                this.clusterGroup = 0;
+                this.clusterGroup = UCSC_CLUSTERGROUP + 2;
                 route = "Upper Campus";
                 this.color = HUE_YELLOW;
                 break;
             default:
-                this.clusterGroup = 1;
+                this.clusterGroup = SCMETRO_CLUSTERGROUP;
                 this.color = HUE_RED;
                 break;
         }
@@ -107,10 +108,9 @@ class Bus {
 
         // if if the differences in coordinates are significant, update bearing
         // otherwise, return the previous bearing
-        float bearing = (latDelta < dLim && lngDelta < dLim) ?
-                prevBearing : (float) calcBearing(prevPos);
 
-        return bearing;
+        return (latDelta < dLim && lngDelta < dLim) ?
+                prevBearing : (float) calcBearing(prevPos);
     }
 
     // trig magic to calculate bearing based on two sets of coordinates
