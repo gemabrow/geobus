@@ -157,7 +157,8 @@ class JsonFileReader {
         while (reader.hasNext()) {
             readBusArray(reader, route, scheduledStops);
         }
-
+        //reader.endArray();
+        //reader.endObject();
         Log.i(TAG, "Finished JSONing");
         for (BusStop stop : allStops) {
             coordinates.add(scheduledStops.indexOf(stop.getTitle()), stop.getLatLng());

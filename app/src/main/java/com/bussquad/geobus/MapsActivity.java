@@ -1,23 +1,24 @@
 package com.bussquad.geobus;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
@@ -43,7 +44,9 @@ import com.androidmapsextensions.OnMapReadyCallback;
 import com.androidmapsextensions.Polyline;
 import com.androidmapsextensions.PolylineOptions;
 import com.androidmapsextensions.SupportMapFragment;
-
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -51,46 +54,37 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, OnMarkerClickListener {
 
-    static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1; // int used to identify specific permissions in permission callback methods
-    private final static int MARKER_UPDATE_INTERVAL = 2000; // in milliseconds
-    private final static float ICON_DEGREES_OFFSET = 90;
-    private static final String TAG = "MapsActivity";
-
-    private BusScheduleFragment busScheduleFragment;
-    public static MapsActivity activity;
-    private final Handler locationHandler = new Handler();
-    private final JsonFileReader test = new JsonFileReader();
-    private Interpolator interpolator = new DecelerateInterpolator();
-
-    private Boolean showStops = true;
-    private Boolean infoWindowActive = false;
-    private GoogleMap mMap;
-    private ArrayList<BusStop> busStops;
-
-
-
-    private FragmentManager fragmentManager;
-    private FragmentTransaction fragmentTransaction;
-
-    private DataBaseHelper database_Helper;
-
     // Map is used to ensure bus markers are not duplicated, as
     // Google Maps V2 for Android has no method to uniquely ID
     // a marker according to input
     public final static String EXTRA_INFO = "com.bussquad.geobus.INFO";
+    static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1; // int used to identify specific permissions in permission callback methods
+    private final static int MARKER_UPDATE_INTERVAL = 2000; // in milliseconds
+    private final static float ICON_DEGREES_OFFSET = 90;
+    private static final String TAG = "MapsActivity";
     private static final float HUE_RED = 0;
     private static final float HUE_BLUE = 240;
     private static final float HUE_YELLOW = 60;
     private static final float HUE_ORANGE = 30;
     private static final float HUE_AZURE = 210;
-
+    public static MapsActivity activity;
+    private final Handler locationHandler = new Handler();
+    private final JsonFileReader test = new JsonFileReader();
+    private BusScheduleFragment busScheduleFragment;
+    private Interpolator interpolator = new DecelerateInterpolator();
+    private Boolean infoWindowActive = false;
+    private String tString = "";
+    private GoogleMap mMap;
+    private ArrayList<BusStop> busStops;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+    private DataBaseHelper database_Helper;
     private Polyline routeLine;
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
@@ -98,36 +92,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     private Map<String, Marker> busMarkers = new HashMap<String, Marker>();
-    private Map<Marker,BusStop> busStopMarkers = new HashMap<Marker, BusStop>();
-
-
-
     private final Runnable updateMarkers = new Runnable() {
         @Override
         public void run() {
             Context context = getApplicationContext();
             int duration = Toast.LENGTH_SHORT;
-            Toast toast;
             //if data connection exists, fetch bus locations
-            if (NetworkUtil.isConnected(context)) {
-                toast = Toast.makeText(context, "connecting...", duration);
+
+            if (NetworkUtil.isConnected(context) && !tString.equals("connecting....")) {
                 NetworkActivity networkActivity = new NetworkActivity();
                 networkActivity.load();
             } else {
-                if (NetworkUtil.isConnecting(context)) {
-                    toast = Toast.makeText(context, "waiting for connection", duration);
-                } else {
-                    duration = Toast.LENGTH_LONG;
-                    toast = Toast.makeText(context, "no network connection", duration);
-                }
+                tString = "no connection";
+                duration = Toast.LENGTH_LONG;
             }
-            if (busMarkers.isEmpty())
-                toast.show();
 
-            locationHandler.postDelayed(this, MARKER_UPDATE_INTERVAL);
+            if (!tString.equals("no connection.")) {
+                if (busMarkers.isEmpty()) {
+                    Log.i(TAG, tString);
+                    Toast toast = Toast.makeText(context, tString, duration);
+                    toast.show();
+                    tString = tString + ".";
+                }
+                locationHandler.postDelayed(this, MARKER_UPDATE_INTERVAL);
+            }
         }
     };
+    private Map<Marker, BusStop> busStopMarkers = new HashMap<Marker, BusStop>();
     private Map<String, Marker> visibleMarkers = new HashMap<String, Marker>();
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,10 +132,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         //setStatusBarTranslucent(true);
-        mDrawerList = (ListView)findViewById(R.id.navList);
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.navList);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         LayoutInflater inflater = getLayoutInflater(); // used to display a header at the top of the drawer
-        ViewGroup header = (ViewGroup)inflater.inflate(R.layout.nav_header_main, mDrawerList, false);
+        ViewGroup header = (ViewGroup) inflater.inflate(R.layout.nav_header_main, mDrawerList, false);
         mDrawerList.addHeaderView(header, null, false);
         addDrawerItems(); // adds elements to drawer
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -149,17 +146,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // sets up the FragmentManager and the  BusScheduleFragment which will be populated with
         // information based on the bus schedule of the specified bus stop
-            fragmentManager = getFragmentManager();
-            busScheduleFragment = new BusScheduleFragment();
-            database_Helper = new DataBaseHelper(MapsActivity.this);
-            database_Helper.createDataBase();
+        fragmentManager = getFragmentManager();
+        busScheduleFragment = new BusScheduleFragment();
+        database_Helper = new DataBaseHelper(MapsActivity.this);
+        database_Helper.createDataBase();
 
         // loads UCSC_WestSide_Bus_Stops.json file to an array of BusStop Objects which are used
         // to create the busstop markers
         loadJsonFromAsset();
         startBackgroundData();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
-
 
 
     public void stopBackgroundData() {
@@ -176,25 +175,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     @Override
-    protected void onSaveInstanceState(Bundle outState)
-    {
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-    }
-
-
-
-
-    @Override
-    protected void onPause() {
-        stopBackgroundData();
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        startBackgroundData();
-        super.onResume();
     }
 
     @Override
@@ -220,7 +203,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void addDrawerItems() { // fills the hamburger menu/sidebar with an array of strings!
-        String[] osArray = { "Toggle Bus Stops", "Loop and Upper Campus Info", "Night Core Info", "Night Owl Info", "Night Owl Schedule" };
+        String[] osArray = {"Toggle Bus Stops", "Loop and Upper Campus Info", "Night Core Info", "Night Owl Info", "Night Owl Schedule", "Manual Refresh"};
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
 
@@ -231,7 +214,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override // depending on the string's array index, perform an action
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 1) {
-                    showStops = !showStops;
                     drawBusStopMarkers(); // Toggle stops
                     mDrawerLayout.closeDrawer(Gravity.LEFT); // and close the drawer
                 } else if (position == 2) { // if the user tapped on Loop and Upper Campus Info
@@ -249,6 +231,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 } else if (position == 5) { // if the user tapped on Night Owl Schedule
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
                     startActivity(schedIntent);
+                } else if (position == 6) {
+                    startBackgroundData();
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
                 }
             }
         });
@@ -259,25 +244,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
-
     @Override
     public void onBackPressed() {
-        if(getFragmentManager().getBackStackEntryCount() > 0 && !mDrawerLayout.isDrawerOpen(Gravity.LEFT))
+        if (getFragmentManager().getBackStackEntryCount() > 0 && !mDrawerLayout.isDrawerOpen(Gravity.LEFT))
             getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE); // close fragment if ONLY the fragment is open
-        else if(mDrawerLayout.isDrawerOpen(Gravity.LEFT) && getFragmentManager().getBackStackEntryCount() == 0)
+        else if (mDrawerLayout.isDrawerOpen(Gravity.LEFT) && getFragmentManager().getBackStackEntryCount() == 0)
             mDrawerLayout.closeDrawer(Gravity.LEFT); // if both the fragment and the drawer is open, only close the drawer
-        else if(mDrawerLayout.isDrawerOpen(Gravity.LEFT) && getFragmentManager().getBackStackEntryCount() > 0){
+        else if (mDrawerLayout.isDrawerOpen(Gravity.LEFT) && getFragmentManager().getBackStackEntryCount() > 0) {
             mDrawerLayout.closeDrawer(Gravity.LEFT); // close the drawer if it's open
-        }else{
+        } else {
             this.finish(); // close the app otherwise
         }
     }
 
 
-
-
-    public void checkVersion(){
+    public void checkVersion() {
         if (Build.VERSION.SDK_INT >= 23) {
             // for Android 6.0 and above: checks if fine location permission is granted--if it isn't, prompt the user to grant during runtime.
             // if the user denies the permission, a dialog will appear, letting him/her know how to enable the permission
@@ -290,8 +271,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         else // once the app has been installed, we can assume that location permissions have been granted. Proceed without a care!
             mMap.setMyLocationEnabled(true);
     }
-
-
 
 
     @Override
@@ -309,12 +288,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     deniedLocation.setCancelable(false); // ensure the user can't accidentally dismiss the dialog by tapping outside of the window
                     deniedLocation.show(fragmentManager, "location"); // show the dialog
                 }
-                return;
             }
         }
     }
-
-
 
 
     @Override
@@ -322,18 +298,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         int id;
         String busStopName;
 
-        if(busStopMarkers.containsKey(marker)) {
+        if (busStopMarkers.containsKey(marker)) {
 
             id = busStopMarkers.get(marker).getBusStopID();
             busStopName = busStopMarkers.get(marker).getTitle();
 
 
             busStopMarkers.get(marker).setBusStopSchedule(database_Helper.getBusStopSchedule(id));
-        }else {
+        } else {
             id = -1;
             busStopName = marker.getTitle();
         }
-
 
 
         if (!infoWindowActive) {
@@ -346,7 +321,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             fragmentTransaction.commit();
             infoWindowActive = true;
 
-        } else if (infoWindowActive && id != busScheduleFragment.getId() && id != -1){
+        } else if (infoWindowActive && id != busScheduleFragment.getId() && id != -1) {
 
             fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -357,8 +332,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             fragmentTransaction.replace(R.id.fragment_container, busScheduleFragment).addToBackStack(null);
             fragmentTransaction.show(busScheduleFragment);
             fragmentTransaction.commit();
-        }
-        else if (id == -1){
+        } else if (id == -1) {
             fragmentTransaction = fragmentManager.beginTransaction();
 
             busScheduleFragment = new BusScheduleFragment();
@@ -367,14 +341,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             fragmentTransaction.show(busScheduleFragment);
             fragmentTransaction.commit();
             infoWindowActive = true;
-        }
-        else{
+        } else {
 
         }
         return false;
     }
-
-
 
 
     public void createBusStopMarkers() {
@@ -390,16 +361,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 System.out.println("adding bus stop");
                 busStopMarkers.put(busStopMarker, temp);
             }
-            visibleMarkers.put(Double.toString(temp.getLatitude()+ temp.getLongitude()),busStopMarker);
+            visibleMarkers.put(Double.toString(temp.getLatitude() + temp.getLongitude()), busStopMarker);
         }
     }
 
 
-
     public void startBackgroundData() {
+        tString = "connecting";
         locationHandler.postDelayed(updateMarkers, MARKER_UPDATE_INTERVAL);
     }
-
 
 
     /**
@@ -412,12 +382,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Map<String, Marker> updatedBusMarkers = new HashMap<String, Marker>();
         AnimationSettings settings = new AnimationSettings()
                 .duration(MARKER_UPDATE_INTERVAL).interpolator(interpolator);
-        for(Bus bus: buses){
+        for (Bus bus : buses) {
             Log.i(TAG, bus.toString());
             LatLng newPos = new LatLng(bus.lat, bus.lng);
             Marker bus_marker = busMarkers.get(Integer.toString(bus.bus_id));
             // if marker does not exist, add new marker
-            if(bus_marker == null){
+            if (bus_marker == null) {
                 //ToDo: retrieve stops LatLng from relevant bus stops and store as data in marker for drawing routes
                 //PolylineOptions stops = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
                 bus_marker = mMap.addMarker(new MarkerOptions()
@@ -426,16 +396,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .title(bus.route)
                         .clusterGroup(bus.clusterGroup)
                         .snippet("Bus ID: " + Integer.toString(bus.bus_id)));
-                        if (bus.color == HUE_AZURE)
-                            bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("blue_marker", 64, 111)));
-                        else if (bus.color == HUE_ORANGE)
-                            bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("orange_marker", 64, 111)));
-                        else if (bus.color == HUE_YELLOW)
-                            bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("yellow_marker", 64, 111)));
-                        else
-                            bus_marker.setIcon(BitmapDescriptorFactory.defaultMarker(bus.color));
-            }
-            else {
+                if (bus.color == HUE_AZURE)
+                    bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("blue_marker", 64, 111)));
+                else if (bus.color == HUE_ORANGE)
+                    bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("orange_marker", 64, 111)));
+                else if (bus.color == HUE_YELLOW)
+                    bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("yellow_marker", 64, 111)));
+                else
+                    bus_marker.setIcon(BitmapDescriptorFactory.defaultMarker(bus.color));
+            } else {
                 // if marker exists, check for changes in position
                 // and for change in bus route from last update
                 int typeChange = bus_marker.getPosition().equals(newPos) ? 0 : 2;
@@ -466,7 +435,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         // remove all values from busMarkers Map (NOT a Google Map)
-        for(Marker marker: busMarkers.values()){
+        for (Marker marker : busMarkers.values()) {
             marker.remove();
         }
         // and set to the updatedBusMarkers Map (NOT a Google Map)
@@ -474,14 +443,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
-
-    public Bitmap resizeMapIcons(String iconName,int width, int height){ // used to resize marker icons so they don't explode to crazy sizes
+    public Bitmap resizeMapIcons(String iconName, int width, int height) { // used to resize marker icons so they don't explode to crazy sizes
         Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier(iconName, "drawable", getPackageName()));
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
         return resizedBitmap;
     }
-
 
 
     //TODO: Check if simple polylines are working correctly and follow up with snap-to-road lines
@@ -500,8 +466,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
-
     private void setPolylineCoords(Marker busMarker) {
         try {
             InputStream in = getAssets().open("UCSC_Westside_Busses.json");
@@ -513,13 +477,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
     // draws the busstop markers on the google map
-    public void drawBusStopMarkers(){
+    public void drawBusStopMarkers() {
 
-        for (BusStop temp : busStops){
+        for (BusStop temp : busStops) {
             Marker busStop = visibleMarkers.get(Double.toString(temp.getLatitude() + temp.getLongitude()));
-            if(busStop.isVisible()){
+            if (busStop.isVisible()) {
                 busStop.setVisible(false);
             } else {
                 busStop.setVisible(true);
@@ -528,23 +491,58 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
-
     // loads bus stops specified by json file
-    public void loadJsonFromAsset(){
+    public void loadJsonFromAsset() {
 
-        try{
+        try {
             InputStream in = getAssets().open("UCSC_Westside_Bus_Stops.json");
             test.readBusStopJsonStream(in);
             busStops = new ArrayList<>(test.getBusStops());
             System.out.println("Read Files" + busStops.size());
-        }
-        catch(IOException ex) {
+        } catch (IOException ex) {
             System.out.println("Error reading file");
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Maps Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.bussquad.geobus/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Maps Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.bussquad.geobus/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
 
 
     // creates dialog for the case of the user denying location permission

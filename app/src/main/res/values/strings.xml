@@ -95,4 +95,6 @@
     <string name="Bus_10">Bus 10</string>
     <string name="action_settings">Bus Main Menu</string>
     <string name="close_fragment">x</string>
+    <string name="geobus_icon">GeoBus_icon.png</string>
+    <string name="hamburger_subheader">Why bus when you can GeoBus?</string>
 </resources>

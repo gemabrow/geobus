@@ -43,68 +43,43 @@ class BusStop {
         return title;
     }
 
-
-
-
-    public void setBusStopId(int setBusStopID){
-        this.busStopID = setBusStopID;
-    }
-
-
-
-
     // sets the name of the bus stop
     public void setTitle(String title) {
         this.title = title;
     }
 
-
-
-
-    // sets the longitude of the bus stop
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+    public void setBusStopId(int setBusStopID) {
+        this.busStopID = setBusStopID;
     }
-
-
-
-
-    // sets the latitude of the bus stop location
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-
-
 
     // set Bus Stop schedules for this specific bus stop location
-    public void setBusStopSchedule(ArrayList<BusStopSchedule> setSchedules){
+    public void setBusStopSchedule(ArrayList<BusStopSchedule> setSchedules) {
         this.schedules = new ArrayList<>(setSchedules);
     }
 
-
-
-
-    public ArrayList<BusStopSchedule> getBusStopSchedules(){
+    public ArrayList<BusStopSchedule> getBusStopSchedules() {
         return this.schedules;
     }
-
-
-
 
     // returns the latitude of the bus stop
     public double getLatitude() {
         return latitude;
     }
 
-
+    // sets the latitude of the bus stop location
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
 
     // returns  the longitude of the bus stop
     public double getLongitude() {
         return longitude;
     }
 
-
+    // sets the longitude of the bus stop
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
 
     // returns the id of the busStop
     public int getBusStopID(){
@@ -134,10 +109,7 @@ class BusStop {
     // if there has not been a bus stop id assigned to this bus, then it will return false
     // otherwise it will return true
     public boolean hasId(){
-        if(this.busStopID < 0){
-            return false;
-        }
-        return true;
+        return (this.busStopID >= 0);
     }
 
 }
