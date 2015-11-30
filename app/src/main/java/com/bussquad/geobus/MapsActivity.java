@@ -74,6 +74,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static MapsActivity activity;
     private final Handler locationHandler = new Handler();
     private final JsonFileReader test = new JsonFileReader();
+    private Toast toast;
     private BusScheduleFragment busScheduleFragment;
     private Interpolator interpolator = new DecelerateInterpolator();
     private Boolean infoWindowActive = false;
@@ -96,23 +97,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Context context = getApplicationContext();
             int duration = Toast.LENGTH_SHORT;
             //if data connection exists, fetch bus locations
-
             if (NetworkUtil.isConnected(context) && !tString.equals("connecting....")) {
-                NetworkActivity networkActivity = new NetworkActivity();
+                NetworkActivity networkActivity;
+                networkActivity = new NetworkActivity();
                 networkActivity.load();
-            } else {
+            } else if (!tString.equals("no connection.")) {
                 tString = "no connection";
                 duration = Toast.LENGTH_LONG;
             }
-
+            //if no bus markers have been retrieved, display toast
             if (!tString.equals("no connection.")) {
-                if (busMarkers.isEmpty()) {
-                    Log.i(TAG, tString);
-                    Toast toast = Toast.makeText(context, tString, duration);
+                if (busMarkers.isEmpty() || tString.equals("no connection")) {
+                    toast = Toast.makeText(context, tString, duration);
                     toast.show();
                     tString = tString + ".";
                 }
                 locationHandler.postDelayed(this, MARKER_UPDATE_INTERVAL);
+            }
+            //otherwise, if no connection, stop background data
+            else {
+                stopBackgroundData();
             }
         }
     };
@@ -172,7 +176,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
+    protected void onPause() {
+        toast.cancel();
+        super.onPause();
+    }
+    @Override
     protected void onDestroy() {
+        toast.cancel();
         stopBackgroundData();
         super.onDestroy();
         System.exit(0);
@@ -184,7 +194,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.setOnMarkerClickListener(this);
         mMap.setClustering(new ClusteringSettings()
-                .clusterSize(25)
+                .clusterSize(30)
                 .clusterOptionsProvider(
                         new DefaultClusterOptionsProvider(getResources())));
 
