@@ -183,7 +183,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.setOnMarkerClickListener(this);
         mMap.setClustering(new ClusteringSettings()
-                .clusterSize(73)
+                .clusterSize(25)
                 .clusterOptionsProvider(
                         new DefaultClusterOptionsProvider(getResources())));
 
