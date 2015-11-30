@@ -38,13 +38,11 @@ public class InfoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
+    public boolean onOptionsItemSelected(MenuItem item) { // makes the actionbar back button behave like the hardware back button
+        if (item.getItemId() == android.R.id.home) {      // such that it doesn't cause the maps activity to redraw
+            onBackPressed();
+            return true;
         }
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 }
