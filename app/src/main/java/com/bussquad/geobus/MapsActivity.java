@@ -175,6 +175,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onDestroy() {
         stopBackgroundData();
         super.onDestroy();
+        System.exit(0);
     }
 
     // draws map
@@ -248,7 +249,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         else if (mDrawerLayout.isDrawerOpen(GravityCompat.START) && getFragmentManager().getBackStackEntryCount() > 0) {
             mDrawerLayout.closeDrawer(GravityCompat.START); // close the drawer if it's open
         } else {
-            this.finish(); // close the app otherwise
+            this.finish();
+            System.exit(0);// close the app otherwise
         }
     }
 
