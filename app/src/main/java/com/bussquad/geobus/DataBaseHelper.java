@@ -79,6 +79,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
+
+
+
     //Check that the database exists here: /data/data/your package/databases/DB Name
     private boolean checkDataBase()
     {
@@ -135,6 +138,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 
 
+
     @Override
     public synchronized void close()
     {
@@ -142,6 +146,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             mDataBase.close();
         super.close();
     }
+
+
 
 
     // this is where you create the table or load db
@@ -157,6 +163,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
+
+
+
 
     public void getAllBusStopSchedule(){
         openDataBase();
@@ -201,6 +210,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 
 
+
     public ArrayList<BusStopSchedule> getBusStopSchedule(int busStopID){
 
         openDataBase();
@@ -235,6 +245,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         return busSchedule;
     }
+
+
 
 
     private ArrayList<String> parseBusDepartTimes(String busDepartTimes,String busName ){
