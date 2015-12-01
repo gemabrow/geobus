@@ -32,14 +32,17 @@ class JsonFileReader {
     }
 
 
-    // reads in the BusStops from UCSC_WestSide_BusStop.json file only
 
+
+    // reads in the BusStops from UCSC_WestSide_BusStop.json file only
     public void readBusStopJsonStream(InputStream in) throws IOException {
         try (JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"))) {
             readBusStopArray(reader);
         }
 
     }
+
+
 
 
     // Returns A list of BusStops
@@ -60,6 +63,7 @@ class JsonFileReader {
         reader.endArray();
         return BusStops;
     }
+
 
 
 
@@ -99,6 +103,8 @@ class JsonFileReader {
     }
 
 
+
+
     // reads in the a list of busses that stop at the specified bus stop
     private void readBusArray(ArrayList<String> busses, JsonReader reader) throws IOException {
 
@@ -115,10 +121,13 @@ class JsonFileReader {
 
 
 
+
     // returns a list of Bustops read from the json file
     public ArrayList<BusStop> getBusStops(){
         return this.BusStops;
     }
+
+
 
 
     // for testing purposes only , prints a list of bus stop information read from the file.
@@ -132,6 +141,10 @@ class JsonFileReader {
 
         }
     }
+  
+  
+  
+  
     //************************************************************************************************//
     // read in UCSC_Westside_Busses.json file only
     public void readScheduledStops(InputStream in, String route, ArrayList<BusStop> allStops) throws IOException {
@@ -139,6 +152,9 @@ class JsonFileReader {
             readBuses(reader, route, allStops);
         }
     }
+
+
+
 
     private void readBuses(JsonReader reader, String route, ArrayList<BusStop> allStops) throws IOException {
         ArrayList<String> scheduledStops = new ArrayList<String>(16);
@@ -157,6 +173,9 @@ class JsonFileReader {
             coordinates.add(scheduledStops.indexOf(stop.getTitle()), stop.getLatLng());
         }
     }
+
+
+
 
     // reads in one bus stop from the json file at a time and returns a new BusStop Object
     private void readBusArray(JsonReader reader, String route, ArrayList<String> scheduledStops) throws IOException {
@@ -178,6 +197,9 @@ class JsonFileReader {
         reader.endObject();
     }
 
+
+
+
     // reads in the a list of busses that stop at the specified bus stop
     private void readStringArray(ArrayList<String> targets, JsonReader reader) throws IOException {
 
@@ -191,6 +213,9 @@ class JsonFileReader {
         reader.endArray();
 
     }
+
+
+
 
     public ArrayList<LatLng> getStopLocations() {
         return coordinates;
