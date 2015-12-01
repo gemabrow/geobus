@@ -1,4 +1,11 @@
 package com.bussquad.geobus;
+/*
+ This class builds an info window that is built using a fragment. It dynamically creates the fragment on top of the
+ fragment_bus_stop_schedule.xml found in the resource folder. This class has several public functinons which work together to build the
+ dynamic layout that changes depending on what bus stop is selected in the main activity.
+ 
+*/
+
 
 import android.os.Bundle;
 import android.app.Fragment;
