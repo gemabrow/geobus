@@ -28,6 +28,9 @@ class NetworkUtil {
         return TYPE_NOT_CONNECTED;
     }
 
+
+
+
     public static boolean isConnected(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -35,6 +38,9 @@ class NetworkUtil {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnected();
     }
+
+
+
 
     public static boolean isConnecting(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context
