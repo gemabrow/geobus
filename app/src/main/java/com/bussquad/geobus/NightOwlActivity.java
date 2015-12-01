@@ -2,7 +2,7 @@ package com.bussquad.geobus;
 
 
 /*
-    This class is used to display info for the night owl bus schedule for the shuttle busses in the hamburger menu
+    This class creates a blank Activity 
 */
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
