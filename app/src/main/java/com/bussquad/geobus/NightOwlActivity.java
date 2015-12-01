@@ -1,5 +1,9 @@
 package com.bussquad.geobus;
 
+
+/*
+    This class is used to display info for the night owl bus schedule for the shuttle busses in the hamburger menu
+*/
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +20,9 @@ public class NightOwlActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) { // makes the actionbar back button behave like the hardware back button
