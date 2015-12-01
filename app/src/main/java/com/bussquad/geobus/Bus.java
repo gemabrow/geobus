@@ -27,8 +27,7 @@ class Bus {
     public final int timestamp;
     public final int clusterGroup;
 
-    Bus(double lat, double lng, int timestamp, String route, String direction, int bus_id)
-    {
+    Bus(double lat, double lng, int timestamp, String route, String direction, int bus_id){
         this.lat = lat;
         this.lng = lng;
         this.timestamp =  timestamp;
@@ -61,6 +60,9 @@ class Bus {
         this.route = route;
     }
 
+
+
+
     public static int busColor(String route) {
         float cVal;
         switch (route) {
@@ -79,25 +81,43 @@ class Bus {
         return Color.HSVToColor(new float[]{cVal, 1.0f, 1.0f});
     }
 
+
+
+
     public double getLat() {
         return lat;
     }
+
+
+
 
     public double getLng() {
         return lng;
     }
 
+
+
+
     public int getTimestamp() {
         return timestamp;
     }
+
+
+
 
     public String getRoute() {
         return route;
     }
 
+
+
+
     public int getBus_id() {
         return bus_id;
     }
+
+
+
 
     // returns the bearing angle from prevPos to current position of bus
     // type float as required by marker options
@@ -113,6 +133,9 @@ class Bus {
                 prevBearing : (float) calcBearing(prevPos);
     }
 
+
+
+
     // trig magic to calculate bearing based on two sets of coordinates
     // returns as degrees as double
     private double calcBearing(LatLng prevPos) {
@@ -127,11 +150,17 @@ class Bus {
         return (Math.toDegrees(Math.atan2(y, x)) + 360) % 360;
     }
 
+
+
+
     public String toString() {
         return("Bus ID: " + this.bus_id + " Current location: Latitude " + this.lat
                 + " Longitude: " + this.lng + " Time Stamp: " + this.timestamp
                 + " Route: " + this.route + " Direction: " + this.direction);
     }
+
+
+
 
     public void printBus(){
         System.out.println("Bus ID: " + this.bus_id + " Current location: Latitude " + this.lat + " Longitude: " + this.lng);
