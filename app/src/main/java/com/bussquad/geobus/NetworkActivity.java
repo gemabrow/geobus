@@ -23,6 +23,9 @@ class NetworkActivity {
         new DownloadXmlTask().execute(URL);
     }
 
+
+
+
     private ArrayList<Bus> loadXmlFromNetwork(String urlString) throws XmlPullParserException, IOException {
         InputStream stream = null;
         // Instantiate the parser
@@ -44,6 +47,9 @@ class NetworkActivity {
         return buses;
     }
 
+
+
+
     // Given a string representation of a URL, sets up a connection and gets
     // an input stream.
     private InputStream downloadUrl(String urlString) throws IOException {
@@ -58,6 +64,9 @@ class NetworkActivity {
         return conn.getInputStream();
 
     }
+
+
+
 
     // Implementation of AsyncTask used to download XML feed
     private class DownloadXmlTask extends AsyncTask<String, Void, ArrayList<Bus>> {
