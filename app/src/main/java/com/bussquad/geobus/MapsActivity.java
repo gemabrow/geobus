@@ -91,6 +91,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     private Map<String, Marker> busMarkers = new HashMap<String, Marker>();
+    
+    
+    
     private final Runnable updateMarkers = new Runnable() {
         @Override
         public void run() {
@@ -128,6 +131,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     private GoogleApiClient client;
 
+   
+   
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         activity = this;
@@ -162,10 +167,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    public void stopBackgroundData() {
+   
+   
+   public void stopBackgroundData() {
         locationHandler.removeCallbacks(updateMarkers);
     }
 
+  
+  
+  
     protected void setStatusBarTranslucent(boolean makeTranslucent) {
         if (makeTranslucent) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -174,6 +184,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+  
+  
     @Override
     protected void onPause() {
         try { // exception handling specific to Android 6, as the permissions allow/deny dialog would make toast.cancel(); trigger an NPE
@@ -183,6 +195,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         super.onPause();
     }
+  
+  
+  
     @Override
     protected void onDestroy() {
         toast.cancel();
@@ -191,6 +206,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         System.exit(0);
     }
 
+  
+  
+  
     // draws map
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -211,6 +229,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+  
+  
+  
     private void addDrawerItems() { // fills the hamburger menu/sidebar with an array of strings!
         String[] osArray = {"Toggle Bus Stops", "Loop and Upper Campus Info", "Night Core Info", "Night Owl Info", "Night Owl Schedule", "Manual Refresh"};
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
@@ -248,11 +269,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
+  
+  
+  
     public void releaseTheBurger(View view) { // opens hamburger/sidebar menu
         mDrawerLayout.openDrawer(mDrawerList);
     }
 
 
+  
+  
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() > 0 && !mDrawerLayout.isDrawerOpen(GravityCompat.START))
@@ -268,6 +294,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+  
+  
     public void checkVersion() {
         if (Build.VERSION.SDK_INT >= 23) {
             // for Android 6.0 and above: checks if fine location permission is granted--if it isn't, prompt the user to grant during runtime.
@@ -283,6 +311,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+  
+  
     @Override
     // overridden callback for permissions request in order to handle the user denying or accepting location permission
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -303,6 +333,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+  
+  
     @Override
     public boolean onMarkerClick(Marker marker) {
         int id;
@@ -358,6 +390,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+  
+  
     public void createBusStopMarkers() {
 
         for (BusStop temp : busStops) {
@@ -377,12 +411,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+  
+  
     public void startBackgroundData() {
         tString = "connecting";
         locationHandler.postDelayed(updateMarkers, MARKER_UPDATE_INTERVAL);
     }
 
 
+  
+  
     /**
      * Given a list of xml_markers (defined in TransitInfoXmlParser),
      * update the map display such that new buses are added as type Marker to mMap,
@@ -454,6 +492,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+  
+  
     public Bitmap resizeMapIcons(String iconName, int width, int height) { // used to resize marker icons so they don't explode to crazy sizes
         Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier(iconName, "drawable", getPackageName()));
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
@@ -461,6 +501,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+  
+  
     //TODO: Check if simple polylines are working correctly and follow up with snap-to-road lines
     private void toggleRoute(Marker busMarker) {
         if (routeLine == null) {
@@ -477,6 +519,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+  
+  
     private void setPolylineCoords(Marker busMarker) {
         try {
             InputStream in = getAssets().open("UCSC_Westside_Busses.json");
@@ -488,6 +532,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+  
+  
     // draws the busstop markers on the google map
     public void drawBusStopMarkers() {
 
@@ -498,6 +544,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+  
+  
     // loads bus stops specified by json file
     private void loadJsonFromAsset() {
 
@@ -511,6 +559,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+  
+  
+  
     @Override
     public void onStart() {
         super.onStart();
@@ -531,6 +582,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         AppIndex.AppIndexApi.start(client, viewAction);
     }
 
+  
+  
+  
     @Override
     public void onStop() {
         super.onStop();
@@ -552,6 +606,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+  
+  
     // creates dialog for the case of the user denying location permission
     public static class LocationDialogFragment extends DialogFragment {
         @Override
@@ -573,15 +629,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-
-
-
-    /*public void closeBusStopScheduleFragment(){
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.remove(busScheduleFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }*/
 
 
 }
