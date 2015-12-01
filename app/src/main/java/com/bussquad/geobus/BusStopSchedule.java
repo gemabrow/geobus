@@ -77,7 +77,6 @@ public class BusStopSchedule {
 
     // returns the id for the bus schedule
     public int getId() {
-
         return id;
     }
 
