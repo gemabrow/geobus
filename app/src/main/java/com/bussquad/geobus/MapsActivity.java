@@ -133,7 +133,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         activity = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        //setStatusBarTranslucent(true);
         mDrawerList = (ListView) findViewById(R.id.navList);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         LayoutInflater inflater = getLayoutInflater(); // used to display a header at the top of the drawer
@@ -177,7 +176,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     protected void onPause() {
-        toast.cancel();
+        try { // exception handling specific to Android 6, as the permissions allow/deny dialog would make toast.cancel(); trigger an NPE
+            toast.cancel();
+        } catch (NullPointerException permissionBlocked) {
+            System.out.println("Toast not canceled due to permissions dialog");
+        }
         super.onPause();
     }
     @Override
