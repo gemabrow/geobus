@@ -26,6 +26,9 @@ class TransitInfoXmlParser {
     private static final String TAG = "Parser";
     private ArrayList<Bus> buses;
 
+
+
+
     public ArrayList<Bus> parse(InputStream in) throws XmlPullParserException, IOException {
         try {
             XmlPullParser parser = Xml.newPullParser();
@@ -39,6 +42,9 @@ class TransitInfoXmlParser {
         return buses;
     }
 
+
+
+
     private void readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
         buses = new ArrayList<Bus>();
         Queue<String> tags = new LinkedList<String>();
@@ -49,6 +55,9 @@ class TransitInfoXmlParser {
         tags.add("marker");
         xmlTagChecker(parser, tags, checkedTags);
     }
+
+
+
 
     private void xmlTagChecker(XmlPullParser parser, Queue<String> tagsToCheck, Stack<String> checkedTags) throws XmlPullParserException, IOException {
         String currentTag;
@@ -74,6 +83,9 @@ class TransitInfoXmlParser {
             }
         }
     }
+
+
+
 
     // parses individual marker, initializing each (lat, lng, ts, rt, id)
     private Bus readBus(XmlPullParser parser) throws XmlPullParserException, IOException {
@@ -115,6 +127,9 @@ class TransitInfoXmlParser {
         return new Bus(lat, lng, timestamp, route, direction, bus_id);
     }
 
+
+
+
     // processes latitudinal coordinates
     private double readLat(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, ns, "lat");
@@ -122,6 +137,9 @@ class TransitInfoXmlParser {
         parser.require(XmlPullParser.END_TAG, ns, "lat");
         return lat;
     }
+
+
+
 
     // processes longitudinal coordinates
     private double readLng(XmlPullParser parser) throws IOException, XmlPullParserException {
@@ -131,6 +149,9 @@ class TransitInfoXmlParser {
         return lng;
     }
 
+
+
+
     // processes timestamp
     private int readTs(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, ns, "timestamp");
@@ -138,6 +159,9 @@ class TransitInfoXmlParser {
         parser.require(XmlPullParser.END_TAG, ns, "timestamp");
         return ts;
     }
+
+
+
 
     // processes name of bus route
     private String readRoute(XmlPullParser parser) throws IOException, XmlPullParserException {
@@ -147,6 +171,9 @@ class TransitInfoXmlParser {
         return route;
     }
 
+
+
+
     // processes name of bus route
     private String readDirection(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, ns, "direction");
@@ -155,6 +182,9 @@ class TransitInfoXmlParser {
         return direction;
     }
 
+
+
+
     // processes bus id
     private int readId(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, ns, "id");
@@ -162,6 +192,9 @@ class TransitInfoXmlParser {
         parser.require(XmlPullParser.END_TAG, ns, "id");
         return bus_id;
     }
+
+
+
 
     // For latitude and longitude, extract their double values
     private double readDouble(XmlPullParser parser) throws IOException, XmlPullParserException {
@@ -173,6 +206,9 @@ class TransitInfoXmlParser {
         return result;
     }
 
+
+
+
     // For timestamp and bus id, extract their integer values
     private int readInt(XmlPullParser parser) throws IOException, XmlPullParserException {
         int result = 0;
@@ -182,6 +218,9 @@ class TransitInfoXmlParser {
         }
         return result;
     }
+
+
+
 
     // For bus route name, extract its String (potential to be used for other values later)
     private String readString(XmlPullParser parser) throws IOException, XmlPullParserException {
@@ -193,6 +232,9 @@ class TransitInfoXmlParser {
         }
         return result;
     }
+
+
+
 
     // Allows for the parser to skip irrelevant tags
     private void skip(XmlPullParser parser) throws IOException, XmlPullParserException {
