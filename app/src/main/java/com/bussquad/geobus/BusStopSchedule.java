@@ -5,7 +5,9 @@ import java.util.ArrayList;
 /**
  * Created by Jose on 11/14/2015.
 
-  This class BusStop Class consist
+  This class consists of 3 private variables and an array list of String. The Tag String is used for debugging. The Id variable
+  is used for identifying the bus stop the that schedule applies to. The busName is the bus number that corresponds to that the 
+  schedule reflects. The Arraylist is a list of depart times.
  */
 
 public class BusStopSchedule {
@@ -39,10 +41,12 @@ public class BusStopSchedule {
 
 
 
+
     // sets the name of the bus that stops at the specified bus stop
     public void setName(String name) {
         this.busName = name;
     }
+
 
 
 
@@ -61,10 +65,13 @@ public class BusStopSchedule {
     }
 
 
+
+
     // returns a set of depart times
     public ArrayList<String> getBusDepartTime(){
         return this.departTime;
     }
+
 
 
 
@@ -73,6 +80,7 @@ public class BusStopSchedule {
 
         return id;
     }
+
 
 
 
