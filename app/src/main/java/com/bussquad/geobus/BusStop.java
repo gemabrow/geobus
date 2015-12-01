@@ -44,48 +44,77 @@ class BusStop {
         return title;
     }
 
+
+
+
     // sets the name of the bus stop
     public void setTitle(String title) {
         this.title = title;
     }
 
+
+
+
     public void setBusStopId(int setBusStopID) {
         this.busStopID = setBusStopID;
     }
+
+
+
 
     // set Bus Stop schedules for this specific bus stop location
     public void setBusStopSchedule(ArrayList<BusStopSchedule> setSchedules) {
         this.schedules = new ArrayList<>(setSchedules);
     }
 
+
+
+
     public ArrayList<BusStopSchedule> getBusStopSchedules() {
         return this.schedules;
     }
+
+
+
 
     // returns the latitude of the bus stop
     public double getLatitude() {
         return latitude;
     }
 
+
+
+
     // sets the latitude of the bus stop location
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
+
+
+
 
     // returns  the longitude of the bus stop
     public double getLongitude() {
         return longitude;
     }
 
+
+
+
     // sets the longitude of the bus stop
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
+
+
+
     // returns the id of the busStop
     public int getBusStopID(){
         return  this.busStopID;
     }
+
+
 
 
     public boolean hasBus(String bus) {
@@ -100,10 +129,12 @@ class BusStop {
 
 
 
+
     // stores a list of busses that stop at this bus stop
     public ArrayList<String> getBusses() {
         return busses;
     }
+
 
 
 
