@@ -140,7 +140,7 @@ public class BusScheduleFragment extends Fragment {
 
 
 
-    // creates a Linear Layout which is then return. The LinearLayout contains several LinearLayout
+    // creates a Linear Layout which is then returned. The LinearLayout contains several LinearLayout
     // Child. This depends on the number of buses that stop in the specified busStop. Each
     // LinearLayout Child contains a horizontal Scroll view which consists of textViews for each
     // Depart time the pertains to that bus
@@ -183,10 +183,10 @@ public class BusScheduleFragment extends Fragment {
         else{
             horLayout.setBackgroundColor(ContextCompat.getColor(getActivity(),R.color.colorDarkBlueMetro));
         }
-        horLayout.setOrientation(LinearLayout.HORIZONTAL);
-        horLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-        horLayout.addView(createTextViewBusName(busInfo.getName()));
-        horLayout.addView(createHorScrollView(busInfo));
+            horLayout.setOrientation(LinearLayout.HORIZONTAL);
+            horLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            horLayout.addView(createTextViewBusName(busInfo.getName()));
+            horLayout.addView(createHorScrollView(busInfo));
 
         return horLayout;
     }

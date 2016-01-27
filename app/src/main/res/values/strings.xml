@@ -98,4 +98,16 @@
     <string name="geobus_icon">GeoBus_icon.png</string>
     <string name="hamburger_subheader">Why bus when you can GeoBus?</string>
     <string name="loading">Loading...</string>
+    <string name="favorite">Favorite</string>
+    <string name="schedule">Schedule</string>
+    <string name="notifyMe">NotifyMe</string>
+    <string name="returnToMenu">Return</string>
+
+    <string name="cfdesc">stuff</string>
+    <string name="cftitle">testing</string>
+    <string name="custom_card">Outer Loop</string>
+    <string name="description">ETA: 2 minutes</string>
+
+    <string name="busevent"> Nearest Bus Stops </string>
+
 </resources>

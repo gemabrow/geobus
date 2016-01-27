@@ -22,9 +22,12 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -47,15 +50,19 @@ import com.androidmapsextensions.OnMapReadyCallback;
 import com.androidmapsextensions.Polyline;
 import com.androidmapsextensions.PolylineOptions;
 import com.androidmapsextensions.SupportMapFragment;
+import com.flipboard.bottomsheet.BottomSheetLayout;
+import com.flipboard.bottomsheet.commons.MenuSheetView;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -88,26 +95,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ArrayAdapter<String> mAdapter;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mdAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    protected BottomSheetLayout bottomSheetLayout;
 
-
+    // google maps
     private Map<String, Marker> busMarkers = new HashMap<String, Marker>();
-    
-    
-    
+    private Map<Marker, BusStop> busStopMarkers = new HashMap<Marker, BusStop>();
+    private Map<String, Marker> visibleMarkers = new HashMap<String, Marker>();
+    private GoogleApiClient client;
+    private Location mLastLocation;
+    private  SupportMapFragment mapFragment;
+
+
     private final Runnable updateMarkers = new Runnable() {
+
         @Override
         public void run() {
             Context context = getApplicationContext();
             int duration = Toast.LENGTH_SHORT;
+
             //if data connection exists, fetch bus locations
             if (NetworkUtil.isConnected(context) && !tString.equals("connecting....")) {
-                NetworkActivity networkActivity;
-                networkActivity = new NetworkActivity();
+                NetworkActivity networkActivity = new NetworkActivity();
                 networkActivity.load();
             } else if (!tString.equals("no connection.")) {
                 tString = "no connection";
                 duration = Toast.LENGTH_LONG;
             }
+
             //if no bus markers have been retrieved, display toast
             if (!tString.equals("no connection.")) {
                 if (busMarkers.isEmpty() || tString.equals("no connection")) {
@@ -117,43 +134,67 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 locationHandler.postDelayed(this, MARKER_UPDATE_INTERVAL);
             }
+
+
             //otherwise, if no connection, stop background data
             else {
                 stopBackgroundData();
             }
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                    client);
         }
     };
-    private Map<Marker, BusStop> busStopMarkers = new HashMap<Marker, BusStop>();
-    private Map<String, Marker> visibleMarkers = new HashMap<String, Marker>();
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
 
-   
-   
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         activity = this;
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.main);
+
         mDrawerList = (ListView) findViewById(R.id.navList);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         LayoutInflater inflater = getLayoutInflater(); // used to display a header at the top of the drawer
         ViewGroup header = (ViewGroup) inflater.inflate(R.layout.nav_header_main, mDrawerList, false);
+
         mDrawerList.addHeaderView(header, null, false);
         addDrawerItems(); // adds elements to drawer
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getExtendedMapAsync(this);
 
 
+//        bottomSheetLayout = (BottomSheetLayout) findViewById(R.id.bottomsheet);
+//        bottomSheetLayout.setPeekOnDismiss(true);
+//        bottomSheetLayout.setShouldDimContentView(false);
+//        bottomSheetLayout.setInterceptContentTouch(false);
+
+
+        mRecyclerView = (RecyclerView)findViewById(R.id.my_recycler_view);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mdAdapter = new RecyclerViewAdapter(getDataSet());
+        mRecyclerView.setAdapter(mdAdapter);
+
+
+        addDrawerItems(); // adds elements to drawer
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
+
         // sets up the FragmentManager and the  BusScheduleFragment which will be populated with
         // information based on the bus schedule of the specified bus stop
-        fragmentManager = getFragmentManager();
-        busScheduleFragment = new BusScheduleFragment();
+
         database_Helper = new DataBaseHelper(MapsActivity.this);
         database_Helper.createDataBase();
 
@@ -163,28 +204,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         startBackgroundData();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        client = new GoogleApiClient.Builder(this)
+                .addApi(AppIndex.API)
+                .addApi(LocationServices.API)
+                .build();
     }
 
 
+
+
+    private ArrayList<DataObject> getDataSet() {
+        ArrayList results = new ArrayList<DataObject>();
+        for (int index = 0; index < 20; index++) {
+            DataObject obj = new DataObject("Some Primary Text " + index,
+                    "Secondary " + index);
+            results.add(index, obj);
+        }
+        return results;
+    }
+
    
-   
+
+
    public void stopBackgroundData() {
         locationHandler.removeCallbacks(updateMarkers);
     }
 
-  
-  
-  
-    protected void setStatusBarTranslucent(boolean makeTranslucent) {
-        if (makeTranslucent) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        } else {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
-    }
 
-  
+
   
     @Override
     protected void onPause() {
@@ -197,7 +244,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
   
   
-  
+
+
     @Override
     protected void onDestroy() {
         toast.cancel();
@@ -222,6 +270,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // set up coordinates for the center of UCSC and move the camera to there with a zoom level of 15 on startup
         LatLng ucsc = new LatLng(36.991406, -122.060731);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucsc, 15));
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        mMap.getUiSettings().setCompassEnabled(false);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.setMyLocationEnabled(true);
 
         createBusStopMarkers();
         drawBusStopMarkers();
@@ -229,7 +281,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-  
+
   
   
     private void addDrawerItems() { // fills the hamburger menu/sidebar with an array of strings!
@@ -271,14 +323,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
   
   
-  
+
+    // Opens up the hamburger menu
     public void releaseTheBurger(View view) { // opens hamburger/sidebar menu
         mDrawerLayout.openDrawer(mDrawerList);
     }
 
 
+    // ,Moves screen to users position and zooms screen into the users current position
+    public void setToUserLocation(View view){
+        mLastLocation =  LocationServices.FusedLocationApi.getLastLocation(client);
+
+        if (mLastLocation != null) {
+            double latitude = mLastLocation.getLatitude();
+            double longitude = mLastLocation.getLongitude();
+
+            LatLng location = new LatLng(latitude,longitude);
+
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location,16 ));
+        }
+
+    }
+
+    // expands google maps to fit the entire screen when the full screen
   
-  
+    public void expandMap(View view){
+
+        System.out.println("expanding map view");
+
+        ViewGroup.LayoutParams params = mapFragment.getView().getLayoutParams();
+        params.height = 900;
+        mapFragment.getView().setLayoutParams(params);
+    }
+
+
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() > 0 && !mDrawerLayout.isDrawerOpen(GravityCompat.START))
@@ -334,61 +413,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
   
-  
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        int id;
-        String busStopName;
-
-        if (busStopMarkers.containsKey(marker)) {
-
-            id = busStopMarkers.get(marker).getBusStopID();
-            busStopName = busStopMarkers.get(marker).getTitle();
-
-
-            busStopMarkers.get(marker).setBusStopSchedule(database_Helper.getBusStopSchedule(id));
-        } else {
-            id = -1;
-            busStopName = marker.getTitle();
-        }
-
-
-        if (!infoWindowActive) {
-
-            busScheduleFragment.setBusStopName(busStopName);
-            busScheduleFragment.setBusSchedule(database_Helper.getBusStopSchedule(id));
-            fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.fragment_container, busScheduleFragment).addToBackStack(null);
-            fragmentTransaction.show(busScheduleFragment);
-            fragmentTransaction.commit();
-            infoWindowActive = true;
-
-        } else if (infoWindowActive && id != busScheduleFragment.getId() && id != -1) {
-
-            fragmentTransaction = fragmentManager.beginTransaction();
-
-            busScheduleFragment = new BusScheduleFragment();
-            busScheduleFragment.setBusStopName(busStopName);
-            busScheduleFragment.setBusSchedule(database_Helper.getBusStopSchedule(id));
-
-            fragmentTransaction.replace(R.id.fragment_container, busScheduleFragment).addToBackStack(null);
-            fragmentTransaction.show(busScheduleFragment);
-            fragmentTransaction.commit();
-        } else if (id == -1) {
-            fragmentTransaction = fragmentManager.beginTransaction();
-
-            busScheduleFragment = new BusScheduleFragment();
-            busScheduleFragment.setBusStopName(busStopName);
-            fragmentTransaction.replace(R.id.fragment_container, busScheduleFragment).addToBackStack(null);
-            fragmentTransaction.show(busScheduleFragment);
-            fragmentTransaction.commit();
-            infoWindowActive = true;
-        } else {
-
-        }
-        return false;
-    }
-
 
   
   
@@ -500,25 +524,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return resizedBitmap;
     }
 
-
-  
-  
-    //TODO: Check if simple polylines are working correctly and follow up with snap-to-road lines
-    private void toggleRoute(Marker busMarker) {
-        if (routeLine == null) {
-            Log.i(TAG, "routeLine null");
-            routeLine = mMap.addPolyline(new PolylineOptions()
-                    .addAll((ArrayList<LatLng>) busMarker.getData())
-                    .color(Bus.busColor(busMarker.getTitle())));
-        } else {
-            routeLine.setPoints((ArrayList<LatLng>) busMarker.getData());
-            routeLine.setColor(Bus.busColor(busMarker.getTitle()));
-            routeLine.setVisible(!routeLine.isVisible());
-        }
-
-    }
-
-
   
   
     private void setPolylineCoords(Marker busMarker) {
@@ -606,8 +611,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-  
-  
+
+
     // creates dialog for the case of the user denying location permission
     public static class LocationDialogFragment extends DialogFragment {
         @Override
@@ -629,6 +634,88 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        int id;
+        String busStopName;
+
+
+        if (busStopMarkers.containsKey(marker)) {
+
+            id = busStopMarkers.get(marker).getBusStopID();
+            busStopName = busStopMarkers.get(marker).getTitle();
+
+            busStopMarkers.get(marker).setBusStopSchedule(database_Helper.getBusStopSchedule(id));
+        } else {
+            id = -1;
+            busStopName = marker.getTitle();
+        }
+
+
+        if (!infoWindowActive) {
+
+//            showMenuSheet(MenuSheetView.MenuType.GRID, busStopName);
+
+        } else if (infoWindowActive && id != busScheduleFragment.getId() && id != -1) {
+
+
+        } else if (id == -1) {
+            infoWindowActive = true;
+        } else {
+
+        }
+        return false;
+    }
+
+
+
+//    private void showMenuSheet(final MenuSheetView.MenuType menuType, final String busStopName) {
+//        MenuSheetView menuSheetView =
+//                new MenuSheetView(MapsActivity.this, menuType, busStopName , new MenuSheetView.OnMenuItemClickListener() {
+//
+//                    @Override
+//                    public boolean onMenuItemClick(MenuItem item) {
+//                        Toast.makeText(MapsActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+//                        if (bottomSheetLayout.isSheetShowing()) {
+//                            bottomSheetLayout.dismissSheet();
+//                        }
+//                        if (item.getItemId() == R.id.schedule) {
+//                            showMenuSheet(menuType == MenuSheetView.MenuType.LIST ? MenuSheetView.MenuType.GRID : MenuSheetView.MenuType.LIST, busStopName);
+//                        }
+//                        System.out.println("hello clicked on the menu");
+//                        return true;
+//                    }
+//                });
+//        menuSheetView.inflateMenu(R.menu.create);
+//        bottomSheetLayout.showWithSheetView(menuSheetView);
+//    }
+
+//    private void showListMenuSheet(final MenuSheetView.MenuType menuType, final String busStopName) {
+//        MenuSheetView menuSheetView =
+//                new MenuSheetView(MapsActivity.this, menuType, busStopName , new MenuSheetView.OnMenuItemClickListener() {
+//
+//                    @Override
+//                    public boolean onMenuItemClick(MenuItem item) {
+//                        Toast.makeText(MapsActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+//                        if (bottomSheetLayout.isSheetShowing()) {
+//                            bottomSheetLayout.dismissSheet();
+//                        }
+//                        if (item.getItemId() == R.id.backToMenu) {
+//                            showMenuSheet(menuType == MenuSheetView.MenuType.LIST ? MenuSheetView.MenuType.GRID : MenuSheetView.MenuType.LIST,busStopName);
+//                        }
+//                        System.out.println("hello clicked on the menu list");
+//                        return true;
+//                    }
+//                });
+//
+//        // add menu items here
+//        menuSheetView.inflateMenu(R.menu.create);
+//        View view;
+//        view = inflater.inflate(R.layout.fragment_bus_stop_schedule, container,false);
+//
+//        bottomSheetLayout.showWithSheetView(menuSheetView);
+//    }
 
 
 }

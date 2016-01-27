@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="@string/notifyMe"
+        android:icon="@mipmap/ic_launcher"
+        />
+    <item
+        android:id="@+id/schedule"
+        android:title="@string/schedule"
+        android:icon="@drawable/routine"
+        />
+    <item
+        android:title="@string/favorite"
+        android:icon="@mipmap/ic_launcher"
+        />
+
+
+    <item
+        android:id="@+id/backToMenu"
+        android:title="@string/returnToMenu"
+        android:icon="@mipmap/ic_launcher"
+        />
+
+</menu>

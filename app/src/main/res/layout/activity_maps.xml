@@ -1,4 +1,5 @@
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
@@ -6,64 +7,87 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:weightSum="1"
-        tools:context=".MapsActivity">
 
-        <RelativeLayout
+    <com.flipboard.bottomsheet.BottomSheetLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/bottomsheet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="1"
+            tools:context=".MapsActivity">
 
-            <fragment
-                android:id="@+id/map"
-                android:name="com.androidmapsextensions.SupportMapFragment"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
 
-            <com.dd.ShadowLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                app:sl_cornerRadius="0dp"
-                app:sl_dx="0dp"
-                app:sl_dy="2dp"
-                app:sl_shadowColor="#A9000000"
-                app:sl_shadowRadius="2dp">
-                <ImageButton
-                    android:id="@+id/hamburgerHelper"
+                <fragment
+                    android:id="@+id/map"
+                    android:name="com.androidmapsextensions.SupportMapFragment"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1" />
+
+                <com.dd.ShadowLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:alpha="75"
-                    android:background="#80FFFFFF"
-                    android:onClick="releaseTheBurger"
-                    android:padding="0dp"
-                    android:src="@drawable/ic_menu_black_24dp" />
-            </com.dd.ShadowLayout>
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    app:sl_cornerRadius="0dp"
+                    app:sl_dx="0dp"
+                    app:sl_dy="2dp"
+                    app:sl_shadowColor="#A9000000"
+                    app:sl_shadowRadius="2dp">
 
-        </RelativeLayout>
+                    <ImageButton
+                        android:id="@+id/hamburgerHelper"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:alpha="75"
+                        android:background="#80FFFFFF"
+                        android:onClick="releaseTheBurger"
+                        android:padding="0dp"
+                        android:src="@drawable/ic_menu_black_24dp" />
+                </com.dd.ShadowLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:context=".CardViewActivity">
 
-        <RelativeLayout
-            android:id="@+id/fragment_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/my_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scrollbars="vertical"/>
 
-    </LinearLayout>
-</RelativeLayout>
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Button"
+                android:id="@+id/button" />
+
+
+        </LinearLayout>
+    </com.flipboard.bottomsheet.BottomSheetLayout>
+
     <ListView
         android:id="@+id/navList"
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_gravity="start|start"
         android:background="#ffeeeeee"/>
+
+
+
 </android.support.v4.widget.DrawerLayout>
 

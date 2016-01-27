@@ -20,6 +20,9 @@ class BusStop {
     private double latitude;
     private double longitude;
 
+    private BusStop nextBusStop;
+    private BusStop previousBusStop;
+
     // used to store busses that stop at the bus stop location
     private ArrayList<String> busses;
     private ArrayList<BusStopSchedule> schedules;

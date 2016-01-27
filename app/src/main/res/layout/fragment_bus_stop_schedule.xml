@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     tools:context="com.bussquad.geobus.BusScheduleFragment"
     android:weightSum="1"
-    android:background="@color/colorPrimaryDark">
+    android:background="@color/colorLightBabyBLueMetro">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -23,9 +23,9 @@
             android:id="@+id/busInfo"
             android:textIsSelectable="false"
             android:singleLine="false"
-            android:textColor="@color/colorYellowMetro"
+            android:textColor="#c8000000"
             android:textSize="20sp"
-            android:background="@color/colorDarkBlueMetro"
+            android:background="#ffff00"
             android:gravity="center"
             android:layout_weight="0.52"/>
 
@@ -36,9 +36,9 @@
             android:id="@+id/fragClose"
             android:textIsSelectable="false"
             android:singleLine="false"
-            android:textColor="@color/colorYellowMetro"
+            android:textColor="#c8000000"
             android:textSize="20sp"
-            android:background="@color/colorDarkBlueMetro"
+            android:background="#ffff00"
             android:gravity="center"
             android:layout_weight="0.48"
             android:onClick="closeBusSchedule"
@@ -58,9 +58,9 @@
             android:id="@+id/textView"
             android:textIsSelectable="false"
             android:singleLine="false"
-            android:textColor="@color/colorYellowMetro"
+            android:textColor="#c8000000"
             android:textSize="20sp"
-            android:background="@color/colorDarkBlueMetro"
+            android:background="#ffff00"
             android:gravity="center_horizontal"/>
         <TextView
             android:layout_width="match_parent"
@@ -69,9 +69,9 @@
             android:id="@+id/textView2"
             android:textIsSelectable="false"
             android:singleLine="false"
-            android:textColor="@color/colorYellowMetro"
+            android:textColor="#c8000000"
             android:textSize="20sp"
-            android:background="@color/colorDarkBlueMetro"
+            android:background="#ffff00"
             android:gravity="center_horizontal"/>
 
     </LinearLayout>
@@ -79,7 +79,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="130dp"
-        android:id="@+id/BusScheduleScrollView">
+        android:id="@+id/BusScheduleScrollView"
+        android:background="#FFFF8D">
 
 
     </ScrollView>
