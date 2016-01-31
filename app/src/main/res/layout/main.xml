@@ -11,11 +11,13 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <LinearLayout
+
+    <FrameLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:animateLayoutChanges="true">
 
         <!-- The main content  Map-->
 
@@ -25,13 +27,13 @@
             android:id="@+id/map"
             android:name="com.androidmapsextensions.SupportMapFragment"
             android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+
            >
             <RelativeLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="match_parent"
                 >
 
 
@@ -74,28 +76,34 @@
                     android:layout_marginRight="2dp"
                     android:elevation="15dp" />
 
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/my_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="271dp"
+                    android:scrollbars="vertical"
+                    android:animateLayoutChanges="false"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:background="#f8f8f8" />
+
 
             </RelativeLayout>
 
-     </fragment>
+
+        </fragment>
+
 
         <!-- Displays Cards under neath the Map fragment-->
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/my_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="271dp"
-            android:scrollbars="vertical"
-            android:layout_weight="0.76" />
 
-    </LinearLayout>
+    </FrameLayout>
 
      <!--Hamburger menu that displays on the Left side of the screen-->
-    <!--<ListView-->
-        <!--android:id="@+id/navList"-->
-        <!--android:layout_width="300dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_gravity="start|start"-->
-        <!--android:background="#ffeeeeee"/>-->
+    <ListView
+        android:id="@+id/navList"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start|start"
+        android:background="#ffeeeeee"/>
 
 </android.support.v4.widget.DrawerLayout>

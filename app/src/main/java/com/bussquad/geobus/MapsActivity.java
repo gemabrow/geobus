@@ -1,11 +1,14 @@
 package com.bussquad.geobus;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +16,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +26,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -31,10 +36,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.view.animation.Transformation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -59,7 +68,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLOutput;
@@ -68,13 +76,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, OnMarkerClickListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
+        OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
     // Map is used to ensure bus markers are not duplicated, as
     // Google Maps V2 for Android has no method to uniquely ID
     // a marker according to input
     public final static String EXTRA_INFO = "com.bussquad.geobus.INFO";
     static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 1; // int used to identify specific permissions in permission callback methods
+    static final int ACCESS_COARSE_LOCATION = 2;
     private final static int MARKER_UPDATE_INTERVAL = 2000; // in milliseconds
     private final static float ICON_DEGREES_OFFSET = 90;
     private static final String TAG = "MapsActivity";
@@ -82,7 +92,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private final Handler locationHandler = new Handler();
     private final JsonFileReader test = new JsonFileReader();
     private Toast toast;
-    private BusScheduleFragment busScheduleFragment;
     private Interpolator interpolator = new DecelerateInterpolator();
     private Boolean infoWindowActive = false;
     private String tString = "";
@@ -108,6 +117,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location mLastLocation;
     private  SupportMapFragment mapFragment;
 
+
+    // layout
+    private ImageButton btnExpand;
+    private boolean mapExpanded = false;
 
     private final Runnable updateMarkers = new Runnable() {
 
@@ -140,8 +153,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             else {
                 stopBackgroundData();
             }
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                    client);
+
+            if ( Build.VERSION.SDK_INT >= 23 &&
+                    ContextCompat.checkSelfPermission( context, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission( context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return  ;
+            }
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(client);
         }
     };
 
@@ -160,6 +178,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LayoutInflater inflater = getLayoutInflater(); // used to display a header at the top of the drawer
         ViewGroup header = (ViewGroup) inflater.inflate(R.layout.nav_header_main, mDrawerList, false);
 
+        btnExpand = (ImageButton)findViewById(R.id.swToFullScrBtn);
+
         mDrawerList.addHeaderView(header, null, false);
         addDrawerItems(); // adds elements to drawer
 
@@ -168,19 +188,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getExtendedMapAsync(this);
 
-
+//
 //        bottomSheetLayout = (BottomSheetLayout) findViewById(R.id.bottomsheet);
 //        bottomSheetLayout.setPeekOnDismiss(true);
 //        bottomSheetLayout.setShouldDimContentView(false);
 //        bottomSheetLayout.setInterceptContentTouch(false);
-
+//
 
         mRecyclerView = (RecyclerView)findViewById(R.id.my_recycler_view);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
-
+        mRecyclerView.setHasFixedSize(false);
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -274,6 +293,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.getUiSettings().setCompassEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.setMyLocationEnabled(true);
+        mMap.setOnInfoWindowClickListener(this);
 
         createBusStopMarkers();
         drawBusStopMarkers();
@@ -281,6 +301,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Intent myIntent = new Intent(MapsActivity.this, BusStopMenuActivity.class);
+        myIntent.putExtra("bus_stop_name", marker.getTitle()); //Optional parameters
+        MapsActivity.this.startActivity(myIntent);
+    }
 
   
   
@@ -330,8 +356,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+
+
     // ,Moves screen to users position and zooms screen into the users current position
     public void setToUserLocation(View view){
+
+        if ( Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission( getBaseContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return  ;
+        }
+
         mLastLocation =  LocationServices.FusedLocationApi.getLastLocation(client);
 
         if (mLastLocation != null) {
@@ -341,21 +375,60 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LatLng location = new LatLng(latitude,longitude);
 
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location,16 ));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 16));
         }
 
     }
 
+
+
+
     // expands google maps to fit the entire screen when the full screen
-  
     public void expandMap(View view){
 
-        System.out.println("expanding map view");
 
-        ViewGroup.LayoutParams params = mapFragment.getView().getLayoutParams();
-        params.height = 900;
-        mapFragment.getView().setLayoutParams(params);
+        if(mRecyclerView.getVisibility() != View.GONE){
+            btnExpand.setImageResource(R.drawable.ic_fullscreen_exit_black_24dp);
+            mRecyclerView.animate().
+                    translationY(mRecyclerView.getHeight())
+                    .alpha(0.0f)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+
+                                super.onAnimationEnd(animation);
+                                System.out.println("called");
+                                mRecyclerView.setVisibility(View.GONE);
+
+                        }
+                    });
+        }
+        else{
+            System.out.println("should be visible");
+            btnExpand.setImageResource(R.drawable.ic_fullscreen_black_24dp);
+
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mRecyclerView.setAlpha(0.0f);
+            mRecyclerView.animate().
+                    translationY(0)
+                    .alpha(1.0f)
+                    .setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+
+                        super.onAnimationEnd(animation);
+
+
+                }
+            });
+        }
+
+
+
+
     }
+
+
 
 
     @Override
@@ -391,7 +464,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
   
-  
+
     @Override
     // overridden callback for permissions request in order to handle the user denying or accepting location permission
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -408,14 +481,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     deniedLocation.show(fragmentManager, "location"); // show the dialog
                 }
             }
+            case ACCESS_COARSE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay!
+                } else { // show dialog confirming that the user denied location & brief instructions on how to enable permission
+                    FragmentManager fragmentManager = getFragmentManager();
+                    DialogFragment deniedLocation = new LocationDialogFragment();
+                    deniedLocation.setCancelable(false); // ensure the user can't accidentally dismiss the dialog by tapping outside of the window
+                    deniedLocation.show(fragmentManager, "location"); // show the dialog
+                }
+            }
         }
     }
 
 
   
 
-  
-  
     public void createBusStopMarkers() {
 
         for (BusStop temp : busStops) {
@@ -524,17 +606,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return resizedBitmap;
     }
 
-  
-  
-    private void setPolylineCoords(Marker busMarker) {
-        try {
-            InputStream in = getAssets().open("UCSC_Westside_Busses.json");
-            test.readScheduledStops(in, busMarker.getTitle(), busStops);
-            busMarker.setData(test.getStopLocations());
-        } catch (IOException ex) {
-            System.out.println("Error reading file");
-        }
-    }
 
 
   
@@ -653,69 +724,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
 
-        if (!infoWindowActive) {
 
-//            showMenuSheet(MenuSheetView.MenuType.GRID, busStopName);
-
-        } else if (infoWindowActive && id != busScheduleFragment.getId() && id != -1) {
-
-
-        } else if (id == -1) {
-            infoWindowActive = true;
-        } else {
-
-        }
         return false;
     }
 
 
 
-//    private void showMenuSheet(final MenuSheetView.MenuType menuType, final String busStopName) {
-//        MenuSheetView menuSheetView =
-//                new MenuSheetView(MapsActivity.this, menuType, busStopName , new MenuSheetView.OnMenuItemClickListener() {
-//
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem item) {
-//                        Toast.makeText(MapsActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
-//                        if (bottomSheetLayout.isSheetShowing()) {
-//                            bottomSheetLayout.dismissSheet();
-//                        }
-//                        if (item.getItemId() == R.id.schedule) {
-//                            showMenuSheet(menuType == MenuSheetView.MenuType.LIST ? MenuSheetView.MenuType.GRID : MenuSheetView.MenuType.LIST, busStopName);
-//                        }
-//                        System.out.println("hello clicked on the menu");
-//                        return true;
-//                    }
-//                });
-//        menuSheetView.inflateMenu(R.menu.create);
-//        bottomSheetLayout.showWithSheetView(menuSheetView);
-//    }
+    private void showMenuSheet(final MenuSheetView.MenuType menuType, final String busStopName) {
+        MenuSheetView menuSheetView =
+                new MenuSheetView(MapsActivity.this, menuType, busStopName , new MenuSheetView.OnMenuItemClickListener() {
 
-//    private void showListMenuSheet(final MenuSheetView.MenuType menuType, final String busStopName) {
-//        MenuSheetView menuSheetView =
-//                new MenuSheetView(MapsActivity.this, menuType, busStopName , new MenuSheetView.OnMenuItemClickListener() {
-//
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem item) {
-//                        Toast.makeText(MapsActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
-//                        if (bottomSheetLayout.isSheetShowing()) {
-//                            bottomSheetLayout.dismissSheet();
-//                        }
-//                        if (item.getItemId() == R.id.backToMenu) {
-//                            showMenuSheet(menuType == MenuSheetView.MenuType.LIST ? MenuSheetView.MenuType.GRID : MenuSheetView.MenuType.LIST,busStopName);
-//                        }
-//                        System.out.println("hello clicked on the menu list");
-//                        return true;
-//                    }
-//                });
-//
-//        // add menu items here
-//        menuSheetView.inflateMenu(R.menu.create);
-//        View view;
-//        view = inflater.inflate(R.layout.fragment_bus_stop_schedule, container,false);
-//
-//        bottomSheetLayout.showWithSheetView(menuSheetView);
-//    }
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Toast.makeText(MapsActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
+                        if (bottomSheetLayout.isSheetShowing()) {
+                            bottomSheetLayout.dismissSheet();
+                        }
+                        if (item.getItemId() == R.id.schedule) {
+                            showMenuSheet(menuType == MenuSheetView.MenuType.LIST ? MenuSheetView.MenuType.GRID : MenuSheetView.MenuType.LIST, busStopName);
+                        }
+                        System.out.println("hello clicked on the menu");
+                        return true;
+                    }
+                });
+        menuSheetView.inflateMenu(R.menu.create);
+        bottomSheetLayout.showWithSheetView(menuSheetView);
+    }
+
+
+
+
+
+
 
 
 }

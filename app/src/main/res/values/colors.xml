@@ -7,5 +7,10 @@
     <color name="colorLightBabyBLueMetro">#0076d0</color>
     <color name="colorGoldYellowMetro">#f6af2c</color>
     <color name="colorYellowMetro">#f6af2c</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary2">#125688</color>
+    <color name="colorPrimaryDark2">#125688</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
+    <color name="colorAccent">#c8e8ff</color>
 </resources>

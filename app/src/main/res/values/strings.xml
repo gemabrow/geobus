@@ -89,7 +89,7 @@
         ]]>
     </string>
     <string name="title_activity_night_owl">Night Owl Schedule</string>
-    <string name="bus_schedule">Bus Schedule place holder</string>
+    <string name="busStopName">Bus Stop Name</string>
     <string name="depart_Time">Depart Time</string>
     <string name="Bus_Name">Bus</string>
     <string name="Bus_10">Bus 10</string>
@@ -100,7 +100,10 @@
     <string name="loading">Loading...</string>
     <string name="favorite">Favorite</string>
     <string name="schedule">Schedule</string>
-    <string name="notifyMe">NotifyMe</string>
+
+    <string name="notification">Notifications</string>
+    <string name="allow_notifications">Allow notifications</string>
+
     <string name="returnToMenu">Return</string>
 
     <string name="cfdesc">stuff</string>
@@ -109,5 +112,17 @@
     <string name="description">ETA: 2 minutes</string>
 
     <string name="busevent"> Nearest Bus Stops </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="notifyMe">notifyme</string>
+
+    <string-array name="stops_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
 
 </resources>

@@ -38,23 +38,40 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".InfoActivity"
             android:label="@string/title_activity_info"
             android:parentActivityName=".MapsActivity"
             android:theme="@style/AppTheme.NoActionBar">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.bussquad.geobus.MapsActivity" />
+
         </activity>
+
         <activity
             android:name=".NightOwlActivity"
             android:label="@string/title_activity_night_owl"
             android:parentActivityName=".MapsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/MyMaterialTheme">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.bussquad.geobus.MapsActivity" />
+
+        </activity>
+
+        <activity android:name=".BusStopMenuActivity"
+            android:label="@string/title_activity_info"
+            android:parentActivityName=".MapsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bussquad.geobus.MapsActivity" />
+
         </activity>
         <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
