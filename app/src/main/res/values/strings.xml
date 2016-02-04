@@ -103,9 +103,23 @@
 
     <string name="notification">Notifications</string>
     <string name="allow_notifications">Allow notifications</string>
-
+    <string name="Bus_Stop_Notifications">Start Notifications </string>
     <string name="returnToMenu">Return</string>
-
+    <string-array name="stops_array">
+        <item> 1 Stop</item>
+        <item> 2 Stops</item>
+        <item> 3 Stops</item>
+        <item> 4 Stops</item>
+    </string-array>
+    <string name="bus_route">Bus Route</string>
+    <string-array name="route_array">
+        <item> Outer Loop</item>
+        <item> Inner Loop </item>
+        <item> Upper Campus</item>
+        <item> Any Loop</item>
+    </string-array>
+    <string name="type_of_notification">Notification Type</string>
+    <string name="set_notification">SET NOTIFICATION</string>
     <string name="cfdesc">stuff</string>
     <string name="cftitle">testing</string>
     <string name="custom_card">Outer Loop</string>
@@ -117,12 +131,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="notifyMe">notifyme</string>
 
-    <string-array name="stops_array">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-    </string-array>
+
 
 
 </resources>

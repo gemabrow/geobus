@@ -13,4 +13,7 @@
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
     <color name="colorAccent">#c8e8ff</color>
+    <color name="primaryText">#d9000000</color>
+    <color name="secondaryText">#8C000000</color>
+    <color name="disabledText">#61000000</color>
 </resources>

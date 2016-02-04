@@ -19,12 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class BusStopMenuActivity extends AppCompatActivity {
+public class BusStopMenuActivity extends AppCompatActivity  {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +32,6 @@ public class BusStopMenuActivity extends AppCompatActivity {
         String value = intent.getStringExtra("bus_stop_name");
 
         setContentView(R.layout.bus_stop_menu);
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Bus Stop Info");
         toolbar.setSubtitle(value);
@@ -41,7 +39,6 @@ public class BusStopMenuActivity extends AppCompatActivity {
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
@@ -49,12 +46,29 @@ public class BusStopMenuActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
     }
 
+
+
+
+    // Sets up two fragments, one that will display bus stop schedule information and another
+    // that will display the current notificaiton settings
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new ScheduleFragment(), "Schedule");
-        adapter.addFragment(new NotificationFragment(), "Notifiactions");
+        adapter.addFragment(new NotificationFragment(), "Notification");
         viewPager.setAdapter(adapter);
     }
+
+
+
+
+    // checks if the current bus stop has notifications already set up
+    private void checkForNotifications(){
+
+    }
+
+
+
+
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
@@ -83,5 +97,7 @@ public class BusStopMenuActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
+
+
     }
 }

@@ -65,8 +65,10 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import java.io.IOException;
 import java.io.InputStream;
@@ -93,12 +95,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private final JsonFileReader test = new JsonFileReader();
     private Toast toast;
     private Interpolator interpolator = new DecelerateInterpolator();
-    private Boolean infoWindowActive = false;
     private String tString = "";
-    private GoogleMap mMap;
     private ArrayList<BusStop> busStops;
-    private FragmentManager fragmentManager;
-    private FragmentTransaction fragmentTransaction;
     private DataBaseHelper database_Helper;
     private Polyline routeLine;
     private ListView mDrawerList;
@@ -107,61 +105,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mdAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    protected BottomSheetLayout bottomSheetLayout;
 
-    // google maps
+    // bus stop and bus markers
     private Map<String, Marker> busMarkers = new HashMap<String, Marker>();
     private Map<Marker, BusStop> busStopMarkers = new HashMap<Marker, BusStop>();
     private Map<String, Marker> visibleMarkers = new HashMap<String, Marker>();
+
+    // google maps related objects
     private GoogleApiClient client;
     private Location mLastLocation;
     private  SupportMapFragment mapFragment;
+    private GoogleMap mMap;
+
+    // map updates
+    // Camera Position Update
+    private String REQUEST_CAMERA_UPDATE_KEY = "CAMERALOC";
+    private String CAMERA_POSITION_KEY = "POSITIONKEY";
+    private CameraPosition lstCameraPosition;
+    private CameraPosition currCameraPosition;
+
+    // Bus Stop Selected Update
+    private String REQUESTING_BUS_STOP_SELECTED = "true";
 
 
     // layout
     private ImageButton btnExpand;
     private boolean mapExpanded = false;
 
-    private final Runnable updateMarkers = new Runnable() {
-
-        @Override
-        public void run() {
-            Context context = getApplicationContext();
-            int duration = Toast.LENGTH_SHORT;
-
-            //if data connection exists, fetch bus locations
-            if (NetworkUtil.isConnected(context) && !tString.equals("connecting....")) {
-                NetworkActivity networkActivity = new NetworkActivity();
-                networkActivity.load();
-            } else if (!tString.equals("no connection.")) {
-                tString = "no connection";
-                duration = Toast.LENGTH_LONG;
-            }
-
-            //if no bus markers have been retrieved, display toast
-            if (!tString.equals("no connection.")) {
-                if (busMarkers.isEmpty() || tString.equals("no connection")) {
-                    toast = Toast.makeText(context, tString, duration);
-                    toast.show();
-                    tString = tString + ".";
-                }
-                locationHandler.postDelayed(this, MARKER_UPDATE_INTERVAL);
-            }
-
-
-            //otherwise, if no connection, stop background data
-            else {
-                stopBackgroundData();
-            }
-
-            if ( Build.VERSION.SDK_INT >= 23 &&
-                    ContextCompat.checkSelfPermission( context, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission( context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return  ;
-            }
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(client);
-        }
-    };
 
 
 
@@ -169,9 +139,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        System.out.println("on create");
         activity = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        updateMapValuesBundle(savedInstanceState);
+
 
         mDrawerList = (ListView) findViewById(R.id.navList);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -188,12 +161,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getExtendedMapAsync(this);
 
-//
-//        bottomSheetLayout = (BottomSheetLayout) findViewById(R.id.bottomsheet);
-//        bottomSheetLayout.setPeekOnDismiss(true);
-//        bottomSheetLayout.setShouldDimContentView(false);
-//        bottomSheetLayout.setInterceptContentTouch(false);
-//
 
         mRecyclerView = (RecyclerView)findViewById(R.id.my_recycler_view);
 
@@ -231,6 +198,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
+    // saves the previous position of the camera, and selected bus marker if any, from when a user
+    // returns from a different activity such as the BusStopMenuActivity.java
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState){
+        //This MUST be done before saving any of your own or your base class's variables
+
+        savedInstanceState.putParcelable(CAMERA_POSITION_KEY, lstCameraPosition);
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+
+
+
+    private void updateMapValuesBundle(Bundle savedInstanceState){
+
+        if (savedInstanceState != null){
+            // update the camera zoom, latlng to previous state
+            if(savedInstanceState.keySet().contains(CAMERA_POSITION_KEY)){
+                // Since CAMERA_POSITION_KEY was found in the Bundle, update currentCameraPosition
+                currCameraPosition = savedInstanceState.getParcelable(CAMERA_POSITION_KEY);
+            }
+        }
+
+    }
+
+
+
+
 
     private ArrayList<DataObject> getDataSet() {
         ArrayList results = new ArrayList<DataObject>();
@@ -245,10 +241,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
    
 
 
-   public void stopBackgroundData() {
-        locationHandler.removeCallbacks(updateMarkers);
-    }
-
 
 
   
@@ -259,6 +251,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (NullPointerException permissionBlocked) {
             System.out.println("Toast not canceled due to permissions dialog");
         }
+
+        System.out.println("MapActivity Paused");
+
         super.onPause();
     }
   
@@ -266,19 +261,93 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         toast.cancel();
+        System.out.println("Mapactivity destoryed ");
         stopBackgroundData();
         super.onDestroy();
         System.exit(0);
     }
 
-  
-  
-  
-    // draws map
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        System.out.println( "on resume");
+    }
+
+
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Maps Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.bussquad.geobus/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+
+        System.out.println("on started ");
+
+    }
+
+
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Maps Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.bussquad.geobus/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+
+        System.out.println("Mapactivity stopped ");
+    }
+
+
+
+
+
+    // draws google map
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+        LatLng cameraPosition;
+        float cameraZoom = 15;
+
+        if(currCameraPosition != null){
+             cameraPosition = currCameraPosition.target;
+             cameraZoom = currCameraPosition.zoom;
+        }
+        else{
+            cameraPosition  = new LatLng(36.991406, -122.060731);
+        }
+
         mMap = googleMap;
         mMap.setOnMarkerClickListener(this);
         mMap.setClustering(new ClusteringSettings()
@@ -287,8 +356,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         new DefaultClusterOptionsProvider(getResources())));
 
         // set up coordinates for the center of UCSC and move the camera to there with a zoom level of 15 on startup
-        LatLng ucsc = new LatLng(36.991406, -122.060731);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucsc, 15));
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cameraPosition, cameraZoom));
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setCompassEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
@@ -301,15 +370,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+
+
+
+    // starts the bus stop menu, passes information about the bus stop clicked on
     @Override
     public void onInfoWindowClick(Marker marker) {
         Intent myIntent = new Intent(MapsActivity.this, BusStopMenuActivity.class);
+        lstCameraPosition = mMap.getCameraPosition();
         myIntent.putExtra("bus_stop_name", marker.getTitle()); //Optional parameters
         MapsActivity.this.startActivity(myIntent);
     }
 
-  
-  
+
     private void addDrawerItems() { // fills the hamburger menu/sidebar with an array of strings!
         String[] osArray = {"Toggle Bus Stops", "Loop and Upper Campus Info", "Night Core Info", "Night Owl Info", "Night Owl Schedule", "Manual Refresh"};
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
@@ -431,6 +504,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
+    // closes hamburger menu when users presses the back button on there phone
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() > 0 && !mDrawerLayout.isDrawerOpen(GravityCompat.START))
@@ -447,7 +521,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
   
-  
+
+    // checks the version of the android device
     public void checkVersion() {
         if (Build.VERSION.SDK_INT >= 23) {
             // for Android 6.0 and above: checks if fine location permission is granted--if it isn't, prompt the user to grant during runtime.
@@ -498,6 +573,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
   
 
+    // creates bus stop markers when map activity is created
     public void createBusStopMarkers() {
 
         for (BusStop temp : busStops) {
@@ -519,13 +595,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
   
   
-    public void startBackgroundData() {
-        tString = "connecting";
-        locationHandler.postDelayed(updateMarkers, MARKER_UPDATE_INTERVAL);
-    }
 
-
-  
   
     /**
      * Given a list of xml_markers (defined in TransitInfoXmlParser),
@@ -594,6 +664,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             marker.remove();
         }
         // and set to the updatedBusMarkers Map (NOT a Google Map)
+        System.out.println("updating bus locations");
         busMarkers = updatedBusMarkers;
     }
 
@@ -638,51 +709,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
   
   
   
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Maps Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.bussquad.geobus/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
-    }
-
-  
-  
-  
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Maps Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.bussquad.geobus/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
-    }
-
-
-
 
     // creates dialog for the case of the user denying location permission
     public static class LocationDialogFragment extends DialogFragment {
@@ -704,6 +730,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return builder.create();
         }
     }
+
+
 
 
     @Override
@@ -730,31 +758,65 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
-    private void showMenuSheet(final MenuSheetView.MenuType menuType, final String busStopName) {
-        MenuSheetView menuSheetView =
-                new MenuSheetView(MapsActivity.this, menuType, busStopName , new MenuSheetView.OnMenuItemClickListener() {
 
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        Toast.makeText(MapsActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
-                        if (bottomSheetLayout.isSheetShowing()) {
-                            bottomSheetLayout.dismissSheet();
-                        }
-                        if (item.getItemId() == R.id.schedule) {
-                            showMenuSheet(menuType == MenuSheetView.MenuType.LIST ? MenuSheetView.MenuType.GRID : MenuSheetView.MenuType.LIST, busStopName);
-                        }
-                        System.out.println("hello clicked on the menu");
-                        return true;
-                    }
-                });
-        menuSheetView.inflateMenu(R.menu.create);
-        bottomSheetLayout.showWithSheetView(menuSheetView);
+    // gets bus location information every 2000 milleseeconds if there is a connection
+    // between the server and the mobile device
+    private final Runnable updateMarkers = new Runnable() {
+
+        @Override
+        public void run() {
+            Context context = getApplicationContext();
+            int duration = Toast.LENGTH_SHORT;
+
+            //if data connection exists, fetch bus locations
+            if (NetworkUtil.isConnected(context) && !tString.equals("connecting....")) {
+                NetworkActivity networkActivity = new NetworkActivity();
+                networkActivity.load();
+            } else if (!tString.equals("no connection.")) {
+                tString = "no connection";
+                duration = Toast.LENGTH_LONG;
+            }
+
+            //if no bus markers have been retrieved, display toast
+            if (!tString.equals("no connection.")) {
+                if (busMarkers.isEmpty() || tString.equals("no connection")) {
+                    toast = Toast.makeText(context, tString, duration);
+                    toast.show();
+                    tString = tString + ".";
+                }
+                locationHandler.postDelayed(this, MARKER_UPDATE_INTERVAL);
+            }
+            //otherwise, if no connection, stop background data
+            else {
+                stopBackgroundData();
+            }
+
+            if ( Build.VERSION.SDK_INT >= 23 &&
+                    ContextCompat.checkSelfPermission( context, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission( context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return  ;
+            }
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(client);
+        }
+    };
+
+
+
+
+    // sets a runnable that is called every 2000 milleseconds, this runnable updates that map
+    // every 2000 milleseconds
+    public void startBackgroundData() {
+        tString = "connecting";
+        locationHandler.postDelayed(updateMarkers, MARKER_UPDATE_INTERVAL);
     }
 
 
 
 
 
+    public void stopBackgroundData() {
+        locationHandler.removeCallbacks(updateMarkers);
+    }
 
 
 

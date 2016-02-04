@@ -24,6 +24,26 @@ class NetworkActivity {
     }
 
 
+    // Implementation of AsyncTask used to download XML feed
+    private class DownloadXmlTask extends AsyncTask<String, Void, ArrayList<Bus>> {
+        @Override
+        protected ArrayList<Bus> doInBackground(String... urls) {
+            try {
+                return loadXmlFromNetwork(urls[0]);
+            } catch (IOException e) {
+                Log.e(TAG, "CONNECTION SNAFU");
+            } catch (XmlPullParserException e) {
+                Log.e(TAG, "XML SNAFU");
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Bus> result) {
+            MapsActivity.activity.setMarkers(result);
+        }
+    }
+
 
 
     private ArrayList<Bus> loadXmlFromNetwork(String urlString) throws XmlPullParserException, IOException {
@@ -67,25 +87,5 @@ class NetworkActivity {
 
 
 
-
-    // Implementation of AsyncTask used to download XML feed
-    private class DownloadXmlTask extends AsyncTask<String, Void, ArrayList<Bus>> {
-        @Override
-        protected ArrayList<Bus> doInBackground(String... urls) {
-            try {
-                return loadXmlFromNetwork(urls[0]);
-            } catch (IOException e) {
-                Log.e(TAG, "CONNECTION SNAFU");
-            } catch (XmlPullParserException e) {
-                Log.e(TAG, "XML SNAFU");
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Bus> result) {
-            MapsActivity.activity.setMarkers(result);
-        }
-    }
 
 }
