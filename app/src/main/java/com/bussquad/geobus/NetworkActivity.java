@@ -1,5 +1,7 @@
 package com.bussquad.geobus;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -10,6 +12,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**According to user's preferences, performs background async activity
  * of downloading and parsing xml file for updates to main map activity
@@ -19,6 +22,15 @@ class NetworkActivity {
     private static final String URL = "http://skynet.cse.ucsc.edu/bts/coord2.xml";
     private static final String TAG = "NetworkActivity";
 
+    private Context context;
+
+    NetworkActivity (Context setContext){
+        this.context = setContext;
+    }
+
+
+
+
     public void load(){
         new DownloadXmlTask().execute(URL);
     }
@@ -26,21 +38,32 @@ class NetworkActivity {
 
     // Implementation of AsyncTask used to download XML feed
     private class DownloadXmlTask extends AsyncTask<String, Void, ArrayList<Bus>> {
+
+
         @Override
         protected ArrayList<Bus> doInBackground(String... urls) {
             try {
                 return loadXmlFromNetwork(urls[0]);
             } catch (IOException e) {
-                Log.e(TAG, "CONNECTION SNAFU");
+             //   Log.e(TAG, "CONNECTION SNAFU");
             } catch (XmlPullParserException e) {
-                Log.e(TAG, "XML SNAFU");
+             //   Log.e(TAG, "XML SNAFU");
             }
             return null;
         }
 
+
+
+        // set markers to MapsActvity which are then drawn on the map
         @Override
         protected void onPostExecute(ArrayList<Bus> result) {
-            MapsActivity.activity.setMarkers(result);
+            try{
+                MapsActivity.activity.setMarkers(result);
+            }catch (Exception ex){
+            }
+           if( isNotificationServiceRunnig(NotificationService.class,context)){
+               NotificationService.service.setBusList(result);
+           }
         }
     }
 
@@ -86,6 +109,17 @@ class NetworkActivity {
     }
 
 
+
+
+    private boolean isNotificationServiceRunnig(Class<?> serviceClass, Context context) {
+        ActivityManager manager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
 }

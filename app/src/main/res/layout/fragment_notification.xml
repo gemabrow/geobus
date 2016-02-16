@@ -1,57 +1,55 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.bussquad.geobus.NotificationFragment"
     android:background="#ffffff">
 
 
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView" >
+        <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff">
 
-        <RelativeLayout
+
+
+
+
+
+    <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="72dp"
             android:paddingRight="16dp"
             android:paddingTop="8dp"
             >
 
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnNotification"
-                android:src="@drawable/ic_check_box_outline_blank_black_24dp"
-                android:padding="16dp"
-                android:background="#00ffffff"
-                android:onClick="onSetNotification" />
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/notification"
-                    android:id="@+id/txtNotification"
-                    android:textSize="16sp"
-                    android:paddingLeft="72dp"
-                    android:paddingTop="10dp"
-                    android:textColor="#61000000" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/allow_notifications"
-                    android:id="@+id/txtSubNotifcation"
-                    android:paddingLeft="72dp"
-                    android:paddingBottom="20dp"
-                    android:textColor="#61000000" />
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/notification"
+                android:id="@+id/txtNotification"
+                android:textSize="16sp"
+                android:paddingLeft="72dp"
+                android:paddingTop="10dp"
+                android:textColor="@color/primaryText"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true" />
 
         </RelativeLayout>
     <View style="@style/Divider"/>
@@ -79,7 +77,7 @@
             android:id="@+id/txtNotiOption"
             android:paddingLeft="72dp"
             android:paddingBottom="20dp"
-            android:textColor="#61000000"
+            android:textColor="#d9000000"
             android:textSize="16sp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true" />
@@ -101,7 +99,8 @@
             android:paddingLeft="46dp"
             android:dropDownWidth="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:paddingBottom="20dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -109,7 +108,7 @@
             android:text="@string/bus_route"
             android:paddingLeft="72dp"
             android:paddingBottom="20dp"
-            android:textColor="#61000000"
+            android:textColor="#d9000000"
             android:textSize="16sp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
@@ -130,7 +129,7 @@
             android:text="@string/type_of_notification"
             android:paddingLeft="72dp"
             android:paddingBottom="20dp"
-            android:textColor="#61000000"
+            android:textColor="@color/primaryText"
             android:textSize="16sp"
             android:id="@+id/txtNotificationType"
             android:layout_alignParentBottom="true"
@@ -152,6 +151,31 @@
             android:text="@string/set_notification"
             android:textColor="@color/button_text"
             android:id="@+id/btnSetNotification"
+            android:enabled="true"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:background="#ffffff"
+            android:elevation="15sp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:elegantTextHeight="false"
+            android:focusable="false" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:focusable="false"
+        android:background="#ffffff" >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="@string/update_notification"
+            android:textColor="@color/button_text"
+            android:id="@+id/btnUpdateNotification"
             android:enabled="false"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
@@ -162,4 +186,56 @@
             android:elegantTextHeight="false"
             android:focusable="false" />
     </RelativeLayout>
-</LinearLayout>
+    <View style="@style/Divider"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:focusable="false"
+        android:background="#ffffff" >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="@string/cancel_notification"
+            android:textColor="@color/button_text"
+            android:id="@+id/btnCancelNotification"
+            android:enabled="false"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:background="#ffffff"
+            android:elevation="15sp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:elegantTextHeight="false"
+            android:focusable="false" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:focusable="false"
+        android:background="#ffffff" >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="@string/stop_service"
+            android:textColor="@color/button_text"
+            android:id="@+id/btnstopService"
+            android:enabled="false"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:background="#ffffff"
+            android:elevation="15sp"
+            android:elegantTextHeight="false"
+            android:focusable="false"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+        </LinearLayout></ScrollView>
+</RelativeLayout>

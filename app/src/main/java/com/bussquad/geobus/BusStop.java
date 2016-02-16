@@ -15,13 +15,12 @@ class BusStop {
     public final static int BUSSTOP_CLUSTERGROUP = 10;
     //stores the name of the bus stop
     private String title;
+    private String cardinalDirc;
     private int busStopID = -1;
 
     private double latitude;
     private double longitude;
 
-    private BusStop nextBusStop;
-    private BusStop previousBusStop;
 
     // used to store busses that stop at the bus stop location
     private ArrayList<String> busses;
@@ -114,6 +113,7 @@ class BusStop {
 
     // returns the id of the busStop
     public int getBusStopID(){
+        System.out.println(this.busStopID);
         return  this.busStopID;
     }
 

@@ -3,24 +3,30 @@ package com.bussquad.geobus;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.NotificationManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -91,6 +97,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private final static float ICON_DEGREES_OFFSET = 90;
     private static final String TAG = "MapsActivity";
     public static MapsActivity activity;
+
     private final Handler locationHandler = new Handler();
     private final JsonFileReader test = new JsonFileReader();
     private Toast toast;
@@ -101,6 +108,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Polyline routeLine;
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
+
+
+    // used for drawing and managing cards
     private ArrayAdapter<String> mAdapter;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mdAdapter;
@@ -128,11 +138,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String REQUESTING_BUS_STOP_SELECTED = "true";
 
 
+
     // layout
     private ImageButton btnExpand;
     private boolean mapExpanded = false;
 
 
+    // services
+    private NetworkService networkService;
+    private NotificationService notificationService;
+    private Boolean netBound = false;
+    private Boolean notifBound = false;
+    // notification database
+    private NotificationDbManger notifDb;
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+
+            NetworkService.LocalBinder binder = (NetworkService.LocalBinder) service;
+            networkService = binder.getService();
+            netBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            netBound = false;
+        }
+    };
 
 
 
@@ -198,6 +232,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
+
     // saves the previous position of the camera, and selected bus marker if any, from when a user
     // returns from a different activity such as the BusStopMenuActivity.java
     @Override
@@ -238,12 +273,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return results;
     }
 
-   
 
 
-
-
-  
+//
+//    public ArrayList<String> getNearestBusStops(){
+//
+//
+//     for(BusStop temo : busStops){
+//
+//     }
+//    }
+//
+//
     @Override
     protected void onPause() {
         try { // exception handling specific to Android 6, as the permissions allow/deny dialog would make toast.cancel(); trigger an NPE
@@ -263,7 +304,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onDestroy() {
         toast.cancel();
-        System.out.println("Mapactivity destoryed ");
+
         stopBackgroundData();
         super.onDestroy();
         System.exit(0);
@@ -276,7 +317,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onResume() {
         super.onResume();
 
-        System.out.println( "on resume");
     }
 
 
@@ -300,7 +340,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         );
         AppIndex.AppIndexApi.start(client, viewAction);
 
-        System.out.println("on started ");
+        super.onStart();
+        System.out.println("binding service");
+        // Bind to LocalService
+        Intent intent = new Intent(this, NetworkService.LocalBinder.class);
+        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
 
     }
 
@@ -326,7 +370,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
 
-        System.out.println("Mapactivity stopped ");
+        System.out.println("stopping map actvity" + netBound);
+       // Unbind from the service
+        if (netBound) {
+            System.out.println("un binding service");
+            networkService.mapActivityStopped();
+            unbindService(serviceConnection);
+            netBound = false;
+        }
+
+
     }
 
 
@@ -379,8 +432,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent myIntent = new Intent(MapsActivity.this, BusStopMenuActivity.class);
         lstCameraPosition = mMap.getCameraPosition();
         myIntent.putExtra("bus_stop_name", marker.getTitle()); //Optional parameters
+        myIntent.putExtra("BUSSTOPID", busStopMarkers.get(marker).getBusStopID());
+        myIntent.putExtra("COORDINATES",busStopMarkers.get(marker).getLatLng());
+        myIntent.putStringArrayListExtra("ROUTES",busStopMarkers.get(marker).getBusses());
         MapsActivity.this.startActivity(myIntent);
     }
+
+
 
 
     private void addDrawerItems() { // fills the hamburger menu/sidebar with an array of strings!
@@ -584,10 +642,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .clusterGroup(BusStop.BUSSTOP_CLUSTERGROUP)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop)));
 
-            if (temp.hasId()) {
+           // if (temp.hasId()) {
                 System.out.println("adding bus stop");
                 busStopMarkers.put(busStopMarker, temp);
-            }
+          //  }
             visibleMarkers.put(Double.toString(temp.getLatitude() + temp.getLongitude()), busStopMarker);
         }
     }
@@ -601,6 +659,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * Given a list of xml_markers (defined in TransitInfoXmlParser),
      * update the map display such that new buses are added as type Marker to mMap,
      * and previously displayed bus markers are moved to their new coordinates
+     * This function is called by NetworkActvity
      */
     public void setMarkers(List<Bus> buses) {
         Location dummyLocation = new Location("Dummy");
@@ -664,7 +723,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             marker.remove();
         }
         // and set to the updatedBusMarkers Map (NOT a Google Map)
-        System.out.println("updating bus locations");
         busMarkers = updatedBusMarkers;
     }
 
@@ -700,9 +758,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             InputStream in = getAssets().open("UCSC_Westside_Bus_Stops.json");
             test.readBusStopJsonStream(in);
             busStops = new ArrayList<>(test.getBusStops());
-            System.out.println("Read Files" + busStops.size());
         } catch (IOException ex) {
-            System.out.println("Error reading file");
+
+
         }
     }
 
@@ -739,7 +797,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         int id;
         String busStopName;
 
-
+        System.out.println("marker selected");
         if (busStopMarkers.containsKey(marker)) {
 
             id = busStopMarkers.get(marker).getBusStopID();
@@ -759,55 +817,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
-    // gets bus location information every 2000 milleseeconds if there is a connection
-    // between the server and the mobile device
-    private final Runnable updateMarkers = new Runnable() {
-
-        @Override
-        public void run() {
-            Context context = getApplicationContext();
-            int duration = Toast.LENGTH_SHORT;
-
-            //if data connection exists, fetch bus locations
-            if (NetworkUtil.isConnected(context) && !tString.equals("connecting....")) {
-                NetworkActivity networkActivity = new NetworkActivity();
-                networkActivity.load();
-            } else if (!tString.equals("no connection.")) {
-                tString = "no connection";
-                duration = Toast.LENGTH_LONG;
-            }
-
-            //if no bus markers have been retrieved, display toast
-            if (!tString.equals("no connection.")) {
-                if (busMarkers.isEmpty() || tString.equals("no connection")) {
-                    toast = Toast.makeText(context, tString, duration);
-                    toast.show();
-                    tString = tString + ".";
-                }
-                locationHandler.postDelayed(this, MARKER_UPDATE_INTERVAL);
-            }
-            //otherwise, if no connection, stop background data
-            else {
-                stopBackgroundData();
-            }
-
-            if ( Build.VERSION.SDK_INT >= 23 &&
-                    ContextCompat.checkSelfPermission( context, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission( context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return  ;
-            }
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(client);
-        }
-    };
-
-
-
 
     // sets a runnable that is called every 2000 milleseconds, this runnable updates that map
     // every 2000 milleseconds
     public void startBackgroundData() {
         tString = "connecting";
-        locationHandler.postDelayed(updateMarkers, MARKER_UPDATE_INTERVAL);
+        System.out.println("starting service! ");
+        if(!isServiceRunning(NetworkService.class)){
+
+            Intent netWorkService = new Intent(this,NetworkService.class);
+            netWorkService.putExtra("MAPACTIVITY",true);
+            this.startService(netWorkService);
+            System.out.println("Service started");
+        }
+     //   locationHandler.postDelayed(updateMarkers, MARKER_UPDATE_INTERVAL);
     }
 
 
@@ -815,7 +838,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     public void stopBackgroundData() {
-        locationHandler.removeCallbacks(updateMarkers);
+        if(!isServiceRunning(NetworkService.class)){
+            this.stopService(new Intent(this, NetworkService.class));
+        }
+//        locationHandler.removeCallbacks(updateMarkers);
+    }
+
+
+
+
+    private boolean isServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

@@ -39,16 +39,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
+
+
+
     public void setOnItemClickListener(MyClickListener myClickListener) {
         this.myClickListener = myClickListener;
     }
+
+
+
 
     public RecyclerViewAdapter(ArrayList<DataObject> myDataset) {
         mDataset = myDataset;
     }
 
+
+
+
     @Override
     public DataObjectHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.cardfragment, parent, false);
 
@@ -56,30 +67,49 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return dataObjectHolder;
     }
 
+
+
+
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
         holder.label.setText(mDataset.get(position).getmText1());
         holder.dateTime.setText(mDataset.get(position).getmText2());
     }
 
+
+
+
     public void addItem(DataObject dataObj, int index) {
         mDataset.add(index, dataObj);
         notifyItemInserted(index);
     }
+
+
+
 
     public void deleteItem(int index) {
         mDataset.remove(index);
         notifyItemRemoved(index);
     }
 
+
+
+
     @Override
     public int getItemCount() {
         return mDataset.size();
     }
 
+
+
+
     public interface MyClickListener {
         public void onItemClick(int position, View v);
     }
+
+
+
+
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);

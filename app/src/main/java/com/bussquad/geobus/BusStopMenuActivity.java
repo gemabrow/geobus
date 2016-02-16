@@ -15,8 +15,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 public class BusStopMenuActivity extends AppCompatActivity  {
@@ -24,17 +27,32 @@ public class BusStopMenuActivity extends AppCompatActivity  {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    int busStopId = -1;
+    private String busStopName;
+    private ArrayList<String> routes;
+    // database that is called whenever a new notificaiton is selected
+    private NotificationDbManger notifDb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = getIntent();
-        String value = intent.getStringExtra("bus_stop_name");
+       // initialzied bus stop information
+        Bundle extras= getIntent().getExtras();
+        busStopName = extras.getString("bus_stop_name");
+        busStopId = extras.getInt("BUSSTOPID");
 
+        try{
+            routes = new ArrayList<>(extras.getStringArrayList("ROUTES"));
+        }catch(Exception ex){
+
+        }
+
+        System.out.println("on create Bus Stop Menu");
         setContentView(R.layout.bus_stop_menu);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Bus Stop Info");
-        toolbar.setSubtitle(value);
+        toolbar.setSubtitle(busStopName);
         setSupportActionBar(toolbar);
 
 
@@ -52,9 +70,21 @@ public class BusStopMenuActivity extends AppCompatActivity  {
     // Sets up two fragments, one that will display bus stop schedule information and another
     // that will display the current notificaiton settings
     private void setupViewPager(ViewPager viewPager) {
+
+        // Create bundle which will hold data for the Notification fragment
+        // and the Schedule Fragment
+        Bundle bundle = new Bundle();
+        bundle.putInt("BUSSTOPID", busStopId);
+        bundle.putStringArrayList("ROUTES",routes);
+
+
+        // creates the Notification Fragment
+        NotificationFragment notifFragment = new NotificationFragment();
+        notifFragment.setArguments(bundle);
+
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new ScheduleFragment(), "Schedule");
-        adapter.addFragment(new NotificationFragment(), "Notification");
+        adapter.addFragment(notifFragment, "Notification");
         viewPager.setAdapter(adapter);
     }
 

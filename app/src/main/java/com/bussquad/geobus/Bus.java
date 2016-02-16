@@ -23,6 +23,7 @@ class Bus {
     public final float color;
     public final double lat;
     public final double lng;
+    public final LatLng location;
     public final int bus_id;
     public final int timestamp;
     public final int clusterGroup;
@@ -30,6 +31,7 @@ class Bus {
     Bus(double lat, double lng, int timestamp, String route, String direction, int bus_id){
         this.lat = lat;
         this.lng = lng;
+        this.location = new LatLng(lat,lng);
         this.timestamp =  timestamp;
         this.direction = direction;
         this.bus_id = bus_id;
@@ -95,6 +97,11 @@ class Bus {
         return lng;
     }
 
+
+
+    public LatLng getLocaiton(){
+        return location;
+    }
 
 
 

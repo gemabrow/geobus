@@ -1,6 +1,9 @@
 package com.bussquad.geobus;
 
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,7 +20,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.sql.SQLOutput;
+import java.util.ArrayList;
 
 
 /**
@@ -25,13 +31,20 @@ import java.sql.SQLOutput;
  */
 public class NotificationFragment extends Fragment implements AdapterView.OnItemSelectedListener,View.OnClickListener {
 
-
+    private NotificationDbManger notifDb;
+    private String busStopId;
+    private ArrayList<String> routes;
+    private ArrayList<String> newRoutes = new ArrayList<>();
     //this counts how many items's are on the UI for the spinner dialogue
     private int count = 0;
+    private String[] routeSelection = {"OUTER","INNER","UPPER","ANY","Custom"};
 
 
     ImageButton btnNotification;
     Button btnSetNotification;
+    Button btnCancelNotification;
+    Button btnstopService;
+    Button btnUpdateNotification;
     Spinner busStopSpinner;
     Spinner loopBusSpinner;
     TextView txtNotification;
@@ -43,6 +56,9 @@ public class NotificationFragment extends Fragment implements AdapterView.OnItem
     ArrayAdapter<CharSequence> busRouteAdapter;
     boolean notiEnabled = false;
 
+
+
+
     // used to store notification information for the current bus stop selected
 
     public NotificationFragment() {
@@ -53,7 +69,10 @@ public class NotificationFragment extends Fragment implements AdapterView.OnItem
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        notifDb =  new NotificationDbManger(getContext());
 
+        // create database if it does not already exist
+        notifDb.createDataBase();
 
     }
 
@@ -62,38 +81,90 @@ public class NotificationFragment extends Fragment implements AdapterView.OnItem
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_notification, container, false);
-        btnNotification = (ImageButton)view.findViewById(R.id.btnNotification);
         btnSetNotification = (Button)view.findViewById(R.id.btnSetNotification);
+        btnCancelNotification = (Button)view.findViewById(R.id.btnCancelNotification);
+        btnstopService = (Button)view.findViewById(R.id.btnstopService);
+        btnUpdateNotification = (Button)view.findViewById(R.id.btnUpdateNotification);
         txtNotification = (TextView)view.findViewById(R.id.txtNotification);
-        txtSubNotifcation = (TextView)view.findViewById(R.id.txtSubNotifcation);
+
+        if(isNotificationServiceRunnig(NotificationService.class)){
+            btnstopService.setEnabled(true);
+        }
+        else{
+            btnstopService.setEnabled(false);
+        }
+
+
+
         txtNotiOption = (TextView)view.findViewById(R.id.txtNotiOption);
         txtBusRoute =  (TextView)view.findViewById(R.id.txtBusRoute);
         txtNotificationType = (TextView)view.findViewById(R.id.txtNotificationType);
         // Spinner adapters
+
+
         busStopAdapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.stops_array, R.layout.spinner_item);
+
         busRouteAdapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.route_array, R.layout.spinner_item);
 
 
-        btnSetNotification.setEnabled(false);
+        // get bundles sent from parent activity
+        busStopId = String.valueOf(getArguments().getInt("BUSSTOPID"));
+        routes = new ArrayList<>(getArguments().getStringArrayList("ROUTES"));
+
+        // removes any route that is not an outer or an inner
+        for (String route : routes){
+
+            System.out.println("route: " + route);
+            if(route.equalsIgnoreCase("OUTER") || route.equalsIgnoreCase("INNER")){
+                System.out.println("found match" + route);
+                newRoutes.add(route);
+            }
+        }
+
+        // if there are more than one selection available add ANY in the end of the list
+        if (newRoutes.size() > 1) {
+            newRoutes.add("ANY");
+        }
+
+
+
+        ArrayAdapter<String> adp =  new ArrayAdapter<String>(getContext(),R.layout.spinner_item,newRoutes);
 
         busRouteAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
 
+
+        // set drop down item lists
         loopBusSpinner = (Spinner)view.findViewById(R.id.loopBusSpinner);
-        loopBusSpinner.setEnabled(false);
-        loopBusSpinner.setAdapter(busRouteAdapter);
+        loopBusSpinner.setAdapter(adp);
         loopBusSpinner.setOnItemSelectedListener(this);
 
         busStopAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         busStopSpinner = (Spinner)view.findViewById(R.id.busStopSpinner);
-        busStopSpinner.setEnabled(false);
         busStopSpinner.setAdapter(busStopAdapter);
         busStopSpinner.setOnItemSelectedListener(this);
 
-        btnNotification.setOnClickListener(this);
+
+        // update any previous settings
+        if(notifDb.hasNotifiation(busStopId)){
+            btnSetNotification.setEnabled(false);
+            btnCancelNotification.setEnabled(true);
+            btnUpdateNotification.setEnabled(true);
+
+        }
+        if(busStopId.equalsIgnoreCase("-1")){
+            btnSetNotification.setEnabled(false);
+        }
+
+
+
+        // set button click listeners
         btnSetNotification.setOnClickListener(this);
+        btnCancelNotification.setOnClickListener(this);
+        btnstopService.setOnClickListener(this);
+        btnUpdateNotification.setOnClickListener(this);
         return view;
 
 
@@ -130,7 +201,7 @@ public class NotificationFragment extends Fragment implements AdapterView.OnItem
 
 
 // when button is clicked it can enable or unenable Notifications Option
-    public void onEnableNotification(View view){
+    public void onEnableNotification(View view) {
 
         System.out.println("Clicked!!");
         // if notifications is not enable change notifications text to enable form
@@ -165,17 +236,51 @@ public class NotificationFragment extends Fragment implements AdapterView.OnItem
     }
 
 
+
+
     // checks the current options set by the user and the sets the notificaitons
     // adds notification to a database that is being checked by the runnable in the actvity class
     public void startNotification(View view){
-        System.out.println("button clicked!!!");
 
-        System.out.println("Current option selected: "+ busStopSpinner.getSelectedItem().toString());
-        System.out.println("Current option selected: "+ loopBusSpinner.getSelectedItem().toString());
+        // populate information from the currently selected options
 
+        int stops = busStopSpinner.getSelectedItemPosition() + 1;
+        String vibrate = "1";
+        String sound = "1";
+
+        // checks if there is already a database
+
+        notifDb.addNotification(busStopId,newRoutes.get(loopBusSpinner.getSelectedItemPosition()), vibrate, sound, stops);
+        btnCancelNotification.setEnabled(true);
+
+        // checks if there is already a notifiationService running if there is no service it
+        // starts the service and service ends once there are no more pending notifications
+        if(!isNotificationServiceRunnig(NotificationService.class)){
+            Intent notification = new Intent(getActivity(),NotificationService.class);
+            getActivity().startService(notification);
+            btnstopService.setEnabled(true);
+            btnUpdateNotification.setEnabled(true);
+            btnSetNotification.setEnabled(false);
+        }
 
 
     }
+
+
+    public void cancelNotification(View view){
+
+        System.out.println("deleting row notifications in database " + notifDb.numberOfNotifications());
+        notifDb.deleteRow(busStopId);
+        System.out.println("size of database " +  notifDb.numberOfNotifications());
+        btnCancelNotification.setEnabled(false);
+        btnUpdateNotification.setEnabled(false);
+        btnSetNotification.setEnabled(true);
+
+    }
+
+
+
+
 
 
 
@@ -183,13 +288,42 @@ public class NotificationFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnNotification:
-                onEnableNotification(v);
-                break;
             case R.id.btnSetNotification:
                 startNotification(v);
                 break;
+            case R.id.btnCancelNotification:
+                cancelNotification(v);
+                break;
+            case R.id.btnstopService:
+                stopServiceRunning(v);
+                break;
+            case R.id.btnUpdateNotification:
+                updateNotificationRunning(v);
+                break;
+
         }
+    }
+
+
+
+    public void stopServiceRunning(View view){
+        getActivity().stopService(new Intent(getActivity(), NotificationService.class));
+        btnstopService.setEnabled(false);
+    }
+
+
+
+
+    public void updateNotificationRunning(View view){
+        int stops = busStopSpinner.getSelectedItemPosition() + 1;
+        String vibrate = "1";
+        String sound = "1";
+
+
+
+        // update the route set
+        notifDb.updateStopsLeft(busStopId,stops);
+        notifDb.updateRoute(busStopId,newRoutes.get(loopBusSpinner.getSelectedItemPosition()));
     }
 
 
@@ -198,5 +332,16 @@ public class NotificationFragment extends Fragment implements AdapterView.OnItem
         super.onPause();
 
 
+    }
+
+
+    private boolean isNotificationServiceRunnig(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

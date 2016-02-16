@@ -104,6 +104,7 @@
     <string name="notification">Notifications</string>
     <string name="allow_notifications">Allow notifications</string>
     <string name="Bus_Stop_Notifications">Start Notifications </string>
+    <string name="update_notification">Update Notification</string>
     <string name="returnToMenu">Return</string>
     <string-array name="stops_array">
         <item> 1 Stop</item>
@@ -113,17 +114,23 @@
     </string-array>
     <string name="bus_route">Bus Route</string>
     <string-array name="route_array">
-        <item> Outer Loop</item>
-        <item> Inner Loop </item>
-        <item> Upper Campus</item>
-        <item> Any Loop</item>
+        <item>Outer Loop</item>
+        <item>Inner Loop </item>
+        <item>Upper Campus</item>
+        <item>Any Loop</item>
     </string-array>
     <string name="type_of_notification">Notification Type</string>
     <string name="set_notification">SET NOTIFICATION</string>
+    <string name="cancel_notification">CANCEL NOTIFICATION</string>
+    <string name="stop_service">STOP SERVICE</string>
     <string name="cfdesc">stuff</string>
     <string name="cftitle">testing</string>
     <string name="custom_card">Outer Loop</string>
     <string name="description">ETA: 2 minutes</string>
+    <string name="school_event">School Event</string>
+    <string name="off_campus_event">Off Campus Event</string>
+    <string name="bus_name_Test">Inner loop</string>
+    <string name="bus_stopname">Coolidge and Main Entrance</string>
 
     <string name="busevent"> Nearest Bus Stops </string>
 

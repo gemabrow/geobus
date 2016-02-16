@@ -88,6 +88,7 @@ class TransitInfoXmlParser {
 
 
     // parses individual marker, initializing each (lat, lng, ts, rt, id)
+    // returns the parsed objects as a Bus type
     private Bus readBus(XmlPullParser parser) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, ns, "marker");
         double lat = 0.0;

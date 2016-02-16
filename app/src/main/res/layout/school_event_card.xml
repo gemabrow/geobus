@@ -21,14 +21,13 @@
                 android:id="@+id/header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/busevent"
+                android:text="@string/school_event"
                 />
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:text="@string/busevent"
                 android:layout_below="@+id/header"/>
 
             <TextView

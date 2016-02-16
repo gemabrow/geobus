@@ -117,9 +117,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public boolean openDataBase() throws SQLException
     {
         String mPath = DB_PATH + DB_NAME;
-        //Log.v("mPath", mPath);
         mDataBase = SQLiteDatabase.openDatabase(mPath, null, SQLiteDatabase.CREATE_IF_NECESSARY);
-        //mDataBase = SQLiteDatabase.openDatabase(mPath, null, SQLiteDatabase.NO_LOCALIZED_COLLATORS);
         return mDataBase != null;
     }
 
