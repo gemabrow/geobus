@@ -91,8 +91,11 @@
     <string name="title_activity_night_owl">Night Owl Schedule</string>
     <string name="busStopName">Bus Stop Name</string>
     <string name="depart_Time">Depart Time</string>
+
     <string name="Bus_Name">Bus</string>
-    <string name="Bus_10">Bus 10</string>
+    <string name="nextBus">Inner Loop</string>
+    <string name="nextBusStopEta">ETA: 4 minutes</string>
+
     <string name="action_settings">Bus Main Menu</string>
     <string name="close_fragment">x</string>
     <string name="geobus_icon">GeoBus_icon.png</string>

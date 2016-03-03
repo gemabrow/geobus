@@ -20,6 +20,8 @@ import java.util.Map;
  */
 class NetworkActivity {
     private static final String URL = "http://skynet.cse.ucsc.edu/bts/coord2.xml";
+//    private static final String URL = "http://skynet.cse.ucsc.edu/bts/coord2.xml";
+
     private static final String TAG = "NetworkActivity";
 
     private Context context;

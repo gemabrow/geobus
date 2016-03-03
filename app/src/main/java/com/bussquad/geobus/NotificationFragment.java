@@ -249,6 +249,7 @@ public class NotificationFragment extends Fragment implements AdapterView.OnItem
         String sound = "1";
 
         // checks if there is already a database
+        System.out.println("Bus stop ID: " + busStopId);
 
         notifDb.addNotification(busStopId,newRoutes.get(loopBusSpinner.getSelectedItemPosition()), vibrate, sound, stops);
         btnCancelNotification.setEnabled(true);

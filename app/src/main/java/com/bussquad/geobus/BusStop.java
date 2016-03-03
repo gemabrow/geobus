@@ -20,6 +20,7 @@ class BusStop {
 
     private double latitude;
     private double longitude;
+    private LatLng location;
 
 
     // used to store busses that stop at the bus stop location

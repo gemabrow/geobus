@@ -10,6 +10,8 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationServices;
@@ -26,6 +28,8 @@ public class NetworkService extends Service {
     private String tString = "";
     private Toast toast;
     private Boolean mapActivityActive = false;
+    private int timeStamp;
+    private int sameTime;
 
 
     public class LocalBinder extends Binder {
@@ -49,7 +53,8 @@ public class NetworkService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
+//        throw new UnsupportedOperationException("Not yet implemented");
+        return mBinder;
     }
 
     @Override
@@ -58,10 +63,10 @@ public class NetworkService extends Service {
 //        service = this;
         try{
             mapActivityActive = intent.getBooleanExtra("MAPACTIVITY",false);
-            System.out.println(mapActivityActive);
         }catch (Exception ex){
             // empty
         }
+
         Toast.makeText(this, "Network Service Started", Toast.LENGTH_LONG).show();
         handler.postDelayed(getCoordinates, 5000);
 
@@ -94,12 +99,23 @@ public class NetworkService extends Service {
 //                }
 //                locationHandler.postDelayed(this, MARKER_UPDATE_INTERVAL);
 //            }
+
+            System.out.println(mapActivityActive + " " +  isServiceRunning(NotificationService.class ));
+
             if(mapActivityActive || isServiceRunning(NotificationService.class )){
-                System.out.println("network service is running");
+
+                if(timeStamp > 2){
+                    System.out.println("busses are not being updated in the past 10 seconds let user know"  );
+                    timeStamp = 0;
+
+                }
+
                 handler.postDelayed(getCoordinates, 5000);
+
             }else{
                 // if mapActivity is not running and if there is no notifications pending
                 // stop getting map coordinates
+                Log.d("NETWORK", "Network Service Stopped, MapActivity is not active, No Pending Notifications");
                 stopSelf();
                 System.out.println("stopping network service");
             }
@@ -116,9 +132,18 @@ public class NetworkService extends Service {
 
 
 
+
     public void mapActivityStopped(){
         mapActivityActive =  false;
     }
+
+
+
+    public void sameTimeStamp( ){
+        this.sameTime +=1;
+    }
+
+
 
 
     private boolean isServiceRunning(Class<?> serviceClass) {
@@ -131,6 +156,18 @@ public class NetworkService extends Service {
         return false;
     }
 
+
+
+    // Send an Intent with an action named "custom-event-name". The Intent
+    // sent should
+    // be received by the ReceiverActivity.
+    private void sendMessage() {
+        Log.d("sender", "Broadcasting message");
+        Intent intent = new Intent("notification-added");
+        // You can also include some extra data.
+        intent.putExtra("message", "This is my message!");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
 
 
 }

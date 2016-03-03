@@ -21,7 +21,41 @@
 
         <!-- The main content  Map-->
 
+        <RelativeLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
 
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sideMenuBtn"
+                android:src="@drawable/ic_menu_black_24dp"
+                android:padding="12dp"
+                android:onClick="releaseTheBurger"
+                android:background="#96ffffff"
+                android:layout_marginLeft="4dp"
+                android:elevation="15dp"
+                android:cropToPadding="false" />
+
+
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/myLocationBtn"
+                android:src="@drawable/ic_my_location_black_24dp"
+                android:padding="12dp"
+                android:onClick="setToUserLocation"
+                android:background="#96ffffff"
+                android:layout_marginRight="4dp"
+                android:elevation="15dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true" />
+
+        </RelativeLayout>
         <fragment
             xmlns:map="http://schemas.android.com/apk/res-auto"
             android:id="@+id/map"
@@ -29,68 +63,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
 
-           >
-            <RelativeLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
-
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/sideMenuBtn"
-                    android:src="@drawable/ic_menu_black_24dp"
-                    android:padding="12dp"
-                    android:onClick="releaseTheBurger"
-                    android:background="#96ffffff"
-                    android:layout_marginLeft="4dp"
-                    android:elevation="15dp"
-                    android:cropToPadding="false" />
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/swToFullScrBtn"
-                    android:src="@drawable/ic_fullscreen_black_24dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:onClick="expandMap"
-                    android:padding="12dp"
-                    android:background="#96ffffff"
-                    android:layout_marginRight="4dp"
-                    android:cropToPadding="true"
-                    android:elevation="15dp" />
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/myLocationBtn"
-                    android:src="@drawable/ic_my_location_black_24dp"
-                    android:padding="12dp"
-                    android:onClick="setToUserLocation"
-                    android:background="#96ffffff"
-                    android:layout_alignParentTop="true"
-                    android:layout_toStartOf="@+id/swToFullScrBtn"
-                    android:layout_marginRight="2dp"
-                    android:elevation="15dp" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/my_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="271dp"
-                    android:scrollbars="vertical"
-                    android:animateLayoutChanges="false"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:background="#f8f8f8" />
-
-
-            </RelativeLayout>
-
-
-        </fragment>
+            />
 
 
         <!-- Displays Cards under neath the Map fragment-->
@@ -98,12 +71,12 @@
 
     </FrameLayout>
 
-     <!--Hamburger menu that displays on the Left side of the screen-->
-    <ListView
-        android:id="@+id/navList"
-        android:layout_width="300dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start|start"
-        android:background="#ffeeeeee"/>
+    <!--Hamburger menu that displays on the Left side of the screen-->
+    <!--<ListView-->
+        <!--android:id="@+id/navList"-->
+        <!--android:layout_width="300dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_gravity="start|start"-->
+        <!--android:background="#ffeeeeee"/>-->
 
 </android.support.v4.widget.DrawerLayout>

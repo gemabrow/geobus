@@ -33,11 +33,22 @@ public class BusStopMenuActivity extends AppCompatActivity  {
     // database that is called whenever a new notificaiton is selected
     private NotificationDbManger notifDb;
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-       // initialzied bus stop information
+        // initialzied bus stop information
         Bundle extras= getIntent().getExtras();
         busStopName = extras.getString("bus_stop_name");
         busStopId = extras.getInt("BUSSTOPID");
@@ -63,9 +74,6 @@ public class BusStopMenuActivity extends AppCompatActivity  {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
     }
-
-
-
 
     // Sets up two fragments, one that will display bus stop schedule information and another
     // that will display the current notificaiton settings

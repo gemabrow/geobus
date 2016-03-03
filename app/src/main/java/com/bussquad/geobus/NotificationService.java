@@ -200,13 +200,11 @@ public class NotificationService extends Service {
             notifDb.deleteNotification(stopID);
             System.out.println("after deleting : " + notifDb.numberOfNotifications());
         }else{
-
-
-
             currStopID = notifDb.getNextStop(stopID);
             nextStopID = notifDb.getNextBusStopId(stopID, route, stopsLeft);
             System.out.println("current set stop is: " + currStopID + " next stop is: " + nextStopID);
             System.out.println("stops left are: "+ stopsLeft);
+
             notifDb.updateCurrStop(stopID, currStopID);
             notifDb.updateNextStop(stopID, nextStopID);
             notifDb.updateStopsLeft(stopID, stopsLeft);

@@ -105,7 +105,7 @@ class Bus {
 
 
 
-    public int getTimestamp() {
+    public int getTimeStamp() {
         return timestamp;
     }
 

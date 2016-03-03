@@ -126,7 +126,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
             {
                 // TO-DO : update database if it already exists without deleting the current set notifications
 //                System.out.println("DataBse already exists delete");
-//                deleteDataBase();
+               // deleteDataBase();
 
                 //Copy the database from assests
                 copyDataBase();
@@ -615,6 +615,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
         c.moveToFirst();
         column = c.getColumnIndex(ROUTE);
         int size = c.getCount();
+        System.out.println("number of rows" + size);
         // moves the cursor to first index in the row of stops in the route
         for (int index  = 0 ; index < c.getCount(); index++){
             if(c.getString(count).equalsIgnoreCase(stopID)){
@@ -628,7 +629,15 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
                     }
                     count++;
                 }
-                nextStopid =  c.getString(c.getColumnIndex(ROUTE));
+
+                // skips rows that are null
+                while(c.getString(c.getColumnIndex(ROUTE)) == null){
+                    c.moveToPrevious();
+                    index -=1;
+                }
+                nextStopid = c.getString(c.getColumnIndex(ROUTE));
+
+                System.out.println(nextStopid);
                 System.out.println("next stop id: " + nextStopid + " name; " + getStopName(nextStopid));
                 break;
             }else if(c.isLast()){
