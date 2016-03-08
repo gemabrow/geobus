@@ -118,7 +118,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     // used for drawing and managing cards
     private ArrayAdapter<String> mAdapter;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mdAdapter;
+//    private RecyclerView.Adapter mdAdapter;
+    private RecyclerViewAdapter mdAdapter;
+    private int mAdapterCount = 0;
     private RecyclerView.LayoutManager mLayoutManager;
 
     // bus stop and bus markers
@@ -196,6 +198,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.scrollingmap);
         updateMapValuesBundle(savedInstanceState);
 
+        notifDb =  new NotificationDbManger(this);
 
         mDrawerList = (ListView) findViewById(R.id.navList);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -227,7 +230,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mdAdapter = new RecyclerViewAdapter(getDataSet());
+        System.out.println("Creating New Recycle View");
+        mdAdapter = new RecyclerViewAdapter();
 
         mRecyclerView.setAdapter(mdAdapter);
 //        mRecyclerView.add
@@ -247,8 +251,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // loads UCSC_WestSide_Bus_Stops.json file to an array of BusStop Objects which are used
         // to create the busstop markers
         loadJsonFromAsset();
-     //  handler.postDelayed(getClosestBusStops, 5000);
-
+   //    handler.postDelayed(getClosestBusStops, 5000);
         // start retrieving bus locations
         startBackgroundData();
 
@@ -256,6 +259,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .addApi(AppIndex.API)
                 .addApi(LocationServices.API)
                 .build();
+        System.out.println("Getting Closest Stops");
+        getClosestStops();
+
     }
 
 
@@ -294,10 +300,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private ArrayList<DataObject> getDataSet() {
         ArrayList results = new ArrayList<DataObject>();
-        for (int index = 0; index < 10; index++) {
+        for (int index = 0; index < 1; index++) {
             DataObject obj = new DataObject("Some Primary Text " + index,
                     "Secondary " + index);
             results.add(index, obj);
+            mAdapterCount++;
         }
         return results;
     }
@@ -634,7 +641,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop)));
 
            // if (temp.hasId()) {
-                System.out.println("adding bus stop");
                 busStopMarkers.put(busStopMarker, temp);
           //  }
             visibleMarkers.put(Double.toString(temp.getLatitude() + temp.getLongitude()), busStopMarker);
@@ -871,22 +877,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     //
     public void updateClosestBusStops(ArrayList<BusStop> busStops){
+        Log.i("MapActivity", "updateClosestBusStops()");
+        for (BusStop stops: busStops ){
+            System.out.println(stops.getTitle());
 
-
+            System.out.println("Adding Bustop to Adapter");
+            mdAdapter.addBusStopItem(stops,mAdapterCount);
+            mAdapterCount++;
+        }
+        mdAdapter.notifyItemInserted(mAdapterCount - 1);
 
     }
 
-/*
+
+
     private final Runnable getClosestBusStops = new Runnable() {
 
         @Override
         public void run() {
             Context context = getApplicationContext();
+
             ArrayList<BusStop> closestStops = new ArrayList<>();
 
             for(BusStop stop : busStops){
 
-                if(isBusStopCloseToUser(stop.getBusStopID())){
+
+                if(isBusStopCloseToUser(stop.getLocation())){
                     closestStops.add(stop);
                 }
 
@@ -898,23 +914,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     };
 
 
+    public void getClosestStops(){
+        ArrayList<BusStop> closestStops = new ArrayList<>();
+        Log.i("MapActivity", "getClosestStops()");
+        for(BusStop stop : busStops){
+
+
+            if(isBusStopCloseToUser(stop.getLocation())){
+                closestStops.add(stop);
+            }
+
+        }
+
+        updateClosestBusStops(closestStops);
+    }
+
 
     // checks if the bus stop is a 100 meters away from the user
     // TODO - allow user to change the distance of stops to show
     // TODO - filter stops to check
-    public boolean isBusStopCloseToUser(int stopId){
+    public boolean isBusStopCloseToUser(LatLng stopLocation){
+        Log.i("MapActivity", "isBusStopCloseToUser() current user location: " + stopLocation.latitude + ", " + stopLocation.longitude );
 
-        double distance  = SphericalUtil.computeDistanceBetween(getUserCurrentLocation(), notifDb.getLocation(stopId +""));
-        return distance <= 100;
+        double distance  = SphericalUtil.computeDistanceBetween(getUserCurrentLocation(),stopLocation);
+        return distance <= 1000;
 
     }
 
-*/
 
 
     // Get Current user location, if user did not set there permissios to allow the app to get their
     // user location
     public LatLng getUserCurrentLocation(){
+        Log.i("MapActivity", "getUserCurrentLoction()");
+
         if ( Build.VERSION.SDK_INT >= 23 &&
                 ContextCompat.checkSelfPermission( getBaseContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
         }
@@ -927,6 +960,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LatLng location = new LatLng(latitude, longitude);
             return location;
         }else{
+            Log.d("MapActivity", "getUserCurrentLocation() - Current user location is not enabled");
             return new LatLng(36.991406, -122.060731);
         }
 

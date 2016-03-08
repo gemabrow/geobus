@@ -35,6 +35,7 @@ class BusStop {
         this.title = title;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.location = new LatLng(latitude,longitude);
         this.busses =  new ArrayList<>(busses);
         this.busStopID = id;
     }
@@ -112,9 +113,12 @@ class BusStop {
 
 
 
+    public LatLng getLocation(){
+        return this.location;
+    }
     // returns the id of the busStop
     public int getBusStopID(){
-        System.out.println(this.busStopID);
+        System.out.println("busStopId" + this.busStopID);
         return  this.busStopID;
     }
 
