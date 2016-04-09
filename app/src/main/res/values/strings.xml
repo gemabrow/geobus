@@ -140,8 +140,31 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="notifyMe">notifyme</string>
+    <string name="map">Displays map</string>
+    <string name="title_activity_main">GeoBus</string>
+    <string name="title_activity_dining">DiningActivity</string>
+    <string name="title_activity_library">LibraryActivity</string>
+
+    <string name="detail_view_title">Detail View title</string>
+    <string name="detail_view_image_description">Image taken at Baskin Engineering</string>
+    <string name="detailfragment_layout_favbutton">Star image</string>
+    <string name="detail_view_short_description">Dining Description</string>
 
 
+    <string name="location">Location</string>
+    <string name="location_description">City location, Name of location</string>
+    <string name="hour">Hours</string>
+    <string name="time_place_holder">00:00 AM - 0:00 PM</string>
+    <string name="cuisine_type">Cuisine Type</string>
+    <string name="cuisine_place_holder">Mexican</string>
+    <string name="price_range_info">Price Range</string>
+    <string name="price_description">$ 0.00 and under per adult</string>
+    <string name="calendar_display">Date</string>
+    <string name="title_activity_nav_drawer">NavDrawerActivity</string>
+    <string name="menu_open" />
+    <string name="menu_close" />
+
+    <!-- navigation strings-->
 
 
 </resources>

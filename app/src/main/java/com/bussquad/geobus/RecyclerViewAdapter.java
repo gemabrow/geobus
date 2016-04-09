@@ -14,6 +14,9 @@ import android.widget.TextView;
 
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Jose on 1/22/2016.
@@ -21,19 +24,20 @@ import java.util.ArrayList;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static String LOG_TAG = "MRecyclerViewAdapter";
-    private ArrayList<DataObject> mDataset;
-    private ArrayList<BusStop> mBusStopset;
+    private List<DataObject> mDataset = Collections.emptyList();
     private static MyClickListener myClickListener;
     private static final int TYPE_DATAOBJECT = 0;
-    private static final int TYPE_BUSSTOP = 2;
+    private LayoutInflater inflater;
 
-    RecyclerViewAdapter(){
-        mBusStopset = new ArrayList<BusStop>();
-        mDataset = new ArrayList<DataObject>();
+    public RecyclerViewAdapter(Context context, List<DataObject> data){
+        inflater = LayoutInflater.from(context);
+        this.mDataset = data;
     }
 
+
+
+
     public RecyclerViewAdapter(ArrayList<DataObject> myDataset) {
-        mBusStopset = new ArrayList<BusStop>();
         mDataset = myDataset;
     }
 
@@ -42,16 +46,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public static class DataObjectHolder extends ViewHolder
             implements View
             .OnClickListener {
-        TextView label;
-        TextView dateTime;
+        CardView cv;
+        TextView name;
+        TextView mainText;
+        TextView additionalInfo;
+        ImageView iconImage;
+
 
         public DataObjectHolder(View itemView) {
             super(itemView);
-            label = (TextView) itemView.findViewById(R.id.textView);
-            dateTime = (TextView) itemView.findViewById(R.id.textView2);
+            cv = (CardView)itemView.findViewById(R.id.genCardView);
+            name = (TextView) itemView.findViewById(R.id.item_name);
+            mainText = (TextView) itemView.findViewById(R.id.item_main_text);
+            additionalInfo = (TextView) itemView.findViewById(R.id.item_additional_info);
+            iconImage = (ImageView) itemView.findViewById(R.id.item_icon_image);
             Log.i(LOG_TAG, "Adding Listener");
             itemView.setOnClickListener(this);
         }
+
+
+
 
         @Override
         public void onClick(View v) {
@@ -60,24 +74,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
 
-    // handles bus stop event objects
-    public static class BusStopEventViewHolder extends RecyclerView.ViewHolder {
-        CardView cv;
-        TextView busStopName;
-        TextView busEta;
-        TextView busType;
-        ImageView busIcon;
 
-        BusStopEventViewHolder(View itemView) {
-            super(itemView);
-            cv = (CardView) itemView.findViewById(R.id.busStopEventcv);
-            busStopName = (TextView) itemView.findViewById(R.id.busStop_name);
-            busEta = (TextView) itemView.findViewById(R.id.next_bus);
-            busType = (TextView) itemView.findViewById(R.id.next_bus);
-            busIcon = (ImageView) itemView.findViewById(R.id.busStopImage);
-        }
 
-    }
 
 
     public void setOnItemClickListener(MyClickListener myClickListener) {
@@ -86,59 +84,29 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
 
 
-
-
-    public void BusStopViewAdapter(ArrayList<BusStop> busStops) {
-        mBusStopset = busStops;
-    }
-
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         Log.i("RecyclerViewAdapter","onCreateViewHolder - viewType set: " + viewType);
-        System.out.println("RecyclerViewAdapter type set: " + viewType );
-        View view;
-        switch (viewType) {
-            case TYPE_BUSSTOP:
-                view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.bus_stop_card, parent, false);
-                return new BusStopEventViewHolder(view);
-            case TYPE_DATAOBJECT:
-                view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.cardfragment, parent, false);
-                return new DataObjectHolder(view);
-        }
+        View view = inflater.inflate(R.layout.general_card_view,parent,false);
 
-        return null;
+        DataObjectHolder holder = new DataObjectHolder(view);
+
+        return holder;
 
     }
 
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        Log.i("RecyclerViewAdapter","onBindViewHolder");
+        Log.i("RecyclerViewAdapter", "onBindViewHolder");
 
-        System.out.println("Binding View Holder" + viewHolder.getItemViewType());
-        switch (viewHolder.getItemViewType()) {
+        DataObjectHolder dHolder = (DataObjectHolder) viewHolder;
+        dHolder.iconImage.setImageResource(mDataset.get(i).getIconId());
+        dHolder.name.setText(mDataset.get(i).getHeaderText());
+        dHolder.mainText.setText(mDataset.get(i).getMainText());
+        dHolder.additionalInfo.setText(mDataset.get(i).getSubText());
 
-            case TYPE_BUSSTOP:
-                System.out.println("index: " + i);
-                BusStopEventViewHolder bHolder = (BusStopEventViewHolder) viewHolder;
-                bHolder.busStopName.setText(mBusStopset.get(i).getTitle());
-                bHolder.busType.setText(mBusStopset.get(i).getBusses().get(0));
-                break;
-            case TYPE_DATAOBJECT:
-                System.out.println("object Data size: " + mDataset.size());
-                if(mDataset.size() >0){
-                    DataObjectHolder dHolder = (DataObjectHolder) viewHolder;
-                    dHolder.dateTime.setText(mDataset.get(i).getmText1());
-                    dHolder.label.setText(mDataset.get(i).getmText2());
-                    System.out.println("index: " + i + mDataset.get(i).getmText1());
-                }
-
-
-        }
 
 
     }
@@ -146,24 +114,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        Log.i("RecyclerViewAdapter ","getItemCount() - size of bustops: " + mBusStopset.size()
-        + " size of mDataset " + mDataset.size());
-        return (mBusStopset.size() + mDataset.size());
+        return  mDataset.size();
     }
 
 
     @Override
     public int getItemViewType(int position) {
-        Log.i("RecyclerViewAdapter","getItemViewType() - get Type: " +  position);
+        Log.i("RecyclerViewAdapter", "getItemViewType() - get Type: " + position);
         // Just as an example, return 0 or 2 depending on position
         // Note that unlike in ListView adapters, types don't have to be contiguous
         switch (position){
             case 1:
                 System.out.println("getting DataObject " + position);
                 return TYPE_DATAOBJECT;
-            case 2:
-                System.out.println("getting busStopObject " + position);
-                return TYPE_BUSSTOP;
         }
         return 2;
 
@@ -193,11 +156,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
 
 
-    public void addBusStopItem(BusStop busStopObj, int index){
-        mBusStopset.add(index,busStopObj);
-    }
-
-
     public void deleteItem(int index) {
         mDataset.remove(index);
         notifyItemRemoved(index);
@@ -205,12 +163,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
 
 
-
-
-    // populates the routes available for the bus
-    public void addBusStop(){
-
+    public void swap(ArrayList<DataObject> newData){
+        mDataset.clear();
+        mDataset.addAll(newData);
+        notifyDataSetChanged();
     }
+
+
+
+
+
+
 
 }
 

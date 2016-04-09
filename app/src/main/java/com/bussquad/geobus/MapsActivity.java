@@ -1,15 +1,11 @@
 package com.bussquad.geobus;
 
 import android.Manifest;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,36 +15,27 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
-import android.view.animation.Transformation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -63,15 +50,15 @@ import com.androidmapsextensions.Marker;
 import com.androidmapsextensions.MarkerOptions;
 import com.androidmapsextensions.OnMapReadyCallback;
 import com.androidmapsextensions.Polyline;
-import com.androidmapsextensions.PolylineOptions;
 import com.androidmapsextensions.SupportMapFragment;
-import com.flipboard.bottomsheet.BottomSheetLayout;
-import com.flipboard.bottomsheet.commons.MenuSheetView;
+import com.bussquad.geobus.activity.BusStopMenuActivity;
+import com.bussquad.geobus.activity.InfoActivity;
+import com.bussquad.geobus.activity.NightOwlActivity;
+import com.bussquad.geobus.utilities.NetworkService;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -83,7 +70,6 @@ import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -195,7 +181,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         System.out.println("on create");
         activity = this;
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.scrollingmap);
+        setContentView(R.layout.activity_maps);
         updateMapValuesBundle(savedInstanceState);
 
         notifDb =  new NotificationDbManger(this);
@@ -231,7 +217,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         System.out.println("Creating New Recycle View");
-        mdAdapter = new RecyclerViewAdapter();
+        mdAdapter = new RecyclerViewAdapter(getBaseContext(),getDataSet());
 
         mRecyclerView.setAdapter(mdAdapter);
 //        mRecyclerView.add
@@ -301,8 +287,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<DataObject> getDataSet() {
         ArrayList results = new ArrayList<DataObject>();
         for (int index = 0; index < 1; index++) {
-            DataObject obj = new DataObject("Some Primary Text " + index,
-                    "Secondary " + index);
+            DataObject obj = new DataObject(1,"Some Primary Text " + index,
+                    "Secondary " + index,"stuff");
             results.add(index, obj);
             mAdapterCount++;
         }
@@ -477,7 +463,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent myIntent = new Intent(MapsActivity.this, BusStopMenuActivity.class);
         lstCameraPosition = mMap.getCameraPosition();
         myIntent.putExtra("bus_stop_name", marker.getTitle()); //Optional parameters
-        myIntent.putExtra("BUSSTOPID", busStopMarkers.get(marker).getBusStopID());
+        myIntent.putExtra("BUSSTOPID", busStopMarkers.get(marker).getObjectID());
         myIntent.putExtra("COORDINATES", busStopMarkers.get(marker).getLatLng());
         myIntent.putStringArrayListExtra("ROUTES", busStopMarkers.get(marker).getBusses());
        // startActivityForResult(myIntent, 1);
@@ -635,7 +621,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         for (BusStop temp : busStops) {
             Marker busStopMarker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(temp.getLatitude(), temp.getLongitude()))
-                    .title(temp.getTitle())
+                    .title(temp.getName())
                     .visible(false)
                     .clusterGroup(BusStop.BUSSTOP_CLUSTERGROUP)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop)));
@@ -682,27 +668,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // iterates through the buses found in the xml file
         for (Bus bus : buses) {
 
-            Log.i(TAG, bus.toString());
+    //        Log.i(TAG, bus.toString());
             LatLng newPos = new LatLng(bus.lat, bus.lng);
             Marker bus_marker = busMarkers.get(Integer.toString(bus.bus_id));
             // if marker does not exist, add new marker
             if (bus_marker == null) {
                 //ToDo: retrieve stops LatLng from relevant bus stops and store as data in marker for drawing routes
                 //PolylineOptions stops = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
+                System.out.println("markers found");
                 bus_marker = mMap.addMarker(new MarkerOptions()
                         .position(newPos)
                         .flat(true)
                         .title(bus.route)
                         .clusterGroup(ClusterGroup.NOT_CLUSTERED)
                         .snippet("Bus ID: " + Integer.toString(bus.bus_id)));
-                if (bus.color == Bus.HUE_AZURE)
+                if (bus.color == Bus.HUE_AZURE){
                     bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("blue_marker", 64, 111)));
-                else if (bus.color == Bus.HUE_ORANGE)
+                }
+                else if (bus.color == Bus.HUE_ORANGE){
                     bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("orange_marker", 64, 111)));
-                else if (bus.color == Bus.HUE_YELLOW)
+                }
+                else if (bus.color == Bus.HUE_YELLOW){
                     bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("yellow_marker", 64, 111)));
-                else
+                }
+                else if (bus.color == Bus.HUE_MAGENTA){
+                    bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("magenta_marker", 64, 111)));
+                }
+                else{
                     bus_marker.setIcon(BitmapDescriptorFactory.defaultMarker(bus.color));
+                }
             } else {
                 // if marker exists, check for changes in position
                 // and for change in bus route from last update
@@ -714,14 +708,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     case (1):
                         bus_marker.setTitle(bus.route);
                         bus_marker.setClusterGroup(bus.clusterGroup);
-                        if (bus.color == Bus.HUE_AZURE)
+                        if (bus.color == Bus.HUE_AZURE){
                             bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("blue_marker", 64, 111)));
-                        else if (bus.color == Bus.HUE_ORANGE)
+                        }
+                        else if (bus.color == Bus.HUE_ORANGE){
                             bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("orange_marker", 64, 111)));
-                        else if (bus.color == Bus.HUE_YELLOW)
+                        }
+                        else if (bus.color == Bus.HUE_YELLOW){
                             bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("yellow_marker", 64, 111)));
-                        else
+                        }
+                        else if (bus.color == Bus.HUE_MAGENTA){
+                            bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("magenta_marker", 64, 111)));
+                        }
+                        else{
                             bus_marker.setIcon(BitmapDescriptorFactory.defaultMarker(bus.color));
+                        }
                     case (2):
                         bus_marker.animatePosition(newPos, settings);
                         bus_marker.setRotation(bus.updateBearing(bus_marker.getPosition(), bus_marker.getRotation() - ICON_DEGREES_OFFSET) + ICON_DEGREES_OFFSET);
@@ -814,10 +815,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         System.out.println("marker selected");
         if (busStopMarkers.containsKey(marker)) {
 
-            id = busStopMarkers.get(marker).getBusStopID();
-            busStopName = busStopMarkers.get(marker).getTitle();
+          //  id = busStopMarkers.get(marker).getObjectID();
+            busStopName = busStopMarkers.get(marker).getName();
 
-            busStopMarkers.get(marker).setBusStopSchedule(database_Helper.getBusStopSchedule(id));
+        //    busStopMarkers.get(marker).setBusStopSchedule(database_Helper.getBusStopSchedule(id));
         } else {
             id = -1;
             busStopName = marker.getTitle();
@@ -879,10 +880,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void updateClosestBusStops(ArrayList<BusStop> busStops){
         Log.i("MapActivity", "updateClosestBusStops()");
         for (BusStop stops: busStops ){
-            System.out.println(stops.getTitle());
+            System.out.println(stops.getName());
 
             System.out.println("Adding Bustop to Adapter");
-            mdAdapter.addBusStopItem(stops,mAdapterCount);
             mAdapterCount++;
         }
         mdAdapter.notifyItemInserted(mAdapterCount - 1);

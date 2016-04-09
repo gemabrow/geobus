@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#4CAF50</color>
-    <color name="colorPrimaryDark">#2E7D32</color>
-    <color name="colorDarkBlueMetro">#003e6d</color>
-    <color name="colorDarkBabyBLueMetro">#0098d3</color>
-    <color name="colorLightBabyBLueMetro">#0076d0</color>
-    <color name="colorGoldYellowMetro">#f6af2c</color>
-    <color name="colorYellowMetro">#f6af2c</color>
-    <color name="colorPrimary2">#125688</color>
-    <color name="colorPrimaryDark2">#125688</color>
-    <color name="textColorPrimary">#FFFFFF</color>
-    <color name="windowBackground">#FFFFFF</color>
-    <color name="navigationBarColor">#000000</color>
-    <color name="colorAccent">#c8e8ff</color>
+
     <color name="primaryText">#d9000000</color>
     <color name="secondaryText">#8C000000</color>
     <color name="disabledText">#61000000</color>
+    <color name="mdx_blue">#ff1994d7</color>
+    <color name="mdx_blue_dark">#ff253b56</color>
+    <color name="mdx_blue_gray_dark">#ff7b88a0</color>
+    <color name="mdx_blue_inactive">#ffacd5eb</color>
+    <color name="mdx_blue_light">#fff5f9fc</color>
+    <color name="mdx_blue_powder">#ffdcedf6</color>
+    <color name="mdx_blue_tap">#ff4dabde</color>
+    <color name="black">#ff000000</color>
+    <color name="actionbar">#ff2495d4</color>
+    <color name="mdx_home_divider">#ffe4e8ec</color>
+
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
+    <color name="colorAccent">#C5CAE9</color>
+    <color name="secondaryColor">#FFFF8D</color>
+    <color name="secondaryColorDark">#FFD600</color>
+    <color name="action_button_selected_gradient_bottom">#FFFF8D</color>
+
 </resources>

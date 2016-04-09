@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout android:id="@+id/content_frame"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/view_bottom_bar" />
+
+    <LinearLayout android:gravity="center|right"
+        android:orientation="horizontal"
+        android:id="@id/view_bottom_bar"
+        android:background="@color/actionbar"
+        android:clickable="true"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/home_filter_handle_bar_height"
+        android:divider="@drawable/divider_home_menu"
+        android:layout_alignParentBottom="true"
+        android:showDividers="middle|beginning">
+        <ImageView android:id="@+id/button_map"
+            android:background="@drawable/btn_normal_selector"
+            android:padding="10.0dip"
+            android:layout_width="@dimen/card_filter_button_map"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="6.0dip"
+            android:layout_marginRight="6.0dip"
+            android:src="@drawable/ic_filter_list_black_24dp"
+            android:contentDescription="@string/map" />
+        <ImageView
+            android:id="@+id/imageView2"
+            android:background="@drawable/btn_normal_selector"
+            android:padding="10.0dip"
+            android:layout_width="@dimen/card_filter_button_map"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="6.0dip"
+            android:layout_marginRight="6.0dip"
+            android:src="@drawable/ic_map_black_24dp"
+            android:contentDescription="@string/map" />
+    </LinearLayout>
+</RelativeLayout>

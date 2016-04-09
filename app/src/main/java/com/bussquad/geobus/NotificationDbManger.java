@@ -19,6 +19,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Jose on 2/2/2016.
@@ -55,10 +58,11 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
 
-    // used for getting data from the rbua_atop_info table
+    // used for getting data from the bus_atop_info table
     private static final int XCOORD_COLUMN = 2;
     private static final int YCOORD_COLUMN = 3;
     private static final int STOP_NAME_COLUMN = 4;
+    private static final int ROUTE_LIST_COLUMN = 6;
 
     // indicates what row its currently pointing to
     private int currentRow = 0;
@@ -118,7 +122,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
     {
         //If the database does not exist, copy it from the assets.
         boolean mDataBaseExist = checkDataBase();
-        if(!mDataBaseExist)
+        if(mDataBaseExist)
         {
             this.getReadableDatabase();
             this.close();
@@ -126,7 +130,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
             {
                 // TO-DO : update database if it already exists without deleting the current set notifications
 //                System.out.println("DataBse already exists delete");
-               // deleteDataBase();
+                deleteDataBase();
 
                 //Copy the database from assests
                 copyDataBase();
@@ -706,6 +710,33 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
 
+    // returns a list of routes that belong to the bus stop  specified
+    public List<String> getBusStopRoute(String busStopId){
+
+        List<String> route;
+        String routeData;
+        // sets the pointer tot he first row of the database
+        currentRow = 0;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("select * from bus_stop_info where ID_BUSSTOP=" + busStopId, null);
+        c.moveToFirst();
+
+        System.out.println(busStopId);
+        String temp1 = c.getString(ROUTE_LIST_COLUMN);
+        System.out.println(temp1);
+        route = Arrays.asList((temp1).split(","));
+
+        c.close();
+
+        for (String temp : route){
+            System.out.println(temp);
+        }
+
+        return route;
+    }
+
+
     // returns the busID from the specifed row
     public String getNextRowStopID(){
         // moves the pointer to the next row
@@ -791,9 +822,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
                 System.out.println("row: " + index + "Column: " + c.getColumnName(count) + " : " + c.getString(count));
                 count++;
             }
-
         }
-
     }
 
 

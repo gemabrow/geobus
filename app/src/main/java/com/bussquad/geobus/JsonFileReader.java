@@ -21,7 +21,7 @@ import java.util.List;
 
 
 // this class will read a json file whether it is located in the assets folder
-class JsonFileReader {
+public class JsonFileReader {
     private static String TAG = "JsonFileReader"; // Tag just for the LogCat window
     private ArrayList<BusStop> BusStops;
     private ArrayList<LatLng> coordinates;
@@ -72,7 +72,7 @@ class JsonFileReader {
         String stopName = "";
         double latitude = 0;
         double longitude = 0;
-        int id = -1;
+        String id = "-1";
         ArrayList<String> busses = new ArrayList<>();
 
         // reads in a bracket {
@@ -81,6 +81,7 @@ class JsonFileReader {
         // the String name  stores the next token in the json file and if it equals any of the specified
         // key strings such as name of bus stop, latitude, longitude or busses it stores it to create a BusStop Obect
         while (reader.hasNext()) {
+
             String name = reader.nextName();
             if (name.equals("name")) {
                 stopName = reader.nextString();
@@ -91,7 +92,7 @@ class JsonFileReader {
             } else if (name.equals("busses") && reader.peek() != JsonToken.NULL) {
                 readBusArray(busses, reader);
             } else if (name.equals("id")){
-                id = reader.nextInt();
+                id = reader.nextString();
 
             } else {
                 reader.skipValue();
@@ -133,7 +134,7 @@ class JsonFileReader {
     // for testing purposes only , prints a list of bus stop information read from the file.
     public void printBusStopList(ArrayList<BusStop> BusStops){
         for (BusStop temp: BusStops){
-            System.out.println("Bus Stop name: " + temp.getTitle() + " Bus stop location: " + temp.getLatitude() + ":" + temp.getLongitude());
+            System.out.println("Bus Stop name: " + temp.getName() + " Bus stop location: " + temp.getLatitude() + ":" + temp.getLongitude());
             System.out.println("Busses that stop at this location: ");
             for (String busTemp: temp.getBusses()){
                 System.out.println("Bus: " + busTemp);
@@ -170,7 +171,7 @@ class JsonFileReader {
         //reader.endObject();
         Log.i(TAG, "Finished JSONing");
         for (BusStop stop : allStops) {
-            coordinates.add(scheduledStops.indexOf(stop.getTitle()), stop.getLatLng());
+            coordinates.add(scheduledStops.indexOf(stop.getName()), stop.getLatLng());
         }
     }
 

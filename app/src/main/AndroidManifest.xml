@@ -11,7 +11,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -36,15 +37,18 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".InfoActivity"
+            android:name=".activity.InfoActivity"
             android:label="@string/title_activity_info"
             android:parentActivityName=".MapsActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -53,7 +57,7 @@
                 android:value="com.bussquad.geobus.MapsActivity" />
         </activity>
         <activity
-            android:name=".NightOwlActivity"
+            android:name=".activity.NightOwlActivity"
             android:label="@string/title_activity_night_owl"
             android:parentActivityName=".MapsActivity"
             android:theme="@style/MyMaterialTheme">
@@ -62,7 +66,7 @@
                 android:value="com.bussquad.geobus.MapsActivity" />
         </activity>
         <activity
-            android:name=".BusStopMenuActivity"
+            android:name=".activity.BusStopMenuActivity"
             android:label="@string/title_activity_info"
             android:parentActivityName=".MapsActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -81,11 +85,30 @@
         <service
             android:name=".NotificationService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
         <service
-            android:name=".NetworkService"
+            android:name=".utilities.NetworkService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.DiningActivity"
+            android:label="@string/title_activity_dining"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.LibraryActivity"
+            android:label="@string/title_activity_library"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

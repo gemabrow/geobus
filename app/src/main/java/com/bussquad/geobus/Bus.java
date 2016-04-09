@@ -9,32 +9,97 @@ import com.google.android.gms.maps.model.LatLng;
  * by Google Map Markers
  * Created by Jose on 10/21/2015.
  */
-class Bus {
+public class Bus {
     public static final float HUE_RED = 0;
     public static final float HUE_BLUE = 240;
     public static final float HUE_YELLOW = 60;
     public static final float HUE_ORANGE = 30;
     public static final float HUE_AZURE = 210;
+    public static final float HUE_MAGENTA = 300;
     public static final int UCSC_CLUSTERGROUP = 1;
     public static final int SCMETRO_CLUSTERGROUP = 0;
 
-    public final String route;
-    public final String direction;
-    public final float color;
-    public final double lat;
-    public final double lng;
-    public final LatLng location;
+    public  String route;
+    public  String direction;
+    public  float color;
+    public  double lat;
+    public  double lng;
+    public  LatLng location;
     public final int bus_id;
-    public final int timestamp;
-    public final int clusterGroup;
+    public  int timestamp;
+    public  int clusterGroup;
 
-    Bus(double lat, double lng, int timestamp, String route, String direction, int bus_id){
+    public Bus(double lat, double lng, int timestamp, String route, String direction, int bus_id){
         this.lat = lat;
         this.lng = lng;
         this.location = new LatLng(lat,lng);
         this.timestamp =  timestamp;
         this.direction = direction;
         this.bus_id = bus_id;
+        switch (route.toLowerCase()) {
+            case "loop":
+                if (direction.equals("outer"))
+                {
+                    this.clusterGroup = UCSC_CLUSTERGROUP;
+                    route = "Outer Loop";
+                    this.color = HUE_AZURE;
+                }
+                else {
+                    this.clusterGroup = UCSC_CLUSTERGROUP + 1;
+                    route = "Inner Loop";
+                    this.color = HUE_ORANGE;
+                }
+                break;
+            case "upper campus":
+                this.clusterGroup = UCSC_CLUSTERGROUP + 2;
+                route = "Upper Campus";
+                this.color = HUE_YELLOW;
+                break;
+            default:
+                this.clusterGroup = SCMETRO_CLUSTERGROUP;
+                this.color = HUE_RED;
+                break;
+        }
+        this.route = route;
+    }
+
+
+
+
+    public Bus(int bus_id, double lat, double lng, String route){
+
+        this.bus_id = bus_id;
+        this.lat = lat;
+        this.lng = lng;
+        this.route = route;
+
+        switch (route.toLowerCase()) {
+            case "loop":
+                this.color = HUE_AZURE;
+                this.route = "LOOP";
+                break;
+            case "upper campus":
+                this.color = HUE_YELLOW;
+                this.route = "UPPER CAMPUS";
+                break;
+            default:
+                this.color = HUE_RED;
+                break;
+        }
+        this.route = route;
+    }
+
+
+
+    // constructor
+    public Bus(int bus_id, double lat, double lng, int timestamp, String route, String direction) {
+        this.lat = lat;
+        this.lng = lng;
+        this.location = new LatLng(lat,lng);
+        this.timestamp =  timestamp;
+        this.direction = direction;
+        this.bus_id = bus_id;
+
         switch (route.toLowerCase()) {
             case "loop":
                 if (direction.equals("outer"))
@@ -76,6 +141,12 @@ class Bus {
                 break;
             case ("Upper Campus"):
                 cVal = HUE_YELLOW;
+                break;
+            case ("Loop"):
+                cVal = HUE_RED;
+                break;
+            case("OUT OF SERVICE/SORRY"):
+                cVal = HUE_MAGENTA;
                 break;
             default:
                 cVal = HUE_RED;

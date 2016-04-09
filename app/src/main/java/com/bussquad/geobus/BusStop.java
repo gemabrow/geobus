@@ -10,14 +10,13 @@ import java.util.ArrayList;
  * For now this class is used to store values from the json file with the bus stops and then later
  * can be called from to create markers.
  */
-class BusStop {
+public class BusStop extends MapObject{
 
     public final static int BUSSTOP_CLUSTERGROUP = 10;
     //stores the name of the bus stop
-    private String title;
-    private String cardinalDirc;
-    private int busStopID = -1;
-
+    private int resourceId = R.drawable.ic_directions_bus_black_24dp;
+    private String name;
+    private String busStopID = "-1";
     private double latitude;
     private double longitude;
     private LatLng location;
@@ -31,8 +30,8 @@ class BusStop {
 
 
     // constructor
-    public BusStop(String title, double latitude, double longitude, ArrayList<String> busses,int id) {
-        this.title = title;
+    public BusStop(String title, double latitude, double longitude, ArrayList<String> busses,String id) {
+        this.name = title;
         this.latitude = latitude;
         this.longitude = longitude;
         this.location = new LatLng(latitude,longitude);
@@ -44,23 +43,34 @@ class BusStop {
 
 
     // getters, returns bus stop name
-    public String getTitle() {
-        return title;
+    @Override
+    public String getName() {
+        return name;
     }
 
 
 
 
     // sets the name of the bus stop
-    public void setTitle(String title) {
-        this.title = title;
+    @Override
+    public void setName(String title) {
+        this.name = title;
     }
 
 
 
 
-    public void setBusStopId(int setBusStopID) {
-        this.busStopID = setBusStopID;
+    @Override
+    public String getObjectID() {
+        return busStopID;
+    }
+
+
+
+
+    @Override
+    public void setObjectID(String objectID) {
+        this.busStopID = objectID;
     }
 
 
@@ -74,7 +84,7 @@ class BusStop {
 
 
 
-    public ArrayList<BusStopSchedule> getBusStopSchedules() {
+    public ArrayList<BusStopSchedule> getBusStopSchedule() {
         return this.schedules;
     }
 
@@ -82,6 +92,7 @@ class BusStop {
 
 
     // returns the latitude of the bus stop
+    @Override
     public double getLatitude() {
         return latitude;
     }
@@ -90,6 +101,7 @@ class BusStop {
 
 
     // sets the latitude of the bus stop location
+    @Override
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
@@ -98,6 +110,7 @@ class BusStop {
 
 
     // returns  the longitude of the bus stop
+    @Override
     public double getLongitude() {
         return longitude;
     }
@@ -106,33 +119,17 @@ class BusStop {
 
 
     // sets the longitude of the bus stop
+    @Override
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
 
 
-
+    // returns the location of the bus stop
+    @Override
     public LatLng getLocation(){
         return this.location;
-    }
-    // returns the id of the busStop
-    public int getBusStopID(){
-        System.out.println("busStopId" + this.busStopID);
-        return  this.busStopID;
-    }
-
-
-
-
-    public boolean hasBus(String bus) {
-        return this.busses.contains(bus);
-    }
-
-
-
-    public LatLng getLatLng() {
-        return new LatLng(this.latitude, this.longitude);
     }
 
 
@@ -146,10 +143,21 @@ class BusStop {
 
 
 
-    // if there has not been a bus stop id assigned to this bus, then it will return false
-    // otherwise it will return true
-    public boolean hasId(){
-        return (this.busStopID >= 0);
+    // returns the image resource id value
+    @Override
+    public int getImageResource() {
+        return resourceId;
     }
+
+
+
+
+    // sets the image resource id
+    @Override
+    public void setImageResource(int imageResource) {
+        this.resourceId =  imageResource;
+    }
+
+
 
 }
