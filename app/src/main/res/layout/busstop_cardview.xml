@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/genCardView"
+        card_view:cardUseCompatPadding="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        >
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imgIcon"
+                android:layout_marginRight="16dp"
+                android:src="@drawable/ic_directions_bus_black_24dp"
+                android:layout_above="@+id/sample_bus_schedule_holder"
+                android:layout_alignStart="@+id/sample_bus_schedule_holder" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/item_name"
+                android:text="@string/bus_stopname"
+                android:layout_toRightOf="@+id/imgIcon"
+                android:layout_alignParentTop="true"
+                android:textSize="20sp"
+                />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/item_name"
+                android:divider="@color/black"
+                android:id="@+id/sample_bus_schedule_holder"
+                android:showDividers="middle"
+                android:dividerPadding="1dp">
+
+
+                <include
+                    android:id="@+id/bus_schedule"
+                    android:visibility="visible"
+                    layout="@layout/eta_info" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/action_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?android:attr/borderlessButtonStyle"
+                android:text="@string/schedule_card"
+                android:gravity="center_vertical|left"
+                android:paddingLeft="2dp"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/sample_bus_schedule_holder" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

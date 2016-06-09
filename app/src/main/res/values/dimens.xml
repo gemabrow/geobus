@@ -14,4 +14,7 @@
     <dimen name="card_filter_button_map">40.0dip</dimen>
     <dimen name="home_filter_handle_bar_height">50.0dip</dimen>
     <dimen name="bottom_tab_button">40.0dip</dimen>
+    <dimen name="md_keylines">16dp</dimen>
+    <dimen name="article_subheading">16sp</dimen>
+    <dimen name="supporting_text">14sp</dimen>
 </resources>

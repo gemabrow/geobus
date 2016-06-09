@@ -1,0 +1,777 @@
+{
+	"bikeParking":[
+	{
+		"name":"Bike Rack Hahn/McHenry/Kerr 5",
+		"latitude":36.99427111,
+		"longitude":-122.0652509,
+		"racks":4,
+		"type":[
+			"Cora racks"
+			]
+	},
+	{
+		"name":"Bike Rack Hahn/McHenry/Kerr 10",
+		"latitude":36.996805440787,
+		"longitude":-122.06171035767,
+		"racks":16,
+		"type":[
+			"Hitching Post racks"
+			]
+	},
+	{
+		"name":"Bike Rack Hahn/McHenry/Kerr 12",
+		"latitude":36.996175632155,
+		"longitude":-122.05863654613,
+		"racks":72,
+		"type":[
+			"U racks"
+			]
+	},
+	{
+		"name":"Bike Rack Hahn/McHenry/Kerr 3",
+		"latitude":36.996304164952,
+		"longitude":-122.05730080605,
+		"racks":8,
+		"type":[
+			"Cora racks"
+			]
+	},
+	{
+		"name":"Bike Rack Hahn/McHenry/Kerr 11",
+		"latitude":36.996419844284,
+		"longitude":-122.05911934376,
+		"racks":56,
+		"type":[
+			"Cora racks",
+			"U racks"
+			]
+	},
+	{
+		"name":"Bike Rack Hahn/McHenry/Kerr 1",
+		"latitude":36.99653552344,
+		"longitude":-122.0566624403,
+		"racks":10,
+		"type":[
+			"Hitching Post rack"
+			]
+	},
+	{
+		"name":"Bike Rack Hahn/McHenry/Kerr 6",
+		"latitude":36.996591220749,
+		"longitude":-122.06191420555,
+		"racks":22,
+		"type":[
+			"Hitching Post rack"
+			]
+	},
+	{
+		"name":"Bike Rack Hahn/McHenry/Kerr 7",
+		"latitude":36.996762596828,
+		"longitude":-122.06215560436,
+		"racks":6,
+		"type":[
+			"Hitching Post rack"
+			]
+	},
+	{
+		"name":"Bike Rack Hahn/McHenry/Kerr 8",
+		"latitude":36.997246732163,
+		"longitude":-122.06185519695,
+		"racks":24,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack Hahn/McHenry/Kerr 2",
+		"latitude":36.996419844284,
+		"longitude":-122.05669999123,
+		"racks":8,
+		"type":[
+			"Hitching Post rack"
+			]
+	},
+	{
+		"name":"Bike Rack Hahn/McHenry/Kerr 9",
+		"latitude":36.997422391124,
+		"longitude":-122.06171572208,
+		"racks":8,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack Cowell Health Center 3",
+		"latitude":36.999104050757,
+		"longitude":-122.05792307854,
+		"racks":4,
+		"type":[
+			"Locker"
+			]
+	},
+	{
+		"name":"Bike Rack Cowell Health Center 3",
+		"latitude":36.999104050757,
+		"longitude":-122.05792307854,
+		"racks":4,
+		"type":[
+			"Locker"
+			]
+	},
+	{
+		"name":"Bike Rack Cowell Health Center 1",
+		"latitude":36.999667362604,
+		"longitude":-122.05730617046,
+		"racks":12,
+		"type":[
+			"U rack"
+			]
+	},
+	{
+		"name":"Bike Rack Cowell Health Center 2",
+		"latitude":36.999757331454,
+		"longitude":-122.05798208714,
+		"racks":8,
+		"type":[
+			"Hitching Post rack"
+			]
+	},
+	{
+		"name":"Bike Rack Baytree/Classroom Unit 3",
+		"latitude":36.997837972905,
+		"longitude":-122.05685019493,
+		"racks":5,
+		"type":[
+			"Lightning Bolt rack"
+			]
+	},
+	{
+		"name":"Bike Rack Baytree/Classroom Unit 4",
+		"latitude":36.99778227651,
+		"longitude":-122.05703258514,
+		"racks":28,
+		"type":[
+			"Lightning Bolt rack",
+			"Core rack"
+			]
+	},
+	{
+		"name":"Bike Rack Baytree/Classroom Unit 1",
+		"latitude":36.997508078275,
+		"longitude":-122.05583095551,
+		"racks":49,
+		"type":[
+			"Lightning Bolt rack",
+			"Core rack",
+			"U rack"
+			]
+	},
+	{
+		"name":"Bike Rack Baytree/Classroom Unit 2",
+		"latitude":36.997332419512,
+		"longitude":-122.05602407455,
+		"racks":24,
+		"type":[
+			"Core rack"
+			]
+	},
+	{
+		"name":"Bike Rack - OPERS 1",
+		"latitude":36.995198775793,
+		"longitude":-122.05377101898,
+		"racks":8,
+		"type":[
+			"Core rack"
+			]
+	},
+	{
+		"name":"Bike Rack - OPERS 2",
+		"latitude":36.995134508487,
+		"longitude":-122.05447912216,
+		"racks":54,
+		"type":[
+			"Hitching Post rack"
+			]
+	},
+	{
+		"name":"Bike Rack - OPERS 3",
+		"latitude":36.995134508487,
+		"longitude":-122.05447912216,
+		"racks":54,
+		"type":[
+			"Hitching Post rack"
+			]
+	},
+	{
+		"name":"Bike Rack - OPERS 4",
+		"latitude":36.99449404165,
+		"longitude":-122.05514431,
+		"racks":8,
+		"type":[
+			"Core rack"
+			]
+	},
+	{
+		"name":"Bike Rack - OPERS 5",
+		"latitude":36.993729183155,
+		"longitude":-122.05458641052,
+		"racks":28,
+		"type":[
+			"Core rack",
+			"Lightning Bolt rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Stevenson 1",
+		"latitude":36.99744809728,
+		"longitude":-122.05248892307,
+		"racks":27,
+		"type":[
+			"U rack",
+			"Lightning Bolt rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Stevenson 2",
+		"latitude":36.997126769712,
+		"longitude":-122.05224752426,
+		"racks":20,
+		"type":[
+			"U rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Stevenson 3",
+		"latitude":36.996736890441,
+		"longitude":-122.05227434635,
+		"racks":3,
+		"type":[
+			"Core rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Stevenson 4",
+		"latitude":36.99657408312,
+		"longitude":-122.05235481262,
+		"racks":4,
+		"type":[
+			"U rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Stevenson 5",
+		"latitude":36.99627845841,
+		"longitude":-122.05275714397,
+		"racks":10,
+		"type":[
+			"U rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Stevenson 6",
+		"latitude":36.996201338731,
+		"longitude":-122.05242991447,
+		"racks":10,
+		"type":[
+			"U rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Stevenson 7",
+		"latitude":36.9959571259,
+		"longitude":-122.05241382122,
+		"racks":10,
+		"type":[
+			"U rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Stevenson 8",
+		"latitude":36.996488394917,
+		"longitude":-122.05211341381,
+		"racks":12,
+		"type":[
+			"Bike shed"
+			]
+	},
+	{
+		"name":"Bike Rack - Stevenson 9",
+		"latitude":36.996291311682,
+		"longitude":-122.0516628027,
+		"racks":8,
+		"type":[
+			"Core rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Stevenson 10",
+		"latitude":36.99666405563,
+		"longitude":-122.05170035362,
+		"racks":16,
+		"type":[
+			"Bike shed"
+			]
+	},
+	{
+		"name":"Bike Rack - Stevenson 11",
+		"latitude":36.996891128633,
+		"longitude":-122.05158770084,
+		"racks":24,
+		"type":[
+			"Bike shed"
+			]
+	},
+	{
+		"name":"Bike Rack - Stevenson 12",
+		"latitude":36.997143907217,
+		"longitude":-122.05167353153,
+		"racks":32,
+		"type":[
+			"Hitching Post rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Stevenson 13",
+		"latitude":36.997439528562,
+		"longitude":-122.05110490322,
+		"racks":20,
+		"type":[
+			"Bike shed"
+			]
+	},
+	{
+		"name":"Bike Rack - Stevenson 13",
+		"latitude":36.997439528562,
+		"longitude":-122.05110490322,
+		"racks":20,
+		"type":[
+			"Bike shed"
+			]
+	},
+	{
+		"name":"Bike Rack - Stevenson 14",
+		"latitude":36.997675167942,
+		"longitude":-122.05131411552,
+		"racks":8,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Stevenson 14",
+		"latitude":36.997675167942,
+		"longitude":-122.05131411552,
+		"racks":8,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Stevenson 15",
+		"latitude":36.99766659925,
+		"longitude":-122.05159842968,
+		"racks":32,
+		"type":[
+			"Bike shed"
+			]
+	},
+	{
+		"name":"Bike Rack - Stevenson 16",
+		"latitude":36.997435244203,
+		"longitude":-122.05233871937,
+		"racks":4,
+		"type":[
+			"Lightning Bolt rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Stevenson 17",
+		"latitude":36.997191035334,
+		"longitude":-122.05215632915,
+		"racks":5,
+		"type":[
+			"Lightning Bolt rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Cowell 2",
+		"latitude":36.996736890441,
+		"longitude":-122.0532399416,
+		"racks":10,
+		"type":[
+			"U rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Cowell 2",
+		"latitude":36.996736890441,
+		"longitude":-122.0532399416,
+		"racks":10,
+		"type":[
+			"U rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Cowell 1",
+		"latitude":36.997435244203,
+		"longitude":-122.05360472202,
+		"racks":12,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Cowell 3",
+		"latitude":36.99652695462,
+		"longitude":-122.05348134041,
+		"racks":6,
+		"type":[
+			"Hitching Post rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Cowell 4",
+		"latitude":36.996287027258,
+		"longitude":-122.05395340919,
+		"racks":12,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Cowell 5",
+		"latitude":36.996304164952,
+		"longitude":-122.05449521542,
+		"racks":12,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Cowell 6",
+		"latitude":36.99636843127,
+		"longitude":-122.0549672842,
+		"racks":6,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Cowell 7",
+		"latitude":36.996736890441,
+		"longitude":-122.05503702164,
+		"racks":17,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Cowell 8",
+		"latitude":36.99681829397,
+		"longitude":-122.05499410629,
+		"racks":8,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Cowell 9",
+		"latitude":36.996496963741,
+		"longitude":-122.05480635166,
+		"racks":8,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Cowell 10",
+		"latitude":36.996548376669,
+		"longitude":-122.0545810461,
+		"racks":4,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Cowell 11",
+		"latitude":36.996749743635,
+		"longitude":-122.05463469028,
+		"racks":7,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Cowell 12",
+		"latitude":36.996415559868,
+		"longitude":-122.05423235893,
+		"racks":4,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Cowell 13",
+		"latitude":36.997259585272,
+		"longitude":-122.05472052097,
+		"racks":8,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Cowell 14",
+		"latitude":36.997456665996,
+		"longitude":-122.05424845219,
+		"racks":10,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Cowell 15",
+		"latitude":6.997623755776,
+		"longitude":-122.05439329147,
+		"racks":8,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Cowell 16",
+		"latitude":36.997426675484,
+		"longitude":-122.05403923988,
+		"racks":4,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Cowell 17",
+		"latitude":36.997191035334,
+		"longitude":-122.05394268036,
+		"racks":12,
+		"type":[
+			"Hitching Post rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Humanities 1",
+		"latitude":36.99850204217,
+		"longitude":-122.05474734306,
+		"racks":12,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Humanities 2",
+		"latitude":36.998292111223,
+		"longitude":-122.05462932587,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Humanities 3",
+		"latitude":36.997945081243,
+		"longitude":-122.05432355404,
+		"racks":8,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Humanities 4",
+		"latitude":36.997867963255,
+		"longitude":-122.05480098724,
+		"racks":8,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Crown 1",
+		"latitude":37.000074363695,
+		"longitude":-122.05476343632,
+		"racks":4,
+		"type":[
+			"U rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Crown 2",
+		"latitude":37.000395678807,
+		"longitude":-122.05509066582,
+		"racks":16,
+		"type":[
+			"Hitching Post rack",
+			"Bike shed"
+			]
+	},
+	{
+		"name":"Bike Rack - Crown 3",
+		"latitude":36.999791605274,
+		"longitude":-122.05510139465,
+		"racks":10,
+		"type":[
+			"Hitching Post rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Crown 4",
+		"latitude":36.999585962125,
+		"longitude":-122.05509066582,
+		"racks":14,
+		"type":[
+			"Hitching Post rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Crown 5",
+		"latitude":36.999341760163,
+		"longitude":-122.05417335033,
+		"racks":4,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Crown 7",
+		"latitude":36.999624520258,
+		"longitude":-122.05447912216,
+		"racks":6,
+		"type":[
+			"Hitching Post rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Crown 8",
+		"latitude":36.999333191659,
+		"longitude":-122.05401778221,
+		"racks":4,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Merrill 1",
+		"latitude":36.9998044579524,
+		"longitude":-122.05230653286,
+		"racks":27,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Merrill 3",
+		"latitude":37.000130058412,
+		"longitude":-122.05328285694,
+		"racks":4,
+		"type":[
+			"U rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Merrill 4",
+		"latitude":36.999645941434,
+		"longitude":-122.05345451832,
+		"racks":8,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Merrill 5",
+		"latitude":36.999517414285,
+		"longitude":-122.05386757851,
+		"racks":16,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Merrill 6",
+		"latitude":36.999950121488,
+		"longitude":-122.05310046673,
+		"racks":30,
+		"type":[
+			"Fence rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Merrill 7",
+		"latitude":37.000391394614,
+		"longitude":-122.05388903618,
+		"racks":10,
+		"type":[
+			"Fence rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Crown Merrill Aparments 1",
+		"latitude":37.001899415481,
+		"longitude":-122.05455958843,
+		"racks":5,
+		"type":[
+			"Fence rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Crown Merrill Aparments 2",
+		"latitude":37.00150956068,
+		"longitude":-122.05410897732,
+		"racks":2,
+		"type":[
+			"Hitching Post rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Crown Merrill Aparments 3",
+		"latitude":37.001856574391,
+		"longitude":-122.05367982388,
+		"racks":8,
+		"type":[
+			"Hitching Post rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Crown Merrill Aparments 4",
+		"latitude":37.001967961173,
+		"longitude":-122.0533901453,
+		"racks":4,
+		"type":[
+			"Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Crown Merrill Aparments 5",
+		"latitude":37.001792312713,
+		"longitude":-122.05326139927,
+		"racks":8,
+		"type":[
+			"Hitching Post rack",
+            "Cora rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Crown Merrill Aparments 6",
+		"latitude":37.001333911161,
+		"longitude":-122.05283761024,
+		"racks":10,
+		"type":[
+			"Hitching Post rack",
+			"Fence rack"
+			]
+	},
+	{
+		"name":"Bike Rack - Crown Merrill Aparments 7",
+		"latitude":37.001710914508,
+		"longitude":-122.05261230469,
+		"racks":2,
+		"type":[
+			"Hitching Post rack"
+			]
+	}     
+	]
+}

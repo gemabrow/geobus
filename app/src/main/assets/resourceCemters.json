@@ -1,0 +1,130 @@
+{
+	"ResourceCenters":[
+	{
+		"name":"Services for Transfer and Re-Entry Students (STARS)",
+		"latitude":36.99720375012,
+		"longitude":-122.06647932529,
+		"facility": "College Office Building"
+	},
+	{
+		"name":"Oakes College Learning Center",
+		"latitude":36.98922,
+		"longitude":-122.06317,
+		"facility": "Oakes College Learning Center"
+	},
+	{
+		"name":"Early Education Services (EES)",
+		"latitude":36.991715271174,
+		"longitude":-122.06844270229, 
+		"facility": "Unavialable"
+	},
+	{
+		"name":"Educational Opportnity Programs",
+		"latitude":36.99419185,
+		"longitude":-122.0594949,
+		"facility": "Academic Resources Center"
+	},
+	{
+		"name":"Office of Physical Education, Recreation and Sports (OPERS)",
+		"latitude":36.99508089,
+		"longitude":-122.0542431,
+		"facility":"Office of Physical Education, Recreation and Sports"
+	},
+	{
+		"name":"Learning Support Services",
+		"latitude":36.994316028374,
+		"longitude":-122.05940902233,
+		"facility": "Academic Resources Center" 
+	},
+	{
+		"name":"Academic Resources Center (ARC)",
+		"latitude":36.99433538,
+		"longitude":-122.05935,
+		"facility": "Academic Resources Center"
+	},
+	{
+		"name":"Diversity and Inclusion Program",
+		"latitude":36.996044747197,
+		"longitude":-122.05706477165,
+		"facility": "Hahn Student Services"  
+	},
+	{
+		"name":"Student Volunteer Center",
+		"latitude":36.996076951862,
+		"longitude":-122.05694675446,
+		"facility": "Hahn Student Services"    
+	},
+	{
+		"name":"Disability Resource Center",
+		"latitude":36.99625268,
+		"longitude":-122.0570487,
+		"facility": "Hahn Student Services"    
+	},
+	{
+		"name":"International Education Office",
+		"latitude":36.99792955,
+		"longitude":-122.0566947,
+		"facility": "Classroom Unit"    
+	},
+	{
+		"name":"Student Organization Advising and Resources (SOAR)",
+		"latitude":36.99762369,
+		"longitude":-122.0560268,
+		"facility": "Redwood Building"    
+	},
+	{
+		"name":"Graduate Student Commons",
+		"latitude":36.99814852,
+		"longitude":-122.0558631,
+		"facility": "Graduate Student Commons"    
+	},
+	{
+		"name":"Graduate Student Commons",
+		"latitude":36.99814852,
+		"longitude":-122.0558631,
+		"facility": "Graduate Student Commons"    
+	},
+	{
+		"name":"Ethinic Resource Center",
+		"latitude":36.997786560849,
+		"longitude":-122.05554127693,
+		"facility": "Bay Tree Bookstore"    
+	},
+	{
+		"name":"Chicano Latino Resource Center",
+		"latitude":36.99776293,
+		"longitude":-122.055556,
+		"facility": "Bay Tree Bookstore"    
+	},
+	{
+		"name":"Student Union Assembly",
+		"latitude":36.997863540589,
+		"longitude":-122.05595970154,
+		"facility": "Bay Tree Bookstore"    
+	},
+	{
+		"name":"African American Student Life Resource and Cultural Center",
+		"latitude":36.99782291,
+		"longitude":-122.0555574,
+		"facility": "Bay Tree Bookstore"    
+	},
+	{
+		"name":"American Indian Resource",
+		"latitude":36.997782138179,
+		"longitude":-122.05548763275,
+		"facility": "Bay Tree Bookstore"    
+	},
+	{
+		"name":"Asian American/Pacific Islander Resource Center",
+		"latitude":36.9978272,
+		"longitude":-122.0555842,
+		"facility": "Bay Tree Bookstore"    
+	},
+	{
+		"name":"Career Center",
+		"latitude":36.997735010427,
+		"longitude":-122.05549836159,
+		"facility": "Bay Tree Bookstore"    
+	}
+	]
+}

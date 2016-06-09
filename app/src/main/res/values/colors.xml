@@ -11,10 +11,10 @@
     <color name="mdx_blue_light">#fff5f9fc</color>
     <color name="mdx_blue_powder">#ffdcedf6</color>
     <color name="mdx_blue_tap">#ff4dabde</color>
-    <color name="black">#ff000000</color>
+    <color name="black">#1e000000</color>
     <color name="actionbar">#ff2495d4</color>
     <color name="mdx_home_divider">#ffe4e8ec</color>
-
+    <color name="divide_black"></color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="textColorPrimary">#FFFFFF</color>
@@ -23,6 +23,10 @@
     <color name="colorAccent">#C5CAE9</color>
     <color name="secondaryColor">#FFFF8D</color>
     <color name="secondaryColorDark">#FFD600</color>
-    <color name="action_button_selected_gradient_bottom">#FFFF8D</color>
+    <color name="action_button_selected_gradient_bottom">#ffff8d</color>
 
+    <color name="dark_grey">#424242</color>
+    <color name="medium_grey">#757575</color>
+    <color name="button_grey">#757575</color>
+    <color name="text_white">#ffffff</color>
 </resources>

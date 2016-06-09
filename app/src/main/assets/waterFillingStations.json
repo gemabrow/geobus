@@ -1,0 +1,65 @@
+{
+	"waterFillingStations":[
+	{
+		"name":"Stevenson 150",
+		"latitude":36.99709243,
+		"longitude":-122.0517111
+	},
+	{
+		"name":"Humanities",
+		"latitude":36.99847413,
+		"longitude":-122.0546535
+	},
+	{
+		"name":"Quarry Plaza",
+		"latitude":36.99833489,
+		"longitude":-122.0554528
+	},
+	{
+		"name":"Student Union",
+		"latitude":36.9977308,
+		"longitude":-122.0560697
+	},
+	{
+		"name":"Mchenry",
+		"latitude":36.9956293,
+		"longitude":-122.0590121
+	},
+	{
+		"name":"Media Theater",
+		"latitude":36.99511302,
+		"longitude":-122.0615494
+	},
+	{
+		"name":"Kerr Hall",
+		"latitude":36.99684822,
+		"longitude":-122.0619598
+	},
+	{
+		"name":"Earth & Marine",
+		"latitude":36.99796858,
+		"longitude":-122.0595431
+	},
+	{
+		"name":"Science & Engineering Library",
+		"latitude":36.9989711,
+		"longitude":-122.0605785
+	},
+	{
+		"name":"Physical Sciences",
+		"latitude":36.99972085,
+		"longitude":-122.0617265 
+	},
+	{
+		"name":"Baskin Engineering",
+		"latitude":37.00025209,
+		"longitude":-122.0630568 
+	},
+	{
+		"name":"Social Sciences 2",
+		"latitude":37.00161017,
+		"longitude":-122.0587063  
+	}
+
+	]
+}

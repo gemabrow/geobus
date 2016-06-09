@@ -1,0 +1,124 @@
+{
+"Dining":[
+{
+	"name": "Owl's Nest Cafe",
+	"latitude":36.99886828,
+	"longitude":-122.0661199 ,
+	"id":6
+},
+{
+	"name": "Perk Coffee @ Baskin Engineering",
+	"latitude":37.00047915,
+	"longitude":-122.0630407,
+	"id":8
+},
+{
+	"name": "Perk Coffee @ Physical Science Building",
+	"latitude":36.99955376,
+	"longitude":-122.0617747,
+	"id":9
+},
+{
+	"name": "Perk Coffee @ Earth & Marine Sciences",
+	"latitude":36.99792573,
+	"longitude":-122.0594037,
+	"id":7
+},
+{
+	"name": "Porter Slug Grill and Cafe",
+	"latitude":36.99430967,
+	"longitude":-122.0658034,
+	"id":10
+},
+{
+	"name": "Porter/Kresge Dining Hall",
+	"latitude":36.994297890489,
+	"longitude":-122.06602871418,
+	"id":18
+},
+{
+	"name": "College Eight/Oakes Dining Hall",
+	"latitude":36.99158787,
+	"longitude":-122.0653233,
+	"id":19
+},
+{
+	"name": "College Eight Cafe",
+	"latitude":36.99164036,
+	"longitude":-122.0642853,
+	"id":3
+},
+{
+	"name": "Oakes Cafe",
+	"latitude":36.98926018,
+	"longitude":-122.0631856,
+	"id":5
+},
+{
+	"name": "Global Village Cafe",
+	"latitude":36.99583709,
+	"longitude":-122.0588619,
+	"id":4
+},
+{
+	"name": "Bay Tree Express Store",
+	"latitude":36.997760716477,
+	"longitude":-122.05561101437,
+	"id":2
+},
+{
+	"name": "Stevenson Coffee House",
+	"latitude":36.997301290916,
+	"longitude":-122.05228507519,
+	"id":11
+},
+{
+	"name": "Cowell/Stevenson Dining Hall",
+	"latitude":36.99699174,
+	"longitude":-122.0530629,
+	"id":16
+},
+{
+	"name": "Cowell Coffee Shop",
+	"latitude":36.99699174,
+	"longitude":-122.0530629,
+	"id":14
+},
+{
+	"name": "Banana Joe's",
+	"latitude":36.99997469,
+	"longitude":-122.0544469,
+	"id":1
+},
+{
+	"name": "Crown/Merrill Dining Hall",
+	"latitude":37.00011071,
+	"longitude":-122.0544255 ,
+	"id":17
+},
+{
+	"name": "Terry Freitas Cafe",
+	"latitude":37.000318563304,
+	"longitude":-122.05794453621 ,
+	"id":100
+},
+{
+	"name": "Terra Fresca at the University Center",
+	"latitude":37.00078761,
+	"longitude":-122.0578909,
+	"id":12
+},
+{
+	"name": "College Nine andTen Dining Hall",
+	"latitude":37.00109393,
+	"longitude":-122.0577581,
+	"id":15
+},
+{
+	"name": "Perk Coffee @ University Center",
+	"latitude":37.00078761,
+	"longitude":-122.0578909  ,
+	"id":9
+}
+]
+}

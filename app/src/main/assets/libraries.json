@@ -1,0 +1,39 @@
+{
+	"libraries":[
+
+{
+	"name": "McHenry  Library",
+	"latitude":36.995915151741,
+	"longitude":-122.05901741982
+},
+{
+	"name": "Page Smith Library",
+	"latitude":36.99687611,
+	"longitude":-122.0535511
+},
+{
+	"name": "Stevenson Library",
+	"latitude":36.997153346231,
+	"longitude":-122.05150723457
+},
+{
+	"name": "Merrill Library",
+	"latitude":36.999358897169,
+	"longitude":-122.05332577229 
+},
+{
+	"name": "Crown Library",
+	"latitude": 36.99978835,
+	"longitude":-122.0548868
+},
+{
+	"name": "Science and Engineering Library",
+	"latitude": 36.999147759193,
+	"longitude": -122.06095933914
+},
+{
+	"name": "Oakes Library",
+	"latitude": 36.98985368,
+	"longitude": -122.0627618
+}
+]}
