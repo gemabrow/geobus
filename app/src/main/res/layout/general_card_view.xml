@@ -25,7 +25,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/item_icon_image"
+                android:id="@+id/imgIcon"
                 android:layout_marginRight="16dp"
                 android:src="@drawable/ic_directions_bus_black_24dp"
                 android:layout_alignTop="@+id/item_name"
@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/item_name"
                 android:text="@string/bus_stopname"
-                android:layout_toRightOf="@+id/item_icon_image"
+                android:layout_toRightOf="@+id/imgIcon"
                 android:layout_alignParentTop="true"
                 android:textSize="20sp"
                 />
@@ -44,8 +44,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/nextBus"
-                android:id="@+id/item_main_text"
-                android:layout_toRightOf="@+id/item_icon_image"
+                android:id="@+id/next_bus"
+                android:layout_toRightOf="@+id/imgIcon"
                 android:layout_below="@+id/item_name"
                 />
             <TextView
@@ -53,8 +53,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/nextBusStopEta"
                 android:id="@+id/item_additional_info"
-                android:layout_toRightOf="@+id/item_icon_image"
-                android:layout_below="@+id/item_main_text"
+                android:layout_toRightOf="@+id/imgIcon"
+                android:layout_below="@+id/next_bus"
                 />
 
         </RelativeLayout>

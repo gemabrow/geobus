@@ -37,22 +37,21 @@
 
     <android.support.v4.view.ViewPager
     android:id="@+id/viewpager"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_below="@+id/view"
+        android:layout_alignBottom="@+id/view" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <fragment
-            android:id="@+id/map"
-            android:name="com.androidmapsextensions.SupportMapFragment"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_above="@+id/view_bottom_bar"
-            android:layout_below="@+id/view" />
-        </FrameLayout>
+    <fragment
+        android:id="@+id/map"
+        android:name="com.androidmapsextensions.SupportMapFragment"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/view"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/view_bottom_bar" />
+
     <LinearLayout android:gravity="center|right"
         android:orientation="horizontal"
         android:id="@+id/view_bottom_bar"
@@ -63,14 +62,16 @@
         android:divider="@drawable/divider_home_menu"
         android:layout_alignParentBottom="true"
         android:showDividers="middle|beginning">
-        <ImageView android:id="@+id/button_map"
+        <ImageButton android:id="@+id/btnFilter"
             android:padding="10.0dip"
             android:layout_width="@dimen/card_filter_button_map"
             android:layout_height="fill_parent"
+            android:clickable="true"
             android:layout_marginLeft="6.0dip"
             android:layout_marginRight="6.0dip"
             android:src="@drawable/ic_filter_list_black_24dp"
-            android:contentDescription="@string/map" />
+            android:contentDescription="@string/map"
+            android:background="#00ffffff" />
         <ImageButton
             android:id="@+id/btnSwitchView"
             android:padding="10.0dip"
@@ -83,6 +84,7 @@
             android:contentDescription="@string/map"
             android:background="#00ffffff" />
     </LinearLayout>
+
 </RelativeLayout>
 
 
