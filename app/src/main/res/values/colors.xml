@@ -14,7 +14,7 @@
     <color name="black">#1e000000</color>
     <color name="actionbar">#ff2495d4</color>
     <color name="mdx_home_divider">#ffe4e8ec</color>
-    <color name="divide_black"></color>
+    <color name="divide_black">#ffe4e8ec</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="textColorPrimary">#FFFFFF</color>
