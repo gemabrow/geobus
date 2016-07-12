@@ -151,6 +151,7 @@
     <string name="detail_view_image_description">Image taken at Baskin Engineering</string>
     <string name="detailfragment_layout_favbutton">Star image</string>
     <string name="detail_view_short_description">Dining Description</string>
+    <string name="next_bus">Next Bus Arrives In: </string>
 
 
     <string name="location">Location</string>
@@ -176,8 +177,38 @@
     <string name="uppercampus">Upper Campus</string>
     <string name="minute">1 minute</string>
     <string name="nextBusStopEta">4:00 pm</string>
-
+    <string name="profile_name">First Lastname</string>
+    <string name="profile_email">sammytheslug@gmail.com</string>
+    <string name="navitem">list item</string>
     <!-- navigation strings-->
 
+    <string-array name="navigation_drawer_account_item_array">
+        <!-- Sub Header -->
+        <item>My Account</item>
+        <!-- list items-->
+        <item>My Profile</item>
+        <item>Notification</item>
+        <item>Class Schedule</item>
+    </string-array>
+    <string-array name="navigation_drawer_explore_item_array">
+        <!-- Sub Header -->
+        <item>Explore</item>
+        <!-- list items-->
+        <item>Search</item>
+        <item>Shuttle Schedule</item>
+        <item>Metro Schedule</item>
+    </string-array>
+    <string-array name="navigation_drawer_help_support_item_array">
+        <!-- Sub Header -->
+        <item>Help &amp; Support</item>
+        <!-- list items-->
+        <item>Tips &amp; Tricks</item>
+        <item>Help Center</item>
+        <item>Settings</item>
+        <item>Sign In</item>
+    </string-array>
 
+    <!-- button text-->
+    <string name="show_moret">SHOW MORE</string>
+    <string name="show_less">SHOW LESS</string>
 </resources>

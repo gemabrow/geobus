@@ -69,7 +69,6 @@ public class NavListFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
         if(bundle != null){
-            System.out.println("bundle is not null");
             listObject =  bundle.getParcelableArrayList(KEY_OBJECT_LIST);
             cardTypes = bundle.getIntegerArrayList("TYPE_LIST");
         }
@@ -86,7 +85,7 @@ public class NavListFragment extends Fragment {
 
             }
         });
-
+        mAdapter.notifyDataSetChanged();
         // initialize the adapter
         return layout;
     }
@@ -101,18 +100,6 @@ public class NavListFragment extends Fragment {
     }
 
 
-
-//
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
 
 
 

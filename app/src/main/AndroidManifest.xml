@@ -7,50 +7,43 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality. 
     -->
+    <permission
+        android:name="your_package_name.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <permission
         android:name="com.bussquad.sluglife.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="com.bussquad.sluglife.permission.C2D_MESSAGE" />
 
     <application
-        android:name="com.bussquad.sluglife.activity.AppController"
+        android:name=".activity.AppController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <!--
-             The API key for Google Maps-based APIs is defined as a string resource.
-             (See the file "res/values/google_maps_api.xml").
-             Note that the API key is linked to the encryption key used to sign the APK.
-             You need a different API key for each encryption key, including the release key that is used to
-             sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/.
-        -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
-
         <activity
-            android:name="com.bussquad.sluglife.activity.InfoActivity"
+            android:name=".activity.InfoActivity"
             android:label="@string/title_activity_info"
-            android:parentActivityName="com.bussquad.sluglife.activity.MainActivity"
+            android:parentActivityName=".activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.bussquad.sluglife.activity.MainActivity" />
         </activity>
         <activity
-            android:name="com.bussquad.sluglife.activity.NightOwlActivity"
+            android:name=".activity.NightOwlActivity"
             android:label="@string/title_activity_night_owl"
-            android:parentActivityName="com.bussquad.sluglife.activity.MainActivity"
+            android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme">
             <meta-data
@@ -58,9 +51,9 @@
                 android:value="com.bussquad.sluglife.activity.MainActivity" />
         </activity>
         <activity
-            android:name="com.bussquad.sluglife.activity.BusStopMenuActivity"
+            android:name=".activity.BusStopMenuActivity"
             android:label="@string/title_activity_info"
-            android:parentActivityName="com.bussquad.sluglife.activity.MainActivity"
+            android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -76,66 +69,94 @@
             android:value="@integer/google_play_services_version" />
 
         <service
-            android:name="com.bussquad.sluglife.NotificationService"
+            android:name=".NotificationService"
             android:enabled="true"
             android:exported="true" />
         <service
-            android:name="com.bussquad.sluglife.utilities.NetworkService"
+            android:name=".utilities.NetworkService"
             android:enabled="true"
             android:exported="true" />
 
         <activity
-            android:name="com.bussquad.sluglife.activity.MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/title_activity_main"
-            android:parentActivityName="com.bussquad.sluglife.activity.MainActivity"
+            android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.bussquad.sluglife.activity.DiningActivity"
+            android:name=".activity.DiningActivity"
             android:label="@string/title_activity_dining"
-            android:parentActivityName="com.bussquad.sluglife.activity.MainActivity"
+            android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="com.bussquad.sluglife.activity.LibraryActivity"
+            android:name=".activity.ScheduleAcitivity"
+            android:label="@string/title_activity_dining"
+            android:parentActivityName=".activity.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.LibraryActivity"
             android:label="@string/title_activity_library"
-            android:parentActivityName="com.bussquad.sluglife.activity.MainActivity"
+            android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="com.bussquad.sluglife.activity.EventActivity"
+            android:name=".activity.EventActivity"
             android:label="@string/title_activity_event_"
-            android:parentActivityName="com.bussquad.sluglife.activity.MainActivity"
+            android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <!--<activity android:name=".activity.OpersActivity">-->
-            <!---->
-        <!--</activity>-->
+        <!-- <activity android:name=".activity.OpersActivity"> -->
+        <!--  -->
+        <!-- </activity> -->
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-                <category android:name="com.bussquad.sluglife"/>
+
+                <category android:name="com.bussquad.sluglife" />
             </intent-filter>
         </receiver>
-        <service android:name="com.bussquad.sluglife.utilities.GCMPushReceiverService" android:exported="false">
+
+        <service
+            android:name=".utilities.GCMPushReceiverService"
+            android:exported="false">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
-        <service android:name="com.bussquad.sluglife.utilities.GCMRegistrationIntentService" android:exported="false">
+        <service
+            android:name=".utilities.GCMRegistrationIntentService"
+            android:exported="false">
             <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID"/>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
+
+        <!--
+           The API key for Google Maps-based APIs is defined as a string resource.
+           (See the file "res/values/google_maps_api.xml").
+           Note that the API key is linked to the encryption key used to sign the APK.
+           You need a different API key for each encryption key, including the release key that is used to
+           sign the APK for publishing.
+           You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity android:name=".activity.BusNotificationActivity"></activity>
     </application>
 
 </manifest>

@@ -22,6 +22,8 @@ import com.bussquad.sluglife.activity.AppController;
 import com.bussquad.sluglife.activity.EventActivity;
 import com.bussquad.sluglife.utilities.VolleySingleton;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,6 +42,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int GENERAL = 0;
     private static final int EVENT = 1;
     private static final int OPERS = 2;
+    private static final int BUSSCHEDULEITEM = 3;
+    private static final int NOBUSCEDULE = 4;
     private LayoutInflater inflater;
     private AppController dataController;
     private ImageLoader imageLoader;
@@ -149,6 +153,53 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
 
 
+    public class BusScheduleViewHolder extends ViewHolder implements  View.OnClickListener{
+
+        TextView schedule_Time;
+        ImageView notification_button;
+        int stopID;
+        String route;
+
+
+        public BusScheduleViewHolder(View v, int type) {
+            super(v);
+            context = v.getContext();
+            if(type == 1){
+
+            this.schedule_Time = (TextView) v.findViewById(R.id.txt_schedule_time);
+            this.notification_button = (ImageView) v.findViewById(R.id.btn_notification);
+            this.notification_button.setOnClickListener(this);
+            } else {
+                this.schedule_Time = (TextView) v.findViewById(R.id.txt_nobuschedule);
+            }
+
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            super.onClick(v);
+            switch (v.getId()){
+                case R.id.btn_notification:
+                //    startBusNotificationActivity();
+                    System.out.println("Notification Button clicked");
+                    break;
+
+            }
+
+        }
+
+        private void startBusNotificationActivity(){
+            Intent myIntent = new Intent(context,Bus.class);
+            myIntent.putExtra("BUSSTOPID",this.stopID);
+            myIntent.putExtra("ROUTE", this.route);
+            context.startActivity(myIntent);
+            ((Activity)context).overridePendingTransition(R.anim.slide_in_left,R.anim.fade_out_in_place);
+            System.out.println("Starting activity");
+        }
+    }
+
+
     // contains
     public class EventViewHolder extends ViewHolder implements View.OnClickListener{
         CardView cv;
@@ -191,7 +242,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             myIntent.putExtra("EVENTID",this.eventID);
             context.startActivity(myIntent);
             ((Activity)context).overridePendingTransition(R.anim.slide_in_left,R.anim.fade_out_in_place);
-            System.out.println("Starting activity");
         }
     }
 
@@ -202,7 +252,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        Log.i("RecyclerViewAdapter","onCreateViewHolder - viewType set: " + viewType);
 //        View view = inflater.inflate(R.layout.general_card_view,parent,false);
 //        DataObjectHolder holder = new DataObjectHolder(view);
 //        return holder;
@@ -217,6 +266,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.half_imganddesciption, parent, false);
                 return new OpersViewHolder(view);
+            case BUSSCHEDULEITEM:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.bus_schedule_item, parent, false);
+                return new BusScheduleViewHolder(view,1);
+            case NOBUSCEDULE:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.no_busschedule, parent, false);
+                return new BusScheduleViewHolder(view,2);
             default:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.general_card_view, parent, false);
@@ -229,7 +286,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-
         switch (viewHolder.getItemViewType()){
             case EVENT:
                 final EventViewHolder holder = (EventViewHolder)viewHolder;
@@ -272,6 +328,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 oholder.displayImage.setDefaultImageResId(R.drawable.half_view_img);
                 oholder.displayImage.setErrorImageResId(R.drawable.half_view_img);
                 break;
+            case BUSSCHEDULEITEM:
+                final BusScheduleViewHolder holder3 = (BusScheduleViewHolder)viewHolder;
+                holder3.schedule_Time.setText(mDataset.get(position).getMainText());
+                break;
+            case NOBUSCEDULE:
+                final BusScheduleViewHolder holder4 = (BusScheduleViewHolder)viewHolder;
+                holder4.schedule_Time.setText(mDataset.get(position).getMainText());
+                break;
+
             default:
                 GeneralViewHolder dHolder = (GeneralViewHolder) viewHolder;
                 dHolder.iconImage.setImageResource(mDataset.get(position).getIconId());
@@ -294,10 +359,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemViewType(int position) {
-        Log.i("RecyclerViewAdapter", "getItemViewType() - get Type: " + position);
         // Just as an example, return 0 or 2 depending on position
         // Note that unlike in ListView adapters, types don't have to be contiguous
-
+        System.out.println("data set size: " + mDataset.size());
         return mDataSetTypes.get(position);
 
     }

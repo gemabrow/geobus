@@ -1,20 +1,35 @@
 {
   "project_info": {
-    "project_number": "1062407265453",
-    "project_id": "sluglife-1319"
+    "project_number": "138890508148",
+    "firebase_url": "https://project-2924630310737801284.firebaseio.com",
+    "project_id": "project-2924630310737801284",
+    "storage_bucket": "project-2924630310737801284.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1062407265453:android:0c0d07589c3bc9fb",
+        "mobilesdk_app_id": "1:138890508148:android:0c0d07589c3bc9fb",
         "android_client_info": {
           "package_name": "com.bussquad.sluglife"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "138890508148-3j8r4st47cnkgsbvfm6g5fnvs5h4h4qt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bussquad.sluglife",
+            "certificate_hash": "598533FB946823C318CADEED1814B41F7FE8714E"
+          }
+        },
+        {
+          "client_id": "138890508148-rd3d2cca38anppjvobdrjta6uu79hm4i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyDIci6MjmRWIYNRGYeh-_1EZfxzLds6xPQ"
+          "current_key": "AIzaSyAq38U4HikYg0ZzKiq61E0RumAWbaT39QQ"
         }
       ],
       "services": {
@@ -26,7 +41,7 @@
           "other_platform_oauth_client": []
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

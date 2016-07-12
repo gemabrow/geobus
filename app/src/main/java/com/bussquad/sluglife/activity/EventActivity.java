@@ -67,7 +67,6 @@ public class EventActivity extends AppCompatActivity implements Button.OnClickLi
         TextView txtDate  = (TextView)dateLayout.findViewById(R.id.txtDetail);
         txtDate.setText("Date");
         txtEventDate = (TextView) dateLayout.findViewById(R.id.txtDescription);
-        System.out.println("event date: " + event.getEventDate());
         txtEventDate.setText(event.getEventDate());
 
 

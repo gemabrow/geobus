@@ -23,6 +23,10 @@ public class DataObject implements Parcelable{
     private String mainText;
     private String subText;
 
+    public DataObject(){
+
+    }
+
     public DataObject(int objectid,int resourceId, String headerText, String mainText, String subText){
         this.objectid = objectid;
         this.iconId = resourceId;
@@ -167,7 +171,7 @@ public class DataObject implements Parcelable{
 
 
 
-    private DataObject(Parcel in) {
+    public DataObject(Parcel in) {
         objectid = in.readInt();
         iconId = in.readInt();
         headerText = in.readString();

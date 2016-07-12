@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -118,7 +119,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
     {
         //If the database does not exist, copy it from the assets.
         boolean mDataBaseExist = checkDataBase();
-        if(!mDataBaseExist)
+        if(mDataBaseExist)
         {
             this.getReadableDatabase();
             this.close();
@@ -134,7 +135,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
             }
             catch (IOException mIOException)
             {
-                throw new Error("ErrorCopyingDataBase");
+                throw new Error("Error Copying DataBase");
             }
         }
         else{
@@ -550,6 +551,32 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
 
+    // returns a Latlng object for the specifed bus stop
+    public double getLatitude(int stopID ){
+        double latitude;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("select * from bus_stop_info where ID_BUSSTOP=" + stopID, null);
+        c.moveToFirst();
+        latitude =  c.getDouble(XCOORD_COLUMN);
+        c.close();
+
+        return latitude;
+    }
+
+
+
+    // returns a Latlng object for the specifed bus stop
+    public double getLongitude(int stopID ){
+        double latitude;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("select * from bus_stop_info where ID_BUSSTOP=" + stopID, null);
+        c.moveToFirst();
+        latitude =  c.getDouble(YCOORD_COLUMN);
+        c.close();
+
+        return latitude;
+    }
+
 
     // gets the next stop
     // TODO fixme nextStop does not make sense, next stop can only be determined based on the route 
@@ -753,6 +780,40 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
         return stopId;
 
+    }
+
+    public boolean hasSchedule(int busStopId, String routeName){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        try {
+            Cursor c = db.rawQuery("select " + "\"" + routeName + "\"" + " from bus_stop_schedule where ID_BUSSTOP=" + busStopId, null);
+            c.moveToFirst();
+            return true;
+        } catch (Exception ex){
+
+        }
+        return false;
+    }
+
+
+    public List<String> getStopScheduleForRoute(int busStopId, String routeName){
+        List<String> route;
+        String routeData;
+        // sets the pointer tot he first row of the database
+        currentRow = 0;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("select " + "\"" + routeName + "\"" + " from bus_stop_schedule where ID_BUSSTOP=" + busStopId, null);
+        c.moveToFirst();
+
+        System.out.println("Bus Stop Id: " + busStopId);
+        String temp1 = c.getString(0);
+        route = Arrays.asList((temp1).split(";"));
+
+
+        c.close();
+
+        return route;
     }
 
 

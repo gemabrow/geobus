@@ -46,7 +46,6 @@
                 android:id="@+id/txtNotification"
                 android:textSize="16sp"
                 android:paddingLeft="72dp"
-                android:paddingTop="10dp"
                 android:textColor="@color/primaryText"
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true" />

@@ -67,6 +67,8 @@ import com.bussquad.sluglife.fragments.NavListFragment;
 import com.bussquad.sluglife.parser.JsonBikeParkingFileParser;
 import com.bussquad.sluglife.parser.JsonDiningFileParser;
 import com.bussquad.sluglife.parser.JsonLibraryFileParser;
+import com.bussquad.sluglife.adapters.NavItem;
+import com.bussquad.sluglife.adapters.DrawerListAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -79,6 +81,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 //import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.ui.IconGenerator;
 
@@ -108,8 +111,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         TabLayout.OnTabSelectedListener,
         GoogleMap.OnInfoWindowClickListener,
         ImageButton.OnClickListener,
-        GoogleMap.OnMarkerClickListener
-{
+        GoogleMap.OnMarkerClickListener, AdapterView.OnItemClickListener {
     @Override
     public boolean onMarkerClick(Marker marker) {
         MapInfoWindowAdapter mapInfoW = new MapInfoWindowAdapter(getBaseContext());
@@ -124,10 +126,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public final static String EXTRA_INFO = "com.bussquad.geobus.INFO";
     private final static int MARKER_UPDATE_INTERVAL = 2000; // in milliseconds
     private final static float ICON_DEGREES_OFFSET = 90;
-    private final static int INNER = 0;
-    private final static int OUTER = 1;
-    private final static int UPPER = 2;
-//    private final static int UPPEROUTER = 3;
     private Interpolator interpolator = new DecelerateInterpolator();
 
     private Toolbar toolbar;
@@ -159,6 +157,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ArrayList<MapObject> displayedMarkers;
     private ArrayAdapter<String> mAdapter;
     private ProgressDialog pDialog;
+
+
+
 
     // Parser
     private final JsonFileReader busStopReader = new JsonFileReader();
@@ -192,11 +193,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-    //drawer
+    // user for managing navigation drawer
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-
+    private ArrayList<NavItem> mNavItems = new ArrayList<NavItem>();
 
     // busses
     private Map<String,ArrayList<Bus>> activeBusses = new HashMap<>();
@@ -267,10 +268,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mDrawerList = (ListView) findViewById(R.id.navList);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.menu_open, R.string.menu_close);
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
         getSupportActionBar().setHomeButtonEnabled(true);
         mDrawerToggle.syncState();
-        addDrawerItems(); // adds elements to drawer
+        populateDrawerItems();
+        DrawerListAdapter mAdapter = new DrawerListAdapter(this, mNavItems);
+        mDrawerList.setAdapter(mAdapter);
+        //addDrawerItems(); // adds elements to drawer
 
 
         LayoutInflater inflater = getLayoutInflater(); // used to display a header at the top of the drawer
@@ -283,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
-        tabLayout.setOnTabSelectedListener(this);
+        tabLayout.addOnTabSelectedListener(this);
 
 
         btnSwitchView = (ImageButton) findViewById(R.id.btnSwitchView);
@@ -300,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         startBackgroundData();
         // set button listners
         btnSwitchView.setOnClickListener(this);
-
+        mDrawerList.setOnItemClickListener(this);
 
         // initialize active busses;
         activeBusses.put("INNER",new ArrayList<Bus>());
@@ -431,6 +436,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         return registrationId;
     }
+
+
+
+
     /**
      * @return Application's {@code SharedPreferences}.
      */
@@ -656,6 +665,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onClick(View v) {
 
+        System.out.println("drawer item clicked!");
         switch (v.getId()){
             case R.id.btnSwitchView:
                 switchToListView();
@@ -675,6 +685,51 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         throw new NullPointerException("Fake null pointer exception");
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        System.out.println("navigation item clicked!");
+        System.out.println("drawer item: " + position);
+        Toast toast;
+        switch(mNavItems.get(position).getIcon()){
+            case R.drawable.ic_home_black_24dp:
+                toast = Toast.makeText(context,"Home",Toast.LENGTH_SHORT);
+                toast.show();
+                break;
+            case R.drawable.ic_search_black_24dp:
+                toast = Toast.makeText(context,"Search",Toast.LENGTH_SHORT);
+                toast.show();
+                break;
+            case R.drawable.ic_directions_bus_black_24dp:
+                toast = Toast.makeText(context,"Bus Schedule",Toast.LENGTH_SHORT);
+                toast.show();
+                break;
+            case R.drawable.ic_person_black_24dp:
+                toast = Toast.makeText(context,"Account",Toast.LENGTH_SHORT);
+                toast.show();
+                break;
+            case R.drawable.ic_notifications_black_24dp:
+                toast = Toast.makeText(context,"Notifications",Toast.LENGTH_SHORT);
+                toast.show();
+                break;
+            case R.drawable.ic_schedule_black_24dp:
+                toast = Toast.makeText(context,"Class Schedule",Toast.LENGTH_SHORT);
+                toast.show();
+                break;
+            case R.drawable.ic_help_black_24dp:
+              //  FirebaseCrash.logcat(Log.INFO,TAG,"Crash button clicked");
+                //FirebaseCrash.report(ex);
+
+                break;
+            case R.drawable.ic_settings_black_24dp:
+                break;
+             case R.drawable.ic_check_box_black_24dp:
+                toast = Toast.makeText(context,"Sign In",Toast.LENGTH_SHORT);
+                toast.show();
+                break;
+
+
+        }
+    }
 
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -946,46 +1001,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-
-    // Populates the hamburger menu.
-    private void addDrawerItems() { // fills the hamburger menu/sidebar with an array of strings!
-        String[] osArray = {"Toggle Bus Stops", "Loop and Upper Campus Info", "Night Core Info", "Night Owl Info", "Night Owl Schedule", "Manual Refresh"};
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
-        mDrawerList.setAdapter(mAdapter);
-
-        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            Intent intent = new Intent(MainActivity.this, InfoActivity.class);
-            Intent schedIntent = new Intent(MainActivity.this, NightOwlActivity.class);
-
-            @Override // depending on the string's array index, perform an action
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 1) {
-                   // drawMarkers(); // Toggle stops
-                    mDrawerLayout.closeDrawer(GravityCompat.START); // and close the drawer
-                } else if (position == 2) { // if the user tapped on Loop and Upper Campus Info
-                    intent.putExtra(EXTRA_INFO, "1"); // using extras in an intent in order to set an appropriate textview in the next activity
-                    mDrawerLayout.closeDrawer(GravityCompat.START);
-                    startActivity(intent); // start info activity
-                } else if (position == 3) { // if the user tapped on Night Core Info
-                    intent.putExtra(EXTRA_INFO, "2");
-                    mDrawerLayout.closeDrawer(GravityCompat.START);
-                    startActivity(intent);
-                } else if (position == 4) { // if the user tapped on Night Owl Info
-                    intent.putExtra(EXTRA_INFO, "3");
-                    mDrawerLayout.closeDrawer(GravityCompat.START);
-                    startActivity(intent);
-                } else if (position == 5) { // if the user tapped on Night Owl Schedule
-                    mDrawerLayout.closeDrawer(GravityCompat.START);
-                    startActivity(schedIntent);
-                } else if (position == 6) {
-                    //  startBackgroundData();
-                    mDrawerLayout.closeDrawer(GravityCompat.START);
-                }
-            }
-        });
+    // populates the navigation drawer menu with options
+    private void populateDrawerItems(){
+        mNavItems.add(new NavItem("First Lastname","sammytheslug@gmail.com",R.drawable.ic_account_circle_black_48dp));
+        mNavItems.add(new NavItem("Home",false,R.drawable.ic_home_black_24dp));
+        mNavItems.add(new NavItem("Search",false,R.drawable.ic_search_black_24dp));
+        mNavItems.add(new NavItem("Bus Schedule",false,R.drawable.ic_directions_bus_black_24dp));
+        mNavItems.add(new NavItem(true));               // is a divider
+        mNavItems.add(new NavItem("My Account",true,-1));
+        mNavItems.add(new NavItem("My Profile",false,R.drawable.ic_person_black_24dp));
+        mNavItems.add(new NavItem("Notifications",false,R.drawable.ic_notifications_black_24dp));
+        mNavItems.add(new NavItem("Class Schedule",false,R.drawable.ic_schedule_black_24dp));
+        mNavItems.add(new NavItem(true));               // is a divider
+        mNavItems.add(new NavItem("Help & Support",true,-1));
+        mNavItems.add(new NavItem("Help Center",false,R.drawable.ic_help_black_24dp));
+        mNavItems.add(new NavItem("Settings",false,R.drawable.ic_settings_black_24dp));
+        mNavItems.add(new NavItem("Sign In",false,R.drawable.ic_check_box_black_24dp));
     }
-
-
 
 
     // closes hamburger menu when users presses the back button on there phone
@@ -1023,7 +1055,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent myIntent;
         switch(tab){
             case 0:
-                myIntent = new Intent(MainActivity.this, BusStopMenuActivity.class);
+                myIntent = new Intent(MainActivity.this, ScheduleAcitivity.class);
                 myIntent.putExtra("bus_stop_name", marker.getTitle()); //Optional parameters
                 System.out.println("bus stop id " + objectMarkers.get(marker).getObjectID());
                 myIntent.putExtra("BUSSTOPID", objectMarkers.get(marker).getObjectID());
@@ -1112,13 +1144,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void getEta(BusStop stop){
         System.out.println("calculating eta: ");
 
-        for (String route : stop.getBusses()){
+    /*    for (String route : stop.getBusses()){
             if(activeBusses.containsKey(route)){
                 if(activeBusses.get(route).size() >0){
                     findCLosestBus(activeBusses.get(route), stop.getObjectID());
                 }
             }
         }
+        */
     }
 
 
