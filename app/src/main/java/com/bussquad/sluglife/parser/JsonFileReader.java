@@ -18,6 +18,7 @@ import java.util.List;
 public class JsonFileReader {
 
     ArrayList<String>data ;
+    String rawData = "no data";
     public JsonFileReader(){
 
     }
@@ -51,7 +52,6 @@ public class JsonFileReader {
 
     // reads in one bus stop from the json file at a time and returns a new BusStop Object
     private String readData(JsonReader reader) throws IOException {
-        String textData = "no data ";
         // reads in a brace [
 
         reader.skipValue();
@@ -62,8 +62,8 @@ public class JsonFileReader {
         while (reader.hasNext()) {
             String name = reader.nextName();
             if (name.equals("schedule")) {
-                textData = reader.nextString();
-                System.out.println("text data:  " + textData);
+                this.rawData = reader.nextString();
+                System.out.println("text data:  " + this.rawData);
         } else {
                 reader.skipValue();
             }
@@ -71,7 +71,7 @@ public class JsonFileReader {
         reader.endObject();
         reader.endArray();
         //reads in a closing bracket }
-        return textData;
+        return this.rawData;
     }
 
 
@@ -80,6 +80,12 @@ public class JsonFileReader {
 
     public ArrayList<String> getData(){
         return this.data;
+    }
+
+
+
+    public String getRawData(){
+        return this.rawData;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.bussquad.sluglife.activity;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -14,10 +15,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -52,9 +60,11 @@ import com.bussquad.sluglife.Dining;
 import com.bussquad.sluglife.Event;
 import com.bussquad.sluglife.JsonFileReader;
 import com.bussquad.sluglife.Library;
+import com.bussquad.sluglife.Manifest;
 import com.bussquad.sluglife.MapObject;
 import com.bussquad.sluglife.OpersFacility;
 import com.bussquad.sluglife.adapters.MapInfoWindowAdapter;
+import com.bussquad.sluglife.fragments.PermissionDialog;
 import com.bussquad.sluglife.parser.JsonEventJsonParser;
 import com.bussquad.sluglife.parser.JsonOpersFacilityParser;
 import com.bussquad.sluglife.utilities.GCMRegistrationIntentService;
@@ -94,6 +104,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -111,16 +122,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         TabLayout.OnTabSelectedListener,
         GoogleMap.OnInfoWindowClickListener,
         ImageButton.OnClickListener,
-        GoogleMap.OnMarkerClickListener, AdapterView.OnItemClickListener {
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        MapInfoWindowAdapter mapInfoW = new MapInfoWindowAdapter(getBaseContext());
-        mapInfoW.setMainInfo("Eta: stuff");
-        mMap.setInfoWindowAdapter(mapInfoW);
+        GoogleMap.OnMarkerClickListener, AdapterView.OnItemClickListener,
+PermissionDialog.PermissionDialogListner{
 
-        return false;
-    }
 
+    private static final int PERMISSION_REQUEST_LOCATION = 1 ;
     final String TAG1 = "MainActivity";
     public static MainActivity activity;
     public final static String EXTRA_INFO = "com.bussquad.geobus.INFO";
@@ -313,6 +319,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 //        activeBusses.put("UPPER",new ArrayList<Bus>());
         context = getApplicationContext();
 
+
         // Check device for Play Services APK. If check succeeds, proceed with
         //  GCM registration.
         if (checkPlayServices()) {
@@ -326,8 +333,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else {
             Log.i(TAG, "No valid Google Play Services APK found.");
         }
-        System.out.println("regid: again" + regId);
+
+        notifDb.createDataBase();
     }
+
 
 
 
@@ -671,8 +680,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 switchToListView();
                 break;
             case R.id.btnFilter:
-                createCrash();
-//                getClosestStops();
                 break;
 
         }
@@ -729,6 +736,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         }
+    }
+
+
+
+
+    // Called when the dialogfragment agree button is clicked
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+
+    }
+
+
+
+    // called when the dialog fragment disagress button is clicked
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
     }
 
 
@@ -792,7 +816,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setCompassEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
-        mMap.setMyLocationEnabled(true);
+
+        // if the version of the phone is 6.0 or greater ask the user for permission to get location
+        // information from the user
+        if(Build.VERSION.SDK_INT > 23){
+            if( ActivityCompat.checkSelfPermission(this,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+            ActivityCompat.checkSelfPermission(this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                FirebaseCrash.log(TAG + " Access Coarse Location and Acess " +
+                        "Fine Location permissions has not been granted. Requesting permissions");
+                requestLocationPermission();
+
+            }
+        }
+
         mMap.setOnInfoWindowClickListener(this);
         mMap.setInfoWindowAdapter(new MapInfoWindowAdapter(getBaseContext()));
         drawMarkers(busStops,true,false);
@@ -800,7 +838,48 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+    public void requestLocationPermission(){
 
+
+
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION) || ActivityCompat.shouldShowRequestPermissionRationale(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION) ) {
+            DialogFragment newFragment = PermissionDialog.newInstance(R.string.location_permission_title,R.string.location_permission_msg);
+            newFragment.show(getSupportFragmentManager(), "dialog");
+
+
+        } else {
+            ActivityCompat.requestPermissions(this,new String[] {android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            android.Manifest.permission.ACCESS_FINE_LOCATION},PERMISSION_REQUEST_LOCATION);
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        switch (requestCode){
+            case PERMISSION_REQUEST_LOCATION:{
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // enable location dectecter
+                    mMap.setMyLocationEnabled(true);
+
+
+                } else {
+
+                    // permission denied, Disable location detecter .
+                    mMap.setMyLocationEnabled(false);
+
+                }
+                return;
+            }
+        }
+    }
 
     public void drawMarkers(ArrayList<?> mapObjects, boolean visible, boolean enableIconGen){
         IconGenerator iconGen = null;  // custom icon for displaying text
@@ -811,7 +890,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         if(enableIconGen){
             iconGen = new IconGenerator(this);
-            iconGen.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_blank_icon,null));
+            iconGen.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_blank_icon,getTheme()));
+          //  iconGen.setColor(R.color.windowBackground);
 
         }
         for(MapObject temp : displayedMarkers){
@@ -1428,5 +1508,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        MapInfoWindowAdapter mapInfoW = new MapInfoWindowAdapter(getBaseContext());
+        mapInfoW.setMainInfo("Eta: stuff");
+        mMap.setInfoWindowAdapter(mapInfoW);
+
+        return false;
+    }
 
 }

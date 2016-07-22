@@ -361,7 +361,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public int getItemViewType(int position) {
         // Just as an example, return 0 or 2 depending on position
         // Note that unlike in ListView adapters, types don't have to be contiguous
-        System.out.println("data set size: " + mDataset.size());
         return mDataSetTypes.get(position);
 
     }

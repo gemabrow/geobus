@@ -58,7 +58,7 @@
                         android:layout_height="match_parent"
                         android:id="@+id/imgThumbNail"
                         android:layout_gravity="center"
-                        android:background="#cc0d0d"
+                        android:background="@color/colorPrimary"
                         android:scaleType="fitXY" />
 
                 </FrameLayout>

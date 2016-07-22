@@ -5,7 +5,6 @@
      <string name="connection_error">There was a connectivity issue.</string>
      <string name="xml_error">There was an XML parsing error.</string>
      -->
-    <string name="busStops">Toggle Bus Stops</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="dialog_loc_title"><![CDATA[<font color=#212121>GeoBus</font> <font color=#757575>can\'t access your location</font>]]></string>
@@ -211,4 +210,11 @@
     <!-- button text-->
     <string name="show_moret">SHOW MORE</string>
     <string name="show_less">SHOW LESS</string>
+    <string name="title">Title</string>
+    <string name="content">Content</string>
+    <string name="agree">AGREE</string>
+    <string name="disagree">DISAGREE</string>
+    <string name="location_permission_title">Use Google\'s Location service?</string>
+    <string name="location_permission_msg">Let Google help apps determine location. This means
+        sending anonymous location data to Google, even when no apps are running</string>
 </resources>

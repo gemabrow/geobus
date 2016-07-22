@@ -23,11 +23,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 
 import com.bussquad.sluglife.NotificationDbManger;
 import com.bussquad.sluglife.R;
-import com.bussquad.sluglife.fragments.NotificationFragment;
 import com.bussquad.sluglife.fragments.ScheduleFragment;
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -35,6 +35,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -57,6 +59,7 @@ public class ScheduleAcitivity extends AppCompatActivity implements
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private String busStopName;
+    private TextView txtEta;
 
 
     // Google map
@@ -68,7 +71,7 @@ public class ScheduleAcitivity extends AppCompatActivity implements
     List<String> routes = new ArrayList<>();
     Integer busStopId;
     private NotificationDbManger notifDb;
-
+    ViewPagerAdapter adapter;
 
 
     // calander related  values
@@ -81,6 +84,7 @@ public class ScheduleAcitivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
+        txtEta = (TextView)findViewById(R.id.txt_eta);
 
         // initialize the database
         notifDb =  new NotificationDbManger(getApplicationContext());
@@ -127,6 +131,8 @@ public class ScheduleAcitivity extends AppCompatActivity implements
         btnCalendarPicker = (Button) calendarLayout.findViewById(R.id.btnCalendarPicker);
         setDate();
         btnCalendarPicker.setOnClickListener(this);
+
+
     }
 
 
@@ -154,6 +160,7 @@ public class ScheduleAcitivity extends AppCompatActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnCalendarPicker:
+                displayCalendar();
                 break;
         }
     }
@@ -223,7 +230,7 @@ public class ScheduleAcitivity extends AppCompatActivity implements
     // Creates the tabs for each fragment
     class ViewPagerAdapter extends FragmentPagerAdapter {
 
-        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<ScheduleFragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
         public ViewPagerAdapter(FragmentManager manager) {
@@ -231,7 +238,7 @@ public class ScheduleAcitivity extends AppCompatActivity implements
         }
 
         @Override
-        public Fragment getItem(int position) {
+        public ScheduleFragment getItem(int position) {
             return mFragmentList.get(position);
         }
 
@@ -240,7 +247,7 @@ public class ScheduleAcitivity extends AppCompatActivity implements
             return mFragmentList.size();
         }
 
-        public void addFragment(Fragment fragment, String title) {
+        public void addFragment(ScheduleFragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
         }
@@ -266,7 +273,7 @@ public class ScheduleAcitivity extends AppCompatActivity implements
         bundle.putStringArray("ROUTE",routes.toArray(new String[routes.size()]));
 
         // Create a Tab section for each route that stops  at the bus stop
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+         adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
 
         // create a fragment for each route that stops at this bus stop
@@ -288,8 +295,8 @@ public class ScheduleAcitivity extends AppCompatActivity implements
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         System.out.println(tab.getPosition());
-
-
+        String eta = adapter.getItem(tab.getPosition()).getETAofNextBus();
+        txtEta.setText(eta);
 
     }
 
@@ -339,9 +346,11 @@ public class ScheduleAcitivity extends AppCompatActivity implements
         if (busStopId == null ){
             FirebaseCrash.log("Bus stop Id is null");
         } else {
+            BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_busstop_marker);
             LatLng location = notifDb.getLocation(busStopId);
             Marker busStopMarker = mMap.addMarker(new MarkerOptions()
                     .position(location)
+                    .icon(icon)
                     .visible(true));
         }
 

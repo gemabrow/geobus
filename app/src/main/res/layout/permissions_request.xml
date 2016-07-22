@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    android:contextClickable="false"
+    android:elevation="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:text="@string/title"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/content"
+        android:text="@string/content"
+        android:paddingLeft="24dp"
+        android:paddingTop="10dp"
+        android:paddingRight="24dp"
+        android:paddingBottom="24dp"
+        android:layout_below="@+id/title" />
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="52dp"
+    android:layout_below="@+id/content"
+
+    >
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:id="@+id/btn_disagree"
+        android:text="@string/disagree"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:background="#00ffffff"
+        android:textColor="@color/button_text"
+        android:elevation="0dp"
+        style="@style/Base.Widget.AppCompat.Button.Borderless" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:id="@+id/btn_agree"
+        android:text="@string/agree"
+        android:layout_alignTop="@+id/btn_disagree"
+        android:layout_alignParentEnd="true"
+        android:background="#00ffffff"
+        android:textColor="@color/button_text"
+        style="@style/Base.Widget.AppCompat.Button.Borderless" />
+
+</RelativeLayout>
+</RelativeLayout>

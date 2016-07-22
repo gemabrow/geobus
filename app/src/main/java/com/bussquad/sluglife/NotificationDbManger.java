@@ -117,6 +117,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
     // creates a database if a database does not already exist from the assets folder
     public void createDataBase()
     {
+        System.out.println("creating database");
         //If the database does not exist, copy it from the assets.
         boolean mDataBaseExist = checkDataBase();
         if(mDataBaseExist)
@@ -782,18 +783,6 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
     }
 
-    public boolean hasSchedule(int busStopId, String routeName){
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        try {
-            Cursor c = db.rawQuery("select " + "\"" + routeName + "\"" + " from bus_stop_schedule where ID_BUSSTOP=" + busStopId, null);
-            c.moveToFirst();
-            return true;
-        } catch (Exception ex){
-
-        }
-        return false;
-    }
 
 
     public List<String> getStopScheduleForRoute(int busStopId, String routeName){
@@ -883,6 +872,99 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
             }
         }
     }
+
+
+
+    // adds a column for the bus stop to the bus schedule database
+    public void addBusStopToScheduleDB(int busStopId){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("ID_BUSSTOP", busStopId);
+        db.insert("bus_stop_schedule",null,contentValues);
+        db.close();
+    }
+
+
+
+    // adds the schedule to the specified bus stop. Bus first checks if a row exists in the database
+    // for the bus stop. If it does not it will call addBusStopToScheduleDB which will add the
+    // bus stop to the database. Then it will add the schedule
+    public void addBusSchedule(int busStopId, String route, String schedule){
+
+        if(hasBusStopInDatabase(busStopId) == false){
+
+            // add the bus stop to the db
+            addBusStopToScheduleDB(busStopId);
+        }
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("ID_BUSSTOP", busStopId);
+        contentValues.put("\""+route+"\"" , schedule);
+        db.update("bus_stop_schedule", contentValues, "ID_BUSSTOP = ? ", new String[]{busStopId+""});
+        db.close();
+    }
+
+
+    // update nextStop and number of stops left for a given notification from the database
+    public boolean updateBusSchedule(int busStopId, String route, String schedule){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("\""+route+"\"", schedule);
+        db.update("bus_stop_schedule", contentValues, "ID_BUSSTOP = ? ", new String[]{busStopId+""});
+        return true;
+    }
+
+
+
+    public boolean hasLatestScheduleVersion(int stopid, String route){
+
+        return true;
+    }
+
+
+
+    // checks if the bus stop exists in the bus stop schedule databsase returns true if it does
+    // otherwise returns false
+    public boolean hasBusStopInDatabase(int busStopId){
+        SQLiteDatabase db = this.getReadableDatabase();
+        try {
+            Cursor c = db.rawQuery("select bus_stop_schedule where ID_BUSSTOP=" + busStopId, null);
+            c.moveToFirst();
+
+            // if the string is emtpy that means no bus schedule is set
+            if(c.getString(0).length() == 0){
+                return false;
+            }
+            return true;
+        } catch (Exception ex){
+            System.out.println("does not have bus stop");
+        }
+        return false;
+    }
+
+
+
+    // checks if the bus schedule exists
+    public boolean hasSchedule(int busStopId, String routeName){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        try {
+            Cursor c = db.rawQuery("select " + "\"" + routeName + "\"" + " from bus_stop_schedule where ID_BUSSTOP=" + busStopId, null);
+            c.moveToFirst();
+
+            // if the string is emtpy that means no bus schedule is set
+            if(c.getString(0).length() == 0){
+                return false;
+            }
+            return true;
+        } catch (Exception ex){
+            System.out.println(" does not have bus stop schedule");
+        }
+        return false;
+    }
+
 
 
 }
