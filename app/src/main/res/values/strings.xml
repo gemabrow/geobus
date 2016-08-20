@@ -217,4 +217,9 @@
     <string name="location_permission_title">Use Google\'s Location service?</string>
     <string name="location_permission_msg">Let Google help apps determine location. This means
         sending anonymous location data to Google, even when no apps are running</string>
+    <string name="no_schedule_available"> There is no bus schedule available for this route at this time
+    please try again later</string>
+    <string name="error_loading_schedule"> Unable to get bus schedule</string>
+    <string name="no_more_depart_times"> This route will not be arriving at this stop today</string>
+    <string name="holiday_no_buses">Due to todays holiday, this route wont be running today</string>
 </resources>

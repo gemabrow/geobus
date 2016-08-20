@@ -15,9 +15,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import com.bussquad.sluglife.DataObject;
 import com.bussquad.sluglife.NotificationDbManger;
@@ -33,7 +35,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class ScheduleFragment extends Fragment
 {
@@ -50,7 +55,7 @@ public class ScheduleFragment extends Fragment
     private boolean dataSet = false;
     private String eta;
     private TimeHelper timeHelper = new TimeHelper();
-
+    private String date;
 
 
 
@@ -78,6 +83,7 @@ public class ScheduleFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        System.out.println("on createview fragment");
         View layout = inflater.inflate(R.layout.fragment_schedule, container, false);
 
         // get bus stop id, this will be used to obtain the bus schedule from either the sqlite
@@ -119,43 +125,54 @@ public class ScheduleFragment extends Fragment
 
 
 
-
     // retrieves the bus schedule from the sqlite database, if there is no schedule it will show nothing
     public void loadBusSchedule(){
-        if(!dataSet) {
+//        if(!dataSet) {
 
             try {
 
+                System.out.println("has bus schedule: n + " + notifDb.hasSchedule(this.stopID,this.route));
 
                 // check if the bus schedule exists in the sqlite database
-                if(notifDb.hasSchedule(this.stopID,this.route)){
+                if(!notifDb.hasSchedule(this.stopID,this.route)){
                     notifDb.hasLatestScheduleVersion(this.stopID,this.route);
-                    DownloadBusSchedule busSchedule = new DownloadBusSchedule(this.stopID,this.route);
-                    busSchedule.execute();
+                    DownloadBusSchedule2 busSchedule2 = new DownloadBusSchedule2(this.stopID,this.route);
+                    busSchedule2.execute();
                 } else {
                     schedule = new ArrayList<>(notifDb.getStopScheduleForRoute(this.stopID, this.route));
                     setBusSchedule(schedule);
                 }
                 dataSet = true;
             } catch (Exception ex) {
+                System.out.println("error getting bus schedule");
                 FirebaseCrash.log("ScheduleFragment.java There was an error retriveing schedule information for " + route);
             }
-        }
+//        }
 
 
     }
 
     public void setBusSchedule(ArrayList<String> schedules){
 
+        listObject.clear();
+        viewType.clear();
         schedule = new ArrayList<>(schedules);
         try {
 
+            // there was an error retrieving the bus departures
             if(schedules == null){
                 FirebaseCrash.log("Bus schedule missing for stop " + route);
                 DataObject dataObject = new DataObject();
                 dataObject.setMainText("No Bus Schedule available for this Route");
                 listObject.add(dataObject);
                 viewType.add(4);
+                // there are no more bus departures at the stop for the given day
+            } else if(schedules.size() == 0){
+                DataObject dataObject = new DataObject();
+                dataObject.setMainText("There are no more depart times for this route at this time");
+                listObject.add(dataObject);
+                viewType.add(4);
+
             } else {
 
                 for (String route : schedules) {
@@ -171,8 +188,6 @@ public class ScheduleFragment extends Fragment
             mAdapter.notifyDataSetChanged();
 
         } catch (Exception ex){
-
-            System.out.println("error findinng closest time: " +  ex.getMessage());
             FirebaseCrash.report(ex);
         }
     }
@@ -184,17 +199,14 @@ public class ScheduleFragment extends Fragment
         this.route = route;
     }
 
-    private class DownloadBusSchedule extends AsyncTask<String,String,ArrayList<String>>    {
+    private class DownloadBusSchedule2 extends AsyncTask<String,String,ArrayList<String>>    {
         /* milliseconds */
-        public static final int CONNECTION_TIMEOUT=10000;
-        public static final int READ_TIMEOUT=15000;
 
         private int stopid;
         private String route;
 
-        //ProgressDialog pdLoading = new ProgressDialog(ScheduleFragment.this);
 
-        DownloadBusSchedule(int stopid, String route){
+        DownloadBusSchedule2(int stopid, String route){
             this.stopid = stopid;
             this.route = route;
         }
@@ -203,6 +215,7 @@ public class ScheduleFragment extends Fragment
             super.onPostExecute(schedules);
 
             setBusSchedule(schedules);
+
 
         }
 
@@ -214,24 +227,49 @@ public class ScheduleFragment extends Fragment
         @Override
         protected ArrayList<String> doInBackground(String... params) {
 
+            ArrayList<String> schedule = new ArrayList<>();
+
+            System.out.println("getting bus stop schedule from metro site");
             try {
-                URL url = new URL("http://ec2-54-186-252-123.us-west-2.compute.amazonaws.com/scripts/bus_schedule_data.php?routename=" + this.route
-                        +"&stopid="+this.stopid);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(CONNECTION_TIMEOUT);
-                conn.setConnectTimeout(READ_TIMEOUT);
-                conn.setRequestMethod("GET");
-                conn.setDoInput(true);
 
-                JsonFileReader jsonData = new JsonFileReader();
-                jsonData.readJsonStream(conn.getInputStream());
-                // set the bus schedule to the sqlite database
-                notifDb.addBusSchedule(this.stopid,this.route,jsonData.getRawData());
-                return jsonData.getData();
+                URL url = new URL("http://scmtd.com/en/routes/schedule-by-stop/"+stopid+"/" + date);
+                Document doc = Jsoup.parse(url,3000);
+                Element table = doc.select("table").get(0); //select the first table.
+                Elements rows = table.select("tr");
 
+
+
+
+                for (int i = 2; i < rows.size(); i++) { //first row is the col names so skip it.
+
+                    Element row = rows.get(i);
+                    Elements cols = row.select("td");
+                    Elements colh = row.select("th");
+
+                    // gets the column with the depart time
+                    if(colh.select("a").text().equalsIgnoreCase(route)){
+
+                        String tmpTime = cols.get(1).text().split(" ")[1];
+                        String finalTime = "";
+
+                        // clean up the text of the depart time
+                        if(!tmpTime.isEmpty()){
+                            if(tmpTime.contains("pm")){
+
+                                finalTime = tmpTime.replace("pm", " PM");
+                            } else {
+                                finalTime = tmpTime.replace("am", " AM");
+                            }
+                        }
+                        // add the depart time to the schedule list
+                        schedule.add(finalTime.trim());
+                    }
+
+                }
+                return schedule;
             }catch(Exception e){
-                System.out.println("error retrieving data");
-                return null;
+                Log.e("ERROR_debug",e.getMessage());
+                return schedule;
             } finally {
             }
 
@@ -241,16 +279,20 @@ public class ScheduleFragment extends Fragment
 
 
 
-
-
-
+    // set the eta for the next bus  depart time
     private void setEta(String eta){
-
 
         this.eta = eta;
     }
 
+
+
+    // get the ETA of the next bus stop
     public String  getETAofNextBus(){
+
+        if(schedule.size() == 0 ){
+            return "";
+        }
         long closestTime;
         long rt;
         closestTime = timeHelper.getClosestTimeInMillaseconds(schedule);
@@ -258,6 +300,35 @@ public class ScheduleFragment extends Fragment
         this.eta = timeHelper.getTimeRemainingAsString(rt);
         return this.eta;
 
+    }
+
+
+
+    // this function is called from the parent activity, this sets or updates the date so that the
+    // bus schedule can reflect the schedule of the date picked by the user
+    public void setDate( int year,int month, int day){
+
+        String date = "";
+        date += year+"-";
+        if(month < 10){
+            date += "0"+month+"-";
+        } else {
+            date +=month+"-";
+        }
+        if(day < 10){
+            date +="0"+day;
+        } else {
+            date +=day;
+        }
+        System.out.println("the new date is : " + date);
+        this.date = date;
+
+    }
+
+
+    // returns in the current date in the follign format "year-month-day"
+    public String getDate(){
+        return this.date;
     }
 
 }

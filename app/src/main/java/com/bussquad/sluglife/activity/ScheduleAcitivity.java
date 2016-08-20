@@ -60,7 +60,11 @@ public class ScheduleAcitivity extends AppCompatActivity implements
     private ViewPager viewPager;
     private String busStopName;
     private TextView txtEta;
+    private int day;
+    private int year;
+    private int month;
 
+    private int tab = 0;
 
     // Google map
     private GoogleMap mMap;
@@ -282,6 +286,9 @@ public class ScheduleAcitivity extends AppCompatActivity implements
             ScheduleFragment scheduleFragment = new ScheduleFragment();
             scheduleFragment.setArguments(bundle);
             scheduleFragment.setRoute(route);
+            scheduleFragment.setDate(Calendar.getInstance().get(Calendar.YEAR)
+                    ,Calendar.getInstance().get(Calendar.MONTH) + 1
+                    ,Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
             adapter.addFragment(scheduleFragment, route);
 
         }
@@ -294,7 +301,7 @@ public class ScheduleAcitivity extends AppCompatActivity implements
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        System.out.println(tab.getPosition());
+        this.tab =  tab.getPosition();
         String eta = adapter.getItem(tab.getPosition()).getETAofNextBus();
         txtEta.setText(eta);
 
@@ -362,10 +369,10 @@ public class ScheduleAcitivity extends AppCompatActivity implements
     // handle date picker stuff
     // sets the date for the calander picker that shows up above the list of schedules
     private void setDate(){
-        int month = Calendar.getInstance().get(Calendar.MONTH); // prints 10 (October)
-        int dayOfMonth = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-        btnCalendarPicker.setText(monthOfTheYear[month] + " " + dayOfMonth + ", " + year);
+        this.month = Calendar.getInstance().get(Calendar.MONTH); // prints 10 (October)
+        this.day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        this.year = Calendar.getInstance().get(Calendar.YEAR);
+        btnCalendarPicker.setText(monthOfTheYear[month] + " " + day + ", " + year);
     }
 
 
@@ -377,6 +384,7 @@ public class ScheduleAcitivity extends AppCompatActivity implements
         CalendarDatePickerDialogFragment cdp = new CalendarDatePickerDialogFragment()
                 .setOnDateSetListener(ScheduleAcitivity.this)
                 .setFirstDayOfWeek(Calendar.SUNDAY)
+                .setPreselectedDate(year,month,day)
                 .setThemeLight();
         cdp.show(getSupportFragmentManager(), FRAG_TAG_DATE_PICKER);
     }
@@ -386,7 +394,22 @@ public class ScheduleAcitivity extends AppCompatActivity implements
 
     @Override
     public void onDateSet(CalendarDatePickerDialogFragment dialog, int year, int month, int dayOfMonth) {
+
+        // update the global date
+        this.year = year;
+        this.month = month;
+        this.day = dayOfMonth;
+
+        // set the text of the button to reflect the day that the user clicked on the calendar
         btnCalendarPicker.setText(monthOfTheYear[month] + " " + dayOfMonth + ", " + year);
+
+        // update the date for each schedule fragment
+        for(int count = 0 ; count < tabLayout.getTabCount(); count++){
+            adapter.getItem(count).setDate(year,month+1,dayOfMonth);
+        }
+        // manually update currently selected route
+        adapter.getItem(tab).loadBusSchedule();
+
     }
 
 

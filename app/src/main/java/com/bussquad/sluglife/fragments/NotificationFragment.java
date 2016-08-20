@@ -130,7 +130,7 @@ public class NotificationFragment extends Fragment implements AdapterView.OnItem
 
 
 
-        ArrayAdapter<String> adp =  new ArrayAdapter<String>(getContext(),R.layout.spinner_item,newRoutes);
+        ArrayAdapter<String> adp = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, newRoutes);
 
         busRouteAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
@@ -198,49 +198,9 @@ public class NotificationFragment extends Fragment implements AdapterView.OnItem
     }
 
 
-
-
-// when button is clicked it can enable or unenable Notifications Option
-    public void onEnableNotification(View view) {
-
-        System.out.println("Clicked!!");
-        // if notifications is not enable change notifications text to enable form
-        // else notifications are set to disable thus disable notifications.
-        if(!notiEnabled){
-
-            btnNotification.setImageResource(R.drawable.ic_check_box_black_24dp);
-            txtNotification.setTextColor(Color.parseColor("#d9000000"));
-            txtSubNotifcation.setTextColor(Color.parseColor("#8C000000"));
-            txtNotiOption.setTextColor(Color.parseColor("#d9000000"));
-            txtBusRoute.setTextColor(Color.parseColor("#d9000000"));
-            txtNotificationType.setTextColor(Color.parseColor("#d9000000"));
-            busStopSpinner.setEnabled(true);
-            loopBusSpinner.setEnabled(true);
-            btnSetNotification.setEnabled(true);
-
-            notiEnabled = true;
-        }else{
-            txtNotification.setTextColor(Color.parseColor("#61000000"));
-            txtSubNotifcation.setTextColor(Color.parseColor("#61000000"));
-            txtNotiOption.setTextColor(Color.parseColor("#61000000"));
-            txtBusRoute.setTextColor(Color.parseColor("#61000000"));
-            txtNotificationType.setTextColor(Color.parseColor("#61000000"));
-            busStopSpinner.setEnabled(false);
-            loopBusSpinner.setEnabled(false);
-            btnSetNotification.setEnabled(false);
-            btnNotification.setImageResource(R.drawable.ic_check_box_outline_blank_black_24dp);
-            notiEnabled = false;
-        }
-
-
-    }
-
-
-
-
     // checks the current options set by the user and the sets the notificaitons
     // adds notification to a database that is being checked by the runnable in the actvity class
-    public void startNotification(View view){
+    public void startNotification(){
 
         // populate information from the currently selected options
 
@@ -268,7 +228,7 @@ public class NotificationFragment extends Fragment implements AdapterView.OnItem
     }
 
 
-    public void cancelNotification(View view){
+    public void cancelNotification(){
 
         System.out.println("deleting row notifications in database " + notifDb.numberOfNotifications());
         notifDb.deleteRow(busStopId);
@@ -290,10 +250,10 @@ public class NotificationFragment extends Fragment implements AdapterView.OnItem
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSetNotification:
-                startNotification(v);
+                startNotification();
                 break;
             case R.id.btnCancelNotification:
-                cancelNotification(v);
+                cancelNotification();
                 break;
             case R.id.btnstopService:
                 stopServiceRunning(v);

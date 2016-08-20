@@ -63,7 +63,6 @@ public class JsonFileReader {
             String name = reader.nextName();
             if (name.equals("schedule")) {
                 this.rawData = reader.nextString();
-                System.out.println("text data:  " + this.rawData);
         } else {
                 reader.skipValue();
             }

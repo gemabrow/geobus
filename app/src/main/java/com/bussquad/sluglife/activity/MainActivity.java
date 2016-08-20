@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -26,6 +27,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -64,6 +66,11 @@ import com.bussquad.sluglife.Manifest;
 import com.bussquad.sluglife.MapObject;
 import com.bussquad.sluglife.OpersFacility;
 import com.bussquad.sluglife.adapters.MapInfoWindowAdapter;
+import com.bussquad.sluglife.fragments.BusMapFragment;
+import com.bussquad.sluglife.fragments.DiningFragment;
+import com.bussquad.sluglife.fragments.EventFragment;
+import com.bussquad.sluglife.fragments.LibraryFragment;
+import com.bussquad.sluglife.fragments.OpersFragment;
 import com.bussquad.sluglife.fragments.PermissionDialog;
 import com.bussquad.sluglife.parser.JsonEventJsonParser;
 import com.bussquad.sluglife.parser.JsonOpersFacilityParser;
@@ -112,18 +119,23 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.bussquad.sluglife.fragments.MapFragment.*;
+
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,
         TabLayout.OnTabSelectedListener,
         GoogleMap.OnInfoWindowClickListener,
         ImageButton.OnClickListener,
-        GoogleMap.OnMarkerClickListener, AdapterView.OnItemClickListener,
-PermissionDialog.PermissionDialogListner{
+        GoogleMap.OnMarkerClickListener,
+        AdapterView.OnItemClickListener,
+        PermissionDialog.PermissionDialogListner,
+        OnFragmentInteractionListener{
 
 
     private static final int PERMISSION_REQUEST_LOCATION = 1 ;
@@ -136,9 +148,8 @@ PermissionDialog.PermissionDialogListner{
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private ImageButton btnSwitchView;
-    private ImageButton btnFilter;
+    private MapViewPager viewPager;
+    private ViewPagerAdapter vAdapter;
 
     private GoogleApiClient client;
     private Location mLastLocation;
@@ -153,12 +164,6 @@ PermissionDialog.PermissionDialogListner{
     private CameraPosition lstCameraPosition;
 
     // list of objects retrieved from json files
-    private ArrayList<BusStop> busStops;
-    private ArrayList<Library> libraries;
-    private ArrayList<BikeRack> bikeRacks;
-    private ArrayList<Dining> dining;
-    private ArrayList<Event> events;
-    private ArrayList<OpersFacility> opers;
 
     private ArrayList<MapObject> displayedMarkers;
     private ArrayAdapter<String> mAdapter;
@@ -168,22 +173,14 @@ PermissionDialog.PermissionDialogListner{
 
 
     // Parser
-    private final JsonFileReader busStopReader = new JsonFileReader();
-    private final JsonBikeParkingFileParser bikeReader = new JsonBikeParkingFileParser();
-    private final JsonDiningFileParser dinReader = new JsonDiningFileParser();
-    private final JsonLibraryFileParser libReader = new JsonLibraryFileParser();
-    private JsonEventJsonParser eventReader = new JsonEventJsonParser();
-    private JsonOpersFacilityParser facilityReader = new JsonOpersFacilityParser();
+
 
 
     // hash maps
-    private Map<String, Marker> visibleMarkers = new HashMap<String, Marker>();
-    private Map<Event,Marker> eventMarkers = new HashMap<>();
     private Map<Marker,MapObject>objectMarkers = new HashMap<>();
     private Map<String, Marker> busMarkers = new HashMap<String, Marker>();
     private Map<String,ArrayList<MapObject>> mapObjects = new HashMap<>();
 
-    private Boolean cardMode = false;
     NavListFragment eventList;
     private ArrayList<Integer> cardTypes;
 
@@ -194,7 +191,6 @@ PermissionDialog.PermissionDialogListner{
     private NetworkService networkService;
     private NotificationService notificationService;
     private Boolean netBound = false;
-    private Boolean notifBound = false;
     private int lastTimeStamp = -1;
 
 
@@ -213,7 +209,7 @@ PermissionDialog.PermissionDialogListner{
     private NotificationDbManger notifDb;
 
     // used to esablish a connection with the network service if network service is already running
-    // it also makes it possible to detach from the service when the MapActivity isStoped
+    // it also makes it possible to detach from the service when the MapActivity isStopedlo
     private ServiceConnection serviceConnection = new ServiceConnection() {
 
         @Override
@@ -251,6 +247,12 @@ PermissionDialog.PermissionDialogListner{
     private static final String APP_VERSION = "appVersion";
 
     static final String TAG = "Register Activity";
+    private int dbversion;
+
+
+    private ImageButton btnFilter;
+    private ImageButton btnSwitchView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -288,7 +290,7 @@ PermissionDialog.PermissionDialogListner{
         ViewGroup header = (ViewGroup) inflater.inflate(R.layout.nav_header_main, mDrawerList, false);
 
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = (MapViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -306,9 +308,9 @@ PermissionDialog.PermissionDialogListner{
         mapFragment.getExtendedMapAsync(this);
 
         // load assets from json files
+        System.out.println("loading data");
         loadJsonFromAsset();
 
-        startBackgroundData();
         // set button listners
         btnSwitchView.setOnClickListener(this);
         mDrawerList.setOnItemClickListener(this);
@@ -336,6 +338,8 @@ PermissionDialog.PermissionDialogListner{
 
         notifDb.createDataBase();
     }
+
+
 
 
 
@@ -523,6 +527,10 @@ PermissionDialog.PermissionDialogListner{
     @Override
     public void onStart(){
         super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                mMessageReceiver, new IntentFilter("data_ready"));
+
+
         startBackgroundData();
     }
 
@@ -534,7 +542,7 @@ PermissionDialog.PermissionDialogListner{
     public void onTabSelected(TabLayout.Tab tab) {
 
         mMap.clear();
-        viewPager.setCurrentItem(tab.getPosition());
+        viewPager.setCurrentItem(tab.getPosition(),true);
 
         if (currentTab != tab.getPosition()) {
             previousTab = currentTab;
@@ -542,34 +550,20 @@ PermissionDialog.PermissionDialogListner{
             if (previousTab != currentTab  && previousTab == 4 ){
                 zoomToLocation(cameraPosition,initalCameraZoom);
             }
-            switch (tab.getPosition()) {
+            MapFragment mapFragment = vAdapter.getItem(currentTab);
+            System.out.println("is data loaded" + mapFragment.isDataLoaded());
+            if(mapFragment.isDataLoaded()){
+                System.out.println("on tab selected is it visible" + mapFragment.isVisible());
+                if(mapFragment.isZoomEnabled()){
+                    zoomToLocation(mapFragment.getCameraLocation(),mapFragment.getZoomLevel());
+                }
+                drawMarkers(mapFragment.getMapObjects(),mapFragment.isMarkerVisble(),mapFragment.isIconGenEnabled());
+                updateCardView();
 
-                case 0:
-                    drawMarkers(busStops,true,false);
-                    break;
-                case 1:
-                    drawMarkers(dining,true,false);
-                    break;
-//                case 2:
-//                    drawMarkers(bikeRacks,true,false);
-//                    break;
-                case 2:
-                    drawMarkers(libraries,true,false);
-                    break;
-                case 3:
-                    // draw events on map
-                    System.out.println("4th case");
-                    drawEventMarkers();
-                    break;
-                case 4:
-                    System.out.println("5th case");
-                    // switch to event view
-                    drawOperFacilities();
-                    break;
+            } else{
 
+              // wait until the data loads, display a load screen
             }
-            // update the cards in the list view
-            updateCardView();
         }
 
 
@@ -595,15 +589,15 @@ PermissionDialog.PermissionDialogListner{
 
 
 
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new MapFragment(), "Campus Shuttles");
-        adapter.addFrag(new MapFragment(), "Dining");
+    private void setupViewPager(MapViewPager viewPager) {
+        vAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        vAdapter.addFrag(new BusMapFragment(), "Campus Shuttles");
+        vAdapter.addFrag(new DiningFragment(), "Dining");
 //        adapter.addFrag(new MapFragment(), "Bike Parking");
-        adapter.addFrag(new MapFragment(), "Library");
-        adapter.addFrag(new MapFragment(), "Campus Events");
-        adapter.addFrag(new MapFragment(), "OPERS");
-        viewPager.setAdapter(adapter);
+        vAdapter.addFrag(new LibraryFragment(), "Library");
+        vAdapter.addFrag(new EventFragment(), "Campus Events");
+        vAdapter.addFrag(new OpersFragment(), "OPERS");
+        viewPager.setAdapter(vAdapter);
     }
 
 
@@ -673,24 +667,19 @@ PermissionDialog.PermissionDialogListner{
 
     @Override
     public void onClick(View v) {
-
-        System.out.println("drawer item clicked!");
         switch (v.getId()){
             case R.id.btnSwitchView:
+                System.out.println("switching to card view");
                 switchToListView();
                 break;
             case R.id.btnFilter:
                 break;
 
         }
+
     }
 
-    private void createCrash(){
-//        FirebaseCrash.report(new Exception("My first Android non-fatal error"));
-//        FirebaseCrash.logcat(Log.ERROR, TAG, "crash caused");
 
-        throw new NullPointerException("Fake null pointer exception");
-    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -757,7 +746,7 @@ PermissionDialog.PermissionDialogListner{
 
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<MapFragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
         public ViewPagerAdapter(FragmentManager manager) {
@@ -765,7 +754,7 @@ PermissionDialog.PermissionDialogListner{
         }
 
         @Override
-        public Fragment getItem(int position) {
+        public MapFragment getItem(int position) {
             return mFragmentList.get(position);
         }
 
@@ -780,7 +769,7 @@ PermissionDialog.PermissionDialogListner{
 
 
 
-        public void addFrag(Fragment fragment, String title) {
+        public void addFrag(MapFragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
         }
@@ -790,6 +779,7 @@ PermissionDialog.PermissionDialogListner{
             return mFragmentTitleList.get(position);
         }
     }
+
 
 
 
@@ -833,7 +823,13 @@ PermissionDialog.PermissionDialogListner{
 
         mMap.setOnInfoWindowClickListener(this);
         mMap.setInfoWindowAdapter(new MapInfoWindowAdapter(getBaseContext()));
-        drawMarkers(busStops,true,false);
+
+
+        System.out.println("loading bus stops" + vAdapter.getItem(0).getMapObjects().size());
+        System.out.println("is it visible" + vAdapter.getItem(0).isVisible());
+            drawMarkers(vAdapter.getItem(0).getMapObjects(),
+                    vAdapter.getItem(0).isMarkerVisble(),
+                    vAdapter.getItem(0).isIconGenEnabled());
 
     }
 
@@ -888,7 +884,7 @@ PermissionDialog.PermissionDialogListner{
             objectMarkers.clear();
         }
 
-        if(enableIconGen){
+        if(vAdapter.getItem(currentTab).isIconGenEnabled()){
             iconGen = new IconGenerator(this);
             iconGen.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_blank_icon,getTheme()));
           //  iconGen.setColor(R.color.windowBackground);
@@ -901,6 +897,7 @@ PermissionDialog.PermissionDialogListner{
             } else {
                 icon = BitmapDescriptorFactory.fromResource(temp.getMapImgResource());
             }
+            System.out.println("adding display marker");
             Marker marker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(temp.getLatitude(), temp.getLongitude()))
                     .title(temp.getName())
@@ -915,43 +912,6 @@ PermissionDialog.PermissionDialogListner{
 
 
 
-    public void drawEventMarkers(){
-        // Tag used to cancel the request
-        String  tag_string_req = "string_req";
-        String url = "https://events.ucsc.edu/feed/featured.json";
-
-//        pDialog.setMessage("Loading...");
-//        pDialog.show();
-
-
-        StringRequest strReq = new StringRequest(Request.Method.GET,
-                url, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, response.toString());
-//                pDialog.hide();
-                loadJsonEventAsset(response.toString());
-                if(events != null){
-
-                    drawMarkers(events,true,false);
-                    updateCardView();
-                }
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
-//                pDialog.hide();
-            }
-        });
-
-//        requestQueue.add(strReq);
-
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-    }
 
 
 
@@ -969,114 +929,16 @@ PermissionDialog.PermissionDialogListner{
 
 
 
-    public void drawOperFacilities(){
-        String url = "http://ec2-54-186-252-123.us-west-2.compute.amazonaws.com/facility_count.json";
-        String tag_string_req = "getOperFacilityCount";
-        zoomToLocation(new LatLng(36.99434448480415,-122.05450728535652),17.93418);
-        StringRequest strReq = new StringRequest(Request.Method.GET,
-                url, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-            //    Log.d(TAG, response.toString());
-                loadFacilityJsonData(response.toString());
-                if(opers != null){
-
-
-                    drawMarkers(opers,true,true);
-                    updateCardView();
-
-                }
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
-            }
-        });
-
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-    }
-
-
-
-
-
-    private void loadFacilityJsonData(String input){
-        try{
-            InputStream in = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
-            facilityReader.ReadJsonFile(in);
-            opers = new ArrayList<>(facilityReader.getOpersFacilities());
-
-
-
-        }catch(Exception ex){
-            Log.e(TAG,"Error: " + ex.getMessage());
-        }
-    }
-
-
-
-
-    private void loadJsonEventAsset(String input){
-        try{
-            InputStream in = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
-            eventReader.ReadJsonFile(in,getBaseContext());
-            events = new ArrayList<>(eventReader.getEvents());
-
-
-        }catch(Exception ex){
-            Log.e(TAG,"Error: " + ex.getMessage());
-        }
-
-    }
-
-
-
-
-    // loads bus stops specified by json file
+    // load all data for each tab that is enabled by the user
     private void loadJsonFromAsset() {
-        InputStream in;
-        try {
-
-            Log.i("MainActivity","loadJsonFromAssets() Reading Bus Stop from Json file");
-            // fills the array of bus stop of bus stop locations
-            in = getAssets().open("UCSC_Westside_Bus_Stops.json");
-            busStopReader.readBusStopJsonStream(in);
-            busStops = new ArrayList<>(busStopReader.getBusStops());
 
 
-            Log.i("MainActivity","loadJsonFromAssets() Reading Bike Rack from Json files");
-            // fills the array list with bike parking locations
-            in = getAssets().open("bikeRacks.json");
-            bikeReader.ReadJsonFile(in);
-            bikeRacks = new ArrayList<>(bikeReader.getBikeParking());
-
-
-            Log.i("MainActivity","loadJsonFromAssets() Reading Libraries from Json files");
-            // fills the array list with library locations
-            in = getAssets().open("libraries.json");
-            libReader.ReadJsonFile(in);
-            libraries = new ArrayList<>(libReader.getLibraries());
-            Log.i("MainActivity", "loadJsonFromAssets() number of libraries:" + libraries.size());
-
-
-            Log.i("MainActivity","loadJsonFromAssets() Reading Dining from Json files");
-            // fills thee array list with dining locations retrieved from the json file
-            in = getAssets().open("dining.json");
-            dinReader.ReadJsonFile(in);
-            dining = new ArrayList<>(dinReader.getDining());
-            Log.i("MainActivity", "loadJsonFromAssets() number of dining locations:" + dining.size());
-
-
-        } catch (IOException ex) {
-
-            Log.e("MainActivity", "loadJsonFromAssets()"+ ex.getMessage() );
-
-
+        for(int count = 0 ; count < tabLayout.getTabCount(); count++){
+            vAdapter.getItem(count).loadData(this);
+            vAdapter.getItem(count).setTabPosition(count);
         }
+
+
     }
 
 
@@ -1130,42 +992,15 @@ PermissionDialog.PermissionDialogListner{
     @Override
     public void onInfoWindowClick(Marker marker) {
 
-        int tab = tabLayout.getSelectedTabPosition();
         lstCameraPosition = mMap.getCameraPosition();
-        Intent myIntent;
-        switch(tab){
-            case 0:
-                myIntent = new Intent(MainActivity.this, ScheduleAcitivity.class);
-                myIntent.putExtra("bus_stop_name", marker.getTitle()); //Optional parameters
-                System.out.println("bus stop id " + objectMarkers.get(marker).getObjectID());
-                myIntent.putExtra("BUSSTOPID", objectMarkers.get(marker).getObjectID());
-                myIntent.putExtra("COORDINATES", objectMarkers.get(marker).getLatLng());
-                MainActivity.this.startActivity(myIntent);
-                overridePendingTransition(R.anim.slide_in_left,R.anim.fade_out_in_place);
-                break;
-            case 1:
-                myIntent = new Intent (MainActivity.this,DiningActivity.class);
-                myIntent.putExtra("DINING_NAME",marker.getTitle());
-                MainActivity.this.startActivity(myIntent);
-                overridePendingTransition(R.anim.slide_in_left,R.anim.fade_out_in_place);
-                break;
-            case 2:
-                myIntent = new Intent (MainActivity.this,LibraryActivity.class);
-                myIntent.putExtra("LIBRARY_NAME",marker.getTitle());
-                MainActivity.this.startActivity(myIntent);
-                overridePendingTransition(R.anim.slide_in_left,R.anim.fade_out_in_place);
-                break;
-            case 3:
-                myIntent = new Intent (MainActivity.this,EventActivity.class);
-                myIntent.putExtra("EVENTID",objectMarkers.get(marker).getObjectID());
-                MainActivity.this.startActivity(myIntent);
-                overridePendingTransition(R.anim.slide_in_left,R.anim.fade_out_in_place);
-                break;
+        MapFragment mapFragment = vAdapter.getItem(currentTab);
+        if(mapFragment.isActivityStartable()){
+            Intent mIntent = mapFragment.getMapFragmentIntent(this,marker.getTitle(),objectMarkers.get(marker));
+            MainActivity.this.startActivity(mIntent);
+            overridePendingTransition(R.anim.slide_in_left,R.anim.fade_out_in_place);
         }
 
-
     }
-
 
 
 
@@ -1174,127 +1009,26 @@ PermissionDialog.PermissionDialogListner{
     public void switchToListView (){
         Log.i("MainActivity", "switching fragments");
 
-        if(cardMode == false){
-            cardMode = true;
+        if(vAdapter.getItem(currentTab).isCardMode() == false){
+            vAdapter.getItem(currentTab).setCardMode(true);
             btnSwitchView.setImageResource(R.drawable.ic_map_black_24dp);
             Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList("OBJECT_LIST", getData());
+            bundle.putParcelableArrayList("OBJECT_LIST",getData());
             bundle.putIntegerArrayList("TYPE_LIST",cardTypes);
-
-            if(currentTab == 0){
-                getClosestStops();
-
-            }
 
             eventList = new NavListFragment();
             eventList.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.map,eventList).commit();
+            System.out.println("start card view fragment");
         }else{
-            cardMode = false;
+            vAdapter.getItem(currentTab).setCardMode(false);
             btnSwitchView.setImageResource(R.drawable.ic_format_list_bulleted_black_24dp);
+
             getSupportFragmentManager().beginTransaction().remove(eventList).commit();
         }
 
     }
 
-
-
-
-    // returns the closest bus stops to the user based on the specified distance
-    public ArrayList<BusStop> getClosestStops(){
-        LatLng userLoc;
-        double distance;
-        ArrayList<BusStop> closestStops =  new ArrayList<>();
-
-        for(BusStop stop : busStops){
-//             userLoc =  new LatLng(mMap.getMyLocation().getLatitude(),mMap.getMyLocation().getLongitude());
-            userLoc =  new LatLng(37.000084,-122.062960); // testing location
-            distance = SphericalUtil.computeDistanceBetween(userLoc,stop.getLocation());
-            if(distance < 200 ){
-                closestStops.add(stop);
-                System.out.println(stop.getName());
-            }
-        }
-
-//        if(closestStops)
-        getEta(closestStops.get(0));
-        return closestStops;
-    }
-
-    public void getEta(BusStop stop){
-        System.out.println("calculating eta: ");
-
-    /*    for (String route : stop.getBusses()){
-            if(activeBusses.containsKey(route)){
-                if(activeBusses.get(route).size() >0){
-                    findCLosestBus(activeBusses.get(route), stop.getObjectID());
-                }
-            }
-        }
-        */
-    }
-
-
-
-
-    // finds the closes buses given the route and bus to the bus stop
-    public void findCLosestBus(ArrayList<Bus> busses, int stopID){
-
-        int closestBus = 0;                         // stores the index of the closes bus thus far
-        double tmpD = 0.0;
-        double clstBus = 0.0;
-        int count = 0;
-        for (Bus bus : busses)        {
-            tmpD = calculateTotalDistance(bus.direction.toUpperCase(), bus.getLocaiton(),stopID);
-
-            if(tmpD >= clstBus){
-                clstBus = tmpD;
-                closestBus = count;
-            }
-            count++;
-        }
-
-        System.out.println("from bus stop: " + notifDb.getStopName(stopID));
-        System.out.println("The closest bus is: " + busses.get(closestBus).bus_id + " of route " + busses.get(closestBus).direction);
-        System.out.println("thee distance is: " + clstBus);
-
-    }
-
-
-
-
-    private double calculateTotalDistance(String route, LatLng busLocation,int stopID){
-        boolean reachedBus =  false;
-        double totalDistance = 0.0;
-        int maxCount = 0;
-        while(!reachedBus && maxCount < 32) {
-
-            // if bus is in between the bus stops measure the eta of between the bus stop to the user
-            // otherwise get its estimated eta
-            LatLng curStop = notifDb.getLocation(stopID);            // get LatLng of current stop
-            stopID  = notifDb.getNextBusStopId(stopID,route,1);             // get the next stopID
-            LatLng nextStop = notifDb.getLocation(stopID);           // get LatLng of next stop
-
-            double distbetween = SphericalUtil.computeDistanceBetween(curStop, nextStop);
-            double toBusNextStop = SphericalUtil.computeDistanceBetween(curStop, busLocation);
-            double toBusCurStop = SphericalUtil.computeDistanceBetween(nextStop, busLocation);
-
-
-            // if the bus is in between the two bus stops then get the distance from the current
-            // stop to the bus otherwise get the distance between the bus stops
-            if(distbetween > toBusCurStop && distbetween > toBusNextStop){
-                System.out.println("Reached the end");
-                totalDistance += toBusCurStop;
-                reachedBus = true;                                  // reached the bus
-            } else {
-                System.out.println(" calculating between bus stops ");
-                totalDistance += distbetween;
-            }
-
-            maxCount++;
-        }
-        return  totalDistance;
-    }
 
 
 
@@ -1519,4 +1253,25 @@ PermissionDialog.PermissionDialogListner{
         return false;
     }
 
+
+
+
+    // Our handler for received Intents. This will be called whenever an Intent
+    // with an action named "custom-event-name" is broadcasted.
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // TODO Auto-generated method stub
+            // Get extra data included in the Intent
+            Boolean isReady = intent.getBooleanExtra("loaded",true);
+            int tabPosition = intent.getIntExtra("tab_position",-1);
+            System.out.println("tabposition: + " + tabPosition);
+            System.out.println("recived messege and isready = " + isReady);
+            if(isReady && currentTab == tabPosition ){
+                MapFragment mapFragment = vAdapter.getItem(currentTab);
+                drawMarkers(mapFragment.getMapObjects(),mapFragment.isMarkerVisble(),mapFragment.isIconGenEnabled());
+                updateCardView();
+            }
+        }
+    };
 }

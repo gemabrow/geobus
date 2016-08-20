@@ -887,6 +887,33 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
 
+    public void addBusScheduleArray(int busStopId, String route, ArrayList<String> schedule){
+        if(hasBusStopInDatabase(busStopId) == false){
+
+            // add the bus stop to the db
+            addBusStopToScheduleDB(busStopId);
+        }
+
+        // concat the array list of bus bus schedules
+        String bus_schedule = "";
+        int count = 0;
+        for (String tmp : schedule){
+            bus_schedule += tmp;
+            if(count < schedule.size()){
+                bus_schedule +=";";
+            }
+            count++;
+        }
+        System.out.println("bus schedule: " + bus_schedule);
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("ID_BUSSTOP", busStopId);
+        contentValues.put("\""+route+"\"" , bus_schedule);
+        db.update("bus_stop_schedule", contentValues, "ID_BUSSTOP = ? ", new String[]{busStopId+""});
+        db.close();
+    }
+
+
     // adds the schedule to the specified bus stop. Bus first checks if a row exists in the database
     // for the bus stop. If it does not it will call addBusStopToScheduleDB which will add the
     // bus stop to the database. Then it will add the schedule

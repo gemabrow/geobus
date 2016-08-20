@@ -129,7 +129,6 @@ public class NavListFragment extends Fragment {
 
     // updates the data currently in the recycle view adatper
     public void updateRecycleViewData(ArrayList<DataObject> dataList, ArrayList<Integer> typeList){
-        System.out.println("loading data");
         mAdapter.swap(dataList);
         mAdapter.swapTypeList(typeList);
     }

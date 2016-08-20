@@ -95,9 +95,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TextView mainText;
         TextView additionalInfo;
         ImageView iconImage;
-
+        private final Context context;
         public GeneralViewHolder(View v){
             super(v);
+            this.context = v.getContext();
             this.cv = (CardView)v.findViewById(R.id.genCardView);
             this.name = (TextView) v.findViewById(R.id.item_name);
             this.mainText = (TextView) v.findViewById(R.id.next_bus);
@@ -255,7 +256,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 //        View view = inflater.inflate(R.layout.general_card_view,parent,false);
 //        DataObjectHolder holder = new DataObjectHolder(view);
 //        return holder;
-
         View view;
         switch (viewType){
             case EVENT:
@@ -337,12 +337,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 holder4.schedule_Time.setText(mDataset.get(position).getMainText());
                 break;
 
-            default:
-                GeneralViewHolder dHolder = (GeneralViewHolder) viewHolder;
+            case GENERAL:
+                final GeneralViewHolder dHolder = (GeneralViewHolder) viewHolder;
                 dHolder.iconImage.setImageResource(mDataset.get(position).getIconId());
                 dHolder.name.setText(mDataset.get(position).getHeaderText());
                 dHolder.mainText.setText(mDataset.get(position).getMainText());
                 dHolder.additionalInfo.setText(mDataset.get(position).getSubText());
+                break;
+            default:
+                break;
 
         }
 

@@ -36,14 +36,14 @@
             app:tabMode="scrollable"
             app:tabGravity="fill"/>
     </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.view.ViewPager
-    android:id="@+id/viewpager"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    <com.bussquad.sluglife.activity.MapViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_below="@+id/view"
         android:layout_alignBottom="@+id/view" />
+
 
     <fragment
         android:id="@+id/map"
