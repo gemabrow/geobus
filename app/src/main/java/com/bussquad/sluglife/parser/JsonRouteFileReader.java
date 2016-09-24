@@ -4,19 +4,23 @@ import android.util.JsonReader;
 import android.util.Log;
 
 import com.bussquad.sluglife.MapObject;
+import com.bussquad.sluglife.Route;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by Jose on 4/7/2016.
+ * Created by Jose on 8/31/2016.
  */
-public class JsonMapObjectFileReader {
+public class JsonRouteFileReader {
 
-    ArrayList<MapObject> mapObjects;
+
+    ArrayList<Route> routes;
 
     public void ReadJsonFile(InputStream in) throws IOException {
 
@@ -28,7 +32,7 @@ public class JsonMapObjectFileReader {
 
     // Returns A list of BusStops
     private List readDiningArray(JsonReader reader) throws IOException {
-        this.mapObjects = new ArrayList<>();
+        this.routes = new ArrayList<>();
 
         // reads in a bracket{
         reader.beginObject();
@@ -38,11 +42,11 @@ public class JsonMapObjectFileReader {
         reader.beginArray();
         while (reader.hasNext()) {
 
-            mapObjects.add(readLibraryInfo(reader));
+            routes.add(readRoute(reader));
         }
         // reads in a a brace ]
         reader.endArray();
-        return mapObjects;
+        return routes;
     }
 
 
@@ -51,12 +55,12 @@ public class JsonMapObjectFileReader {
 
 
     // reads in one bus stop from the json file at a time and returns a new BusStop Object
-    private MapObject readLibraryInfo(JsonReader reader) throws IOException {
-        Log.i("JsonLibraryFileParser", "readLibraryInfo():  reading library.json");
+    private Route readRoute(JsonReader reader) throws IOException {
+        Log.i("JsonRouteFileReader", "readRoute():  reading route_list.json");
         String name = "";
-        double latitude = 0;
-        double longitude = 0;
-        String id = "";
+        String routeNumber = "";
+        String temp = "";
+        int id = -1;
 
         // reads in a bracket {
         reader.beginObject();
@@ -65,22 +69,27 @@ public class JsonMapObjectFileReader {
         // key strings such as name of bus stop, latitude, longitude or busses it stores it to create a Dining Object
         while (reader.hasNext()) {
             String token = reader.nextName();
-            if (token.equals("name")) {
+            if (token.equals("id")) {
+                id = reader.nextInt();
+            } else if (token.equals("route_name")) {
                 name = reader.nextString();
-            } else if (token.equals("latitude")) {
-                latitude = reader.nextDouble();
-            } else if(token.equals("longitude")){
-                longitude = reader.nextDouble();
-            } else if(token.equals("id")){
-                id = reader.nextString();
+            } else if(token.equals("route_number")){
+                routeNumber = reader.nextString();
+            } else if(token.equals("stops")){
+                temp = reader.nextString();
+
             }else {
                 reader.skipValue();
             }
         }
         //reads in a closing bracket }
         reader.endObject();
-        return new MapObject(id,name,latitude,longitude);
+        return new Route(id,name,routeNumber,temp);
     }
 
 
+
+    public ArrayList<Route> getRoutes(){
+        return this.routes;
+    }
 }

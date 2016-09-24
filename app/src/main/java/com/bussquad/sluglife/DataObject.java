@@ -16,7 +16,7 @@ public class DataObject implements Parcelable{
     private static final String KEY_RESOURCEID = "ID";
     private static final String KEY_IMAGEURL ="IMGURL";
 
-    private int objectid = -1;
+    private String objectid = "";
     private int iconId;
     private String imgUrl;
     private String headerText;
@@ -27,7 +27,7 @@ public class DataObject implements Parcelable{
 
     }
 
-    public DataObject(int objectid,int resourceId, String headerText, String mainText, String subText){
+    public DataObject(String objectid,int resourceId, String headerText, String mainText, String subText){
         this.objectid = objectid;
         this.iconId = resourceId;
         this.headerText = headerText;
@@ -105,14 +105,14 @@ public class DataObject implements Parcelable{
 
 
 
-    public void setObjectid(int objectid){
+    public void setObjectid(String objectid){
         this.objectid = objectid;
     }
 
 
 
 
-    public int getObjectid(){
+    public String getObjectid(){
         return objectid;
     }
     @Override
@@ -132,7 +132,7 @@ public class DataObject implements Parcelable{
         bundle.putString(KEY_MAIN,mainText);
         bundle.putString(KEY_SUBTEXT,subText);
         bundle.putString(KEY_IMAGEURL,imgUrl);
-        bundle.putInt(KEY_ID,objectid);
+        bundle.putString(KEY_ID,objectid);
 
         dest.writeBundle(bundle);
 
@@ -149,7 +149,7 @@ public class DataObject implements Parcelable{
 
 
             // instantiate a DataObject using the values from the bundle
-            DataObject newObject = new DataObject(bundle.getInt(KEY_ID),
+            DataObject newObject = new DataObject(bundle.getString(KEY_ID),
                     bundle.getInt(KEY_RESOURCEID),
                     bundle.getString(KEY_HEADER),
                     bundle.getString(KEY_MAIN),
@@ -172,7 +172,7 @@ public class DataObject implements Parcelable{
 
 
     public DataObject(Parcel in) {
-        objectid = in.readInt();
+        objectid = in.readString();
         iconId = in.readInt();
         headerText = in.readString();
         mainText = in.readString();

@@ -39,6 +39,8 @@ public class EventFragment extends MapFragment {
     public EventFragment() {
         // Required empty public constructor
         isActivityStartable(true);
+        enableFilterMenuOptions();
+        setFilterMenuResourceId(R.array.event_filter_options);
     }
 
 

@@ -20,8 +20,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -33,6 +35,7 @@ import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialo
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -73,7 +76,7 @@ public class ScheduleAcitivity extends AppCompatActivity implements
 
     // bus stop related varibles
     List<String> routes = new ArrayList<>();
-    Integer busStopId;
+    String busStopId;
     private NotificationDbManger notifDb;
     ViewPagerAdapter adapter;
 
@@ -94,7 +97,7 @@ public class ScheduleAcitivity extends AppCompatActivity implements
         notifDb =  new NotificationDbManger(getApplicationContext());
         Bundle extras= getIntent().getExtras();
         busStopName = extras.getString("bus_stop_name");
-        busStopId = extras.getInt("BUSSTOPID");
+        busStopId = extras.getString("BUSSTOPID");
 
         // check for routes that stop at the bus stop
         try{
@@ -273,7 +276,7 @@ public class ScheduleAcitivity extends AppCompatActivity implements
         // Create bundle which will hold data for the Notification fragment
         // and the Schedule Fragment
         Bundle bundle = new Bundle();
-        bundle.putInt("BUSSTOPID", busStopId);
+        bundle.putString("BUSSTOPID", busStopId);
         bundle.putStringArray("ROUTE",routes.toArray(new String[routes.size()]));
 
         // Create a Tab section for each route that stops  at the bus stop
@@ -411,6 +414,9 @@ public class ScheduleAcitivity extends AppCompatActivity implements
         adapter.getItem(tab).loadBusSchedule();
 
     }
+
+
+    private final static String BUNDLE_KEY_MAP_STATE = "mapData";
 
 
 }

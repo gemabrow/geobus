@@ -24,7 +24,6 @@ public class JsonFileReader {
     }
 
 
-    // reads in the BusStops from UCSC_WestSide_BusStop.json file only
     public void readJsonStream(InputStream in) throws IOException {
         try (JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"))) {
             readDataArray(reader);

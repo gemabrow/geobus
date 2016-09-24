@@ -57,71 +57,68 @@ public class DrawerListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = convertView;
         int viewType = 0;
         final NavItem item = mNavItems.get(position);
         if (item != null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             if(mNavItems.get(position).isSection()){
 
-                view = inflater.inflate(R.layout.nav_subheader, null);
-                view.setOnClickListener(null);
-                view.setOnLongClickListener(null);
-                view.setLongClickable(false);
+                convertView = inflater.inflate(R.layout.nav_subheader, null);
+                convertView.setOnClickListener(null);
+                convertView.setOnLongClickListener(null);
+                convertView.setLongClickable(false);
                 viewType = R.layout.nav_subheader;
             } else if(mNavItems.get(position).isDivider()){
 
-                view = inflater.inflate(R.layout.nav_divider, null);
-                view.setOnClickListener(null);
-                view.setOnLongClickListener(null);
-                view.setLongClickable(false);
-                view.setClickable(false);
+                convertView = inflater.inflate(R.layout.nav_divider, null);
+                convertView.setOnClickListener(null);
+                convertView.setOnLongClickListener(null);
+                convertView.setLongClickable(false);
+                convertView.setClickable(false);
                 viewType = R.layout.nav_divider;
 
             } else if(mNavItems.get(position).isProfile()){
 
-                view = inflater.inflate(R.layout.nav_profile, null);
-                view.setLongClickable(false);
+                convertView = inflater.inflate(R.layout.nav_profile, null);
+                convertView.setLongClickable(false);
                 viewType = R.layout.nav_profile;
 
             }else {
-                view = inflater.inflate(R.layout.nav_list_item, null);
+                convertView = inflater.inflate(R.layout.nav_list_item, null);
                 viewType = R.layout.nav_list_item;
             }
 
         }
-        else {
-            view = convertView;
-        }
+
 
 
         switch (viewType){
 
             case R.layout.nav_profile:
-                TextView profileName = (TextView)view.findViewById(R.id.profile_name);
-                TextView profileEmail = (TextView)view.findViewById(R.id.profile_email);
-                ImageView profileImage = (ImageView)view.findViewById(R.id.lrg_profile_pic);
+                TextView profileName = (TextView)convertView.findViewById(R.id.profile_name);
+                TextView profileEmail = (TextView)convertView.findViewById(R.id.profile_email);
+                ImageView profileImage = (ImageView)convertView.findViewById(R.id.lrg_profile_pic);
                 profileEmail.setText(mNavItems.get(position).getProfileEmail());
                 profileName.setText(mNavItems.get(position).getProfileName());
                 profileImage.setImageResource(mNavItems.get(position).getIcon());
                 break;
             case R.layout.nav_list_item:
-                TextView titleView = (TextView) view.findViewById(R.id.item_title);
+                TextView titleView = (TextView) convertView.findViewById(R.id.item_title);
                 titleView.setText( mNavItems.get(position).mTitle );
-                ImageView iconView = (ImageView) view.findViewById(R.id.item_icon);
+                ImageView iconView = (ImageView) convertView.findViewById(R.id.item_icon);
                 iconView.setImageResource(mNavItems.get(position).mIcon);
                 break;
             case R.layout.nav_divider:
                 break;
 
             case R.layout.nav_subheader:
-                TextView titleView2 = (TextView) view.findViewById(R.id.item_title);
+                TextView titleView2 = (TextView) convertView.findViewById(R.id.item_title);
                 titleView2.setText( mNavItems.get(position).mTitle );
                 break;
             default:
                 break;
         }
 
-        return view;
+        return convertView;
     }
 }

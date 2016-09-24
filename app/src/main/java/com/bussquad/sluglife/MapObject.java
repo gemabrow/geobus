@@ -1,5 +1,7 @@
 package com.bussquad.sluglife;
 
+import android.location.Location;
+
 import com.google.android.gms.maps.model.LatLng;
 
 /**
@@ -11,8 +13,9 @@ public class MapObject {
     private  double latitude = 0.0;
     private  double longitude = 0.0;
     private  LatLng location;
+    private Location objLocation;
     private  String name;
-    private int objectID = -1;
+    private String objectID ="-1";
 
 
     private int cardViewType = 0;
@@ -38,11 +41,14 @@ public class MapObject {
 
 
 
-    public MapObject( int id, String name, double latitude, double longitude){
+    public MapObject( String id, String name, double latitude, double longitude){
         this.latitude = latitude;
         this.longitude = longitude;
         this.name = name;
         this.objectID = id;
+        objLocation = new Location("");
+        objLocation.setLatitude(this.latitude);
+        objLocation.setLongitude(this.longitude);
     }
 
 
@@ -51,6 +57,9 @@ public class MapObject {
         this.latitude = latitude;
         this.longitude = longitude;
         this.name = name;
+        objLocation = new Location("");
+        objLocation.setLatitude(this.latitude);
+        objLocation.setLongitude(this.longitude);
     }
 
 
@@ -61,19 +70,22 @@ public class MapObject {
         this.name = name;
         this.mainInfo = mainInfo;
         this.additionalInfo = additionalInfo;
+        objLocation = new Location("");
+        objLocation.setLatitude(this.latitude);
+        objLocation.setLongitude(this.longitude);
 
     }
 
 
 
-    public int getObjectID() {
+    public String getObjectID() {
         return objectID;
     }
 
 
 
 
-    public void setObjectID(int objectID) {
+    public void setObjectID(String objectID) {
         this.objectID = objectID;
     }
 
@@ -110,6 +122,20 @@ public class MapObject {
 
     public LatLng getLocation() {
         return location;
+    }
+
+
+    public Location getObjLocation(){
+
+        return this.objLocation;
+    }
+
+
+
+    public void setObjLocation(double latitude, double longitude){
+        this.objLocation =  new Location(getName());
+        this.objLocation.setLatitude(latitude);
+        this.objLocation.setLongitude(longitude);
     }
 
 

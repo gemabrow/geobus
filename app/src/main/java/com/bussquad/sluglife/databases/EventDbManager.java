@@ -298,7 +298,7 @@ public class EventDbManager extends SQLiteOpenHelper {
 
 
     // returns a LatLng object specifing the graphical location of the event of the event
-    public LatLng getLocation(int eventID ){
+    public LatLng getLocation(String eventID ){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("select * from ucsc_events where eventid=" + eventID, null);
         c.moveToFirst();
@@ -326,7 +326,7 @@ public class EventDbManager extends SQLiteOpenHelper {
 
 
     // returns the link with additional information of the eventID if the eventID doesnot exist then an error will be thrown
-    public String getEventURLImageLink(int eventID){
+    public String getEventURLImageLink(String eventID){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("select * from ucsc_events where eventid=" + eventID, null);
         c.moveToFirst();
@@ -344,7 +344,7 @@ public class EventDbManager extends SQLiteOpenHelper {
     // then an error will be thrown
     // TODO error check if no date is available
     // TODO error check if eventID does not exist
-    public String getEventDate(int eventID){
+    public String getEventDate(String eventID){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("select * from ucsc_events where eventid=" + eventID, null);
         c.moveToFirst();
@@ -361,7 +361,7 @@ public class EventDbManager extends SQLiteOpenHelper {
     // if the eventID does not exist then an error will be thrown
     // TODO error check if no weblink is available
     // TODO error check if eventID does not exist
-    public String getEventWeblink(int eventID){
+    public String getEventWeblink(String eventID){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("select * from ucsc_events where eventid=" + eventID, null);
         c.moveToFirst();
@@ -378,7 +378,7 @@ public class EventDbManager extends SQLiteOpenHelper {
     // then an error will be thrown
     // TODO error check if no thumbnail is available
     // TODO error check if eventID does not exist
-    public String getEventThumbnail(int eventID){
+    public String getEventThumbnail(String eventID){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("select * from ucsc_events where eventid=" + eventID, null);
         c.moveToFirst();
@@ -395,7 +395,7 @@ public class EventDbManager extends SQLiteOpenHelper {
     // then an error will be thrown
     // TODO error check if no description is available
     // TODO error check if eventID does not exist
-    public String getEventDescription(int eventID){
+    public String getEventDescription(String eventID){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("select * from ucsc_events where eventid=" + eventID, null);
         c.moveToFirst();
@@ -442,7 +442,7 @@ public class EventDbManager extends SQLiteOpenHelper {
 
 
 
-    public Event getEvent(int eventID){
+    public Event getEvent(String eventID){
         Event event;
         String title;
         String teaser;

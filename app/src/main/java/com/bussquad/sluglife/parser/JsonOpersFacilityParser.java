@@ -76,7 +76,7 @@ public class JsonOpersFacilityParser {
         double longitude = 0.0;
         String imgurl = null;
         String lastupdate = "";
-        int id  = -1;
+        String id  = "";
 
         reader.beginObject();
 
@@ -85,7 +85,7 @@ public class JsonOpersFacilityParser {
         while (reader.hasNext()) {
             String token = reader.nextName();
             if (token.equals("id")) {
-                id = reader.nextInt();
+                id = reader.nextString();
             } else if(token.equals("count")){
                 pep_count = reader.nextString();
             } else if(token.equals("facility_name")){

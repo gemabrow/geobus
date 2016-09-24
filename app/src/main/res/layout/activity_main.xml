@@ -33,6 +33,7 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="@dimen/custom_tab_layout_height"
+            app:tabSelectedTextColor="@color/text_white"
             app:tabMode="scrollable"
             app:tabGravity="fill"/>
     </android.support.design.widget.AppBarLayout>
@@ -63,7 +64,21 @@
         android:layout_height="@dimen/home_filter_handle_bar_height"
         android:divider="@drawable/divider_home_menu"
         android:layout_alignParentBottom="true"
-        android:showDividers="middle|beginning">
+        android:showDividers="middle"
+        android:weightSum="1">
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:textSize="14sp"
+            android:layout_weight="1"
+            android:textAlignment="viewStart"
+            android:singleLine="false"
+            android:gravity="center_vertical"
+            android:paddingLeft="16dp"
+            android:textColor="@color/text_white"
+            android:background="#00ffffff"
+            android:id="@+id/btnMenuFilter" />
+
         <ImageButton android:id="@+id/btnFilter"
             android:padding="10.0dip"
             android:layout_width="@dimen/card_filter_button_map"
@@ -71,7 +86,7 @@
             android:clickable="true"
             android:layout_marginLeft="6.0dip"
             android:layout_marginRight="6.0dip"
-            android:src="@drawable/ic_filter_list_black_24dp"
+            android:src="@drawable/ic_filter_list_white_24dp"
             android:contentDescription="@string/map"
             android:background="#00ffffff" />
         <ImageButton
@@ -82,7 +97,7 @@
             android:clickable="true"
             android:layout_marginLeft="6.0dip"
             android:layout_marginRight="6.0dip"
-            android:src="@drawable/ic_format_list_bulleted_black_24dp"
+            android:src="@drawable/ic_format_list_bulleted_white_24dp"
             android:contentDescription="@string/map"
             android:background="#00ffffff" />
     </LinearLayout>

@@ -105,7 +105,7 @@ public class NotificationService extends Service {
                         if(notifDb.numberOfNotifications() == 0){
                             break;
                         }
-                        int stopId = notifDb.getFirstRowStopID();
+                        String stopId = notifDb.getFirstRowStopID();
 
                         while (count < notifDb.numberOfNotifications()) {
 
@@ -144,7 +144,7 @@ public class NotificationService extends Service {
 
     // checks if the route is one that the user wants to be notified for, returns true if the
     // user wants to be notified if any route is nearby
-    private boolean compareBusRoute( Bus bus,int stopID) {
+    private boolean compareBusRoute( Bus bus,String stopID) {
 
 
         if(notifDb.getRoute(stopID).contains("Any")){
@@ -158,9 +158,9 @@ public class NotificationService extends Service {
     // compares the distance between bus current coordinates and the bus stop coordinate
     // if the bus is less then or equal to 10 meters from the bus stop this function will return
     // true
-    private boolean busInRange(Bus bus, int stopID){
+    private boolean busInRange(Bus bus, String stopID){
 
-        int currStopId = notifDb.getCurrStop(stopID);
+        String currStopId = notifDb.getCurrStop(stopID);
         double distance  = SphericalUtil.computeDistanceBetween(bus.getLocaiton(), notifDb.getLocation(currStopId));
 
         return distance <= 100;
@@ -184,14 +184,14 @@ public class NotificationService extends Service {
 
     // updates the current notification with a decremented busStop count, updates current bus stop
     // id, updates next busStop id , updates new coordinates
-    public void updateNotification(int stopID){
+    public void updateNotification(String stopID){
 
 
         int stopsLeft = (notifDb.getStopsLeft(stopID) - 1);
         String route = notifDb.getRoute(stopID);
 
-        int nextStopID;
-        int currStopID;
+        String nextStopID;
+        String currStopID;
 
         System.out.println("stops left: " +  stopsLeft );
         if (stopsLeft == 0){
@@ -216,7 +216,7 @@ public class NotificationService extends Service {
 
     // removes notification from the database returns an exception if there is no such
     // notification
-    public void removeNotificatoin(int id){
+    public void removeNotificatoin(String id){
 
         notifDb.deleteNotification(id);
 
@@ -226,7 +226,7 @@ public class NotificationService extends Service {
 
 
     // notifies user when there is a bus a the specifed location
-    public void sendNotification(int stopID){
+    public void sendNotification(String stopID){
 
 
 

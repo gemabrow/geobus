@@ -147,6 +147,27 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
 
+    // checks if the table exists or not
+    boolean isTableExists( String tableName)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        if (tableName == null || db == null || !db.isOpen())
+        {
+            return false;
+        }
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM sqlite_master WHERE type = ? AND name = ?", new String[] {"table", tableName});
+        if (!cursor.moveToFirst())
+        {
+            return false;
+        }
+        int count = cursor.getInt(0);
+        cursor.close();
+        return count > 0;
+    }
+
+
+
     private void deleteDataBase(){
         mContext.deleteDatabase(DB_PATH + DB_NAME);
     }
@@ -239,10 +260,10 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
     // checks if the current database that is open has a table called notificaitons
-    public boolean checkTable(){
+    public boolean checkTable(String tablename){
         SQLiteDatabase db = this.getReadableDatabase();
         try {
-            Cursor c = db.query("notifications",null,null,null,null,null,null,null);
+            Cursor c = db.query(tablename,null,null,null,null,null,null,null);
             c.getCount();
             return true;
         }catch(Exception ex){
@@ -253,8 +274,24 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
 
+
+    // checks if the current database that is open has a table called notificaitons
+    public int checkTableSize(String tablename){
+        SQLiteDatabase db = this.getReadableDatabase();
+        try {
+            Cursor c = db.query(tablename,null,null,null,null,null,null,null);
+
+            return c.getCount();
+        }catch(Exception ex){
+            System.out.println("table does not exist");
+        }
+        return 0;
+    }
+
+
+
     // creates a table called notifications
-    public void createTable(){
+    public void createNotificationTable(){
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("create table notifications" + "(id integer primary key, " +
@@ -271,17 +308,43 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
 
-
-    // Deletes the notificaiton table
-    public void deleteTable(){
+    public void createRouteTable(){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS notifications");
+        db.execSQL("create table route" + "(route_id integer primary key, " +
+                "name text," +
+                "route_name text" +
+                "longitude text" +
+                "stops text"
+        );
     }
 
 
 
+
+    public void createBusStopInfoTable(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("create table bus_stop_info" + "(idbusstop integer primary key, " +
+                "id text," +
+                "latitude text" +
+                "longitude text" +
+                "name text" +
+                "routes text" +
+                "cardinal_point" +
+                "additional_info text)"
+        );
+    }
+
+
+
+    // Deletes the specified table if it exists
+    public void deleteTable(String name){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + name);
+    }
+
+
     // deletes the specified row from the notificaiton database
-    public void deleteRow(int rowID){
+    public void deleteRow(String rowID){
         SQLiteDatabase db = this.getWritableDatabase();
         try{
             db.delete(NOTIFICATION_TABLE_NAME, BUSSTOP_COLUMN_ID +" = " + rowID,null );
@@ -326,7 +389,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
     // checks if the bus stop has a notification already set for it, if there is not notificaiton
     // reflecting that bus stop id, this will return false
-    public boolean hasNotifiation(int stopID){
+    public boolean hasNotifiation(String stopID){
 
         boolean exists = false;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -392,7 +455,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
     // update nextStop and number of stops left for a given notification from the database
-    public boolean updateNextStop(int stopID, int nextStop){
+    public boolean updateNextStop(String stopID, String nextStop){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("ID_NEXTSTOP", nextStop);
@@ -404,7 +467,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
     // update nextStop and number of stops left for a given notification from the database
-    public boolean updateCurrStop(int stopID, int currStopID){
+    public boolean updateCurrStop(String stopID, String currStopID){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("ID_CURR_STOP", currStopID);
@@ -416,7 +479,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
     // updates the number of stops left for this notification
-    public boolean updateStopsLeft(int stopID, int stops){
+    public boolean updateStopsLeft(String stopID, int stops){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("STOPS", stops);
@@ -428,7 +491,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
     // updates the number of stops left for this notification
-    public boolean updateRoute(int stopID, String newRoute){
+    public boolean updateRoute(String stopID, String newRoute){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("ROUTE", newRoute);
@@ -458,7 +521,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
     // deletes the notification from the database
-    public void deleteNotification(int stopID){
+    public void deleteNotification(String stopID){
         SQLiteDatabase db = this.getWritableDatabase();
         try{
             db.delete(NOTIFICATION_TABLE_NAME, BUSSTOP_COLUMN_ID +" = " + stopID,null );
@@ -472,11 +535,11 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
     // adds a notification to the notification database
-    public boolean addNotification(int busStopID, String route,
+    public boolean addNotification(String busStopID, String route,
                                    String vibrate,String sound, int stops ){
 
-        int currStopID;
-        int nextStopID = busStopID;
+        String currStopID;
+        String nextStopID = busStopID;
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -499,9 +562,8 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
         contentValues.put("ID_CURR_STOP", currStopID);
         db.insert("notifications", null, contentValues);
 
-        Cursor  c = db.query("notifications", null, null, null, null, null, null, null);
+//        Cursor  c = db.query("notifications", null, null, null, null, null, null, null);
 
-        System.out.println(c.getCount());
 
         return true;
     }
@@ -540,11 +602,11 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
     // returns a Latlng object for the specifed bus stop
-    public LatLng getLocation(int stopID ){
+    public LatLng getLocation(String stopID ){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery("select * from bus_stop_info where ID_BUSSTOP=" + stopID, null);
+        Cursor c = db.rawQuery("select * from bus_stop_info where id=" + stopID, null);
         c.moveToFirst();
-        LatLng coordinates = new LatLng(c.getDouble(XCOORD_COLUMN), c.getDouble(YCOORD_COLUMN));
+        LatLng coordinates = new LatLng(c.getDouble(2), c.getDouble(3));
         c.close();
 
         return coordinates;
@@ -553,10 +615,10 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
     // returns a Latlng object for the specifed bus stop
-    public double getLatitude(int stopID ){
+    public double getLatitude(String stopID ){
         double latitude;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery("select * from bus_stop_info where ID_BUSSTOP=" + stopID, null);
+        Cursor c = db.rawQuery("select * from bus_stop_info where id=" + stopID, null);
         c.moveToFirst();
         latitude =  c.getDouble(XCOORD_COLUMN);
         c.close();
@@ -567,10 +629,10 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
     // returns a Latlng object for the specifed bus stop
-    public double getLongitude(int stopID ){
+    public double getLongitude(String stopID ){
         double latitude;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery("select * from bus_stop_info where ID_BUSSTOP=" + stopID, null);
+        Cursor c = db.rawQuery("select * from bus_stop_info where id=" + stopID, null);
         c.moveToFirst();
         latitude =  c.getDouble(YCOORD_COLUMN);
         c.close();
@@ -582,11 +644,11 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
     // gets the next stop
     // TODO fixme nextStop does not make sense, next stop can only be determined based on the route 
     // that the bus is going
-    public int getNextStop(int stopID){
+    public String getNextStop(String stopID){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor c = db.rawQuery("select * from notifications where ID_BUSSTOP=" + stopID, null);
         c.moveToFirst();
-        int nextStop = c.getInt(NEXTSTOPID_COLUMN);
+        String nextStop = c.getString(NEXTSTOPID_COLUMN);
 
         return nextStop;
     }
@@ -594,21 +656,21 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
     // gets the current stop for the specified bus stop id
-    public int getCurrStop( int stopID){
+    public String getCurrStop( String stopID){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor c = db.rawQuery("select * from notifications where ID_BUSSTOP=" + stopID, null);
         c.moveToFirst();
-        int currStop = c.getInt(CURR_STOP_COLUMN);
+        String currStop = c.getString(CURR_STOP_COLUMN);
 
         return currStop;
     }
 
 
     // returns a String of the route that the notification is looking for
-    public String getRoute(int stopid){
+    public String getRoute(String stopid){
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor c = db.rawQuery("select * from notifications where ID_BUSSTOP=" + stopid, null);
+        Cursor c = db.rawQuery("select * from notifications where id=" + stopid, null);
         c.moveToFirst();
         String route = c.getString(ROUTE_COLUMN);
         c.close();
@@ -626,11 +688,11 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
     //                                  help select the correct next stop depending on the route
     // @param stopsaway                 This indicates the number of stops away left to reach the
     //                                  the bus stop the user is waiting to be notified from
-    public int getNextBusStopId(int stopID, String route , int stopsAway){
+    public String getNextBusStopId(String stopID, String route , int stopsAway){
         SQLiteDatabase db = this.getReadableDatabase();
 
         String ROUTE = "";
-        int nextStopid = -1;
+        String nextStopid = "";
         int count = 0;
         int column = 0;
         if(route.toLowerCase().contains("outer")){
@@ -639,7 +701,6 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
             ROUTE = "INNER";
         }
 
-        System.out.println(route);
         // gets table
         Cursor c = db.rawQuery("select " + ROUTE +  " from routes", null);
 
@@ -649,7 +710,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
         int size = c.getCount();
         // moves the cursor to first index in the row of stops in the route
         for (int index  = 0 ; index < c.getCount(); index++){
-            if(c.getInt(count) == stopID){
+            if(c.getString(count).equalsIgnoreCase(stopID)){
 
                 while(count < stopsAway){
                     if(c.isFirst()){
@@ -667,7 +728,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
                     c.moveToPrevious();
                     index -=1;
                 }
-                nextStopid = c.getInt(c.getColumnIndex(ROUTE));
+                nextStopid = c.getString(c.getColumnIndex(ROUTE));
                 break;
             }else if(c.isLast()){
                 System.out.println("error did not find  match!!");
@@ -686,7 +747,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
     // returns the number of stops left for the notification specified
-    public int getStopsLeft(int stopID){
+    public int getStopsLeft(String stopID){
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor c = db.rawQuery("select * from notifications where ID_BUSSTOP=" + stopID, null);
@@ -701,7 +762,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
     // Returns the name of the bus stop based on the bus Stop Id given
-    public int getStopName(int stopID){
+    public int getStopName(String stopID){
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor c = db.rawQuery("select * from bus_stop_info where ID_BUSSTOP=" + stopID, null);
@@ -717,7 +778,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
     // returns the stop id of the first bus stop given the colom
     // TODO // FIXME: 5/12/2016 
-    public int getFirstRowStopID(){
+    public String getFirstRowStopID(){
 
         // sets the pointer tot he first row of the database
         currentRow = 0;
@@ -726,7 +787,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
         Cursor c = db.query("notifications", null, null, null, null, null, null);
         c.moveToFirst();
 
-        int stopId = c.getInt(BUSSTOPID_COLUMN);
+        String stopId = c.getString(BUSSTOPID_COLUMN);
         c.close();
 
 
@@ -737,7 +798,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
     // returns a list of routes that belong to the bus stop  specified
-    public List<String> getBusStopRoute(int busStopId){
+    public List<String> getBusStopRoute(String busStopId){
 
         List<String> route;
         String routeData;
@@ -745,36 +806,31 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
         currentRow = 0;
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery("select * from bus_stop_info where ID_BUSSTOP=" + busStopId, null);
+        Cursor c = db.rawQuery("select * from bus_stop_info where id=" + busStopId, null);
         c.moveToFirst();
 
-        System.out.println(busStopId);
         String temp1 = c.getString(ROUTE_LIST_COLUMN);
-        System.out.println(temp1);
         route = Arrays.asList((temp1).split(","));
 
         c.close();
 
-        for (String temp : route){
-            System.out.println(temp);
-        }
 
         return route;
     }
 
 
     // returns the busID from the specifed row
-    public int getNextRowStopID(){
+    public String getNextRowStopID(){
         // moves the pointer to the next row
         currentRow += 1;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.query("notifications", null, null, null,null,null,null);
         c.moveToPosition(currentRow);
-        int stopId =-1;
+        String stopId ="";
         try
         {
-            stopId = c.getInt(BUSSTOPID_COLUMN);
+            stopId = c.getString(BUSSTOPID_COLUMN);
         }catch(Exception ex){
         }
         c.close();
@@ -785,7 +841,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
 
-    public List<String> getStopScheduleForRoute(int busStopId, String routeName){
+    public List<String> getStopScheduleForRoute(String busStopId, String routeName){
         List<String> route;
         String routeData;
         // sets the pointer tot he first row of the database
@@ -795,7 +851,6 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
         Cursor c = db.rawQuery("select " + "\"" + routeName + "\"" + " from bus_stop_schedule where ID_BUSSTOP=" + busStopId, null);
         c.moveToFirst();
 
-        System.out.println("Bus Stop Id: " + busStopId);
         String temp1 = c.getString(0);
         route = Arrays.asList((temp1).split(";"));
 
@@ -809,7 +864,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
     // if virbate is enabled return true that is setting == 1 , other wise return false
-    public Boolean isVibrateEnabled(int busId){
+    public Boolean isVibrateEnabled(String busId){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.query("notifications", null, null, null,null,null,null);
         c.moveToFirst();
@@ -830,7 +885,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
     // if virbate is enabled return true that is setting == 1 , other wise return false
-    public Boolean isSoundEnabled(int busId){
+    public Boolean isSoundEnabled(String busId){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.query("notifications", null, null, null,null,null,null);
         c.moveToFirst();
@@ -876,7 +931,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
     // adds a column for the bus stop to the bus schedule database
-    public void addBusStopToScheduleDB(int busStopId){
+    public void addBusStopToScheduleDB(String busStopId){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -887,7 +942,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
 
-    public void addBusScheduleArray(int busStopId, String route, ArrayList<String> schedule){
+    public void addBusScheduleArray(String busStopId, String route, ArrayList<String> schedule){
         if(hasBusStopInDatabase(busStopId) == false){
 
             // add the bus stop to the db
@@ -904,7 +959,6 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
             }
             count++;
         }
-        System.out.println("bus schedule: " + bus_schedule);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("ID_BUSSTOP", busStopId);
@@ -917,7 +971,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
     // adds the schedule to the specified bus stop. Bus first checks if a row exists in the database
     // for the bus stop. If it does not it will call addBusStopToScheduleDB which will add the
     // bus stop to the database. Then it will add the schedule
-    public void addBusSchedule(int busStopId, String route, String schedule){
+    public void addBusSchedule(String busStopId, String route, String schedule){
 
         if(hasBusStopInDatabase(busStopId) == false){
 
@@ -935,7 +989,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
     // update nextStop and number of stops left for a given notification from the database
-    public boolean updateBusSchedule(int busStopId, String route, String schedule){
+    public boolean updateBusSchedule(String busStopId, String route, String schedule){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("\""+route+"\"", schedule);
@@ -945,7 +999,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
 
-    public boolean hasLatestScheduleVersion(int stopid, String route){
+    public boolean hasLatestScheduleVersion(String stopid, String route){
 
         return true;
     }
@@ -954,7 +1008,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
     // checks if the bus stop exists in the bus stop schedule databsase returns true if it does
     // otherwise returns false
-    public boolean hasBusStopInDatabase(int busStopId){
+    public boolean hasBusStopInDatabase(String busStopId){
         SQLiteDatabase db = this.getReadableDatabase();
         try {
             Cursor c = db.rawQuery("select bus_stop_schedule where ID_BUSSTOP=" + busStopId, null);
@@ -974,7 +1028,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
     // checks if the bus schedule exists
-    public boolean hasSchedule(int busStopId, String routeName){
+    public boolean hasSchedule(String busStopId, String routeName){
 
         SQLiteDatabase db = this.getReadableDatabase();
         try {
@@ -994,4 +1048,42 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
 
 
 
+    /*
+        the following functions help manage the bus_stop_info table
+     */
+
+    public void addBusStopInfo(BusStop stop){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        try{
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("ID", stop.getObjectID());
+            contentValues.put("longitude", stop.getLongitude());
+            contentValues.put("latitude", stop.getLatitude());
+            contentValues.put("name", stop.getName());
+            contentValues.put("cardinal_point", stop.getRoutes());
+            contentValues.put("routes", stop.getRoutes());
+            db.insert("bus_stop_info", null, contentValues);
+
+        } catch (Exception ex){
+            System.out.println("error adding bus to sqlite database");
+        }
+
+    }
+
+
+
+
+    public void printTable(String table){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM " + table ,null);
+        c.moveToFirst();
+        System.out.println("printing the table: " + table);
+        for(int count = 0; count < c.getCount(); count++){
+
+            System.out.println("idbusstop: " + c.getString(0) +  "| id: " + c.getString(1) + "| latitude: "
+                    + c.getString(2) + "| longitude: " + c.getString(3) + "| name: " + c.getString(4) );
+            c.moveToNext();
+        }
+    }
 }

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -52,6 +53,8 @@ public class JsonFileReader {
         // reads in a bracket{
         reader.beginObject();
         // skips (allstops) from json file
+        String name = reader.nextName();
+        System.out.println("reading: " + reader.nextString());
         reader.skipValue();
         // reads in a brace [
         reader.beginArray();
@@ -70,10 +73,11 @@ public class JsonFileReader {
     // reads in one bus stop from the json file at a time and returns a new BusStop Object
     private BusStop readBusStop(JsonReader reader) throws IOException {
         String stopName = "";
+        String routes = "";
         double latitude = 0;
         double longitude = 0;
-        int id = -1;
-        ArrayList<String> busses = new ArrayList<>();
+        String id = "";
+        List<String> busses = new ArrayList<>();
 
         // reads in a bracket {
         reader.beginObject();
@@ -89,10 +93,12 @@ public class JsonFileReader {
                 latitude = reader.nextDouble();
             } else if(name.equals("longitude")){
                 longitude = reader.nextDouble();
-            } else if (name.equals("busses") && reader.peek() != JsonToken.NULL) {
-                readBusArray(busses, reader);
+            } else if (name.equals("routes") && reader.peek() != JsonToken.NULL) {
+                routes = reader.nextString();
+                busses = Arrays.asList(routes.split(","));
+
             } else if (name.equals("id")){
-                id = reader.nextInt();
+                id = reader.nextString();
 
             } else {
                 reader.skipValue();
@@ -101,7 +107,7 @@ public class JsonFileReader {
 
         //reads in a closing bracket }
         reader.endObject();
-        return new BusStop(stopName,latitude,longitude,busses, id);
+        return new BusStop(stopName,latitude,longitude,busses,routes, id);
     }
 
 

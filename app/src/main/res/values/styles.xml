@@ -6,6 +6,19 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:alertDialogTheme">@style/AlertDialogCustom</item>
+        <!--<item name="android:listPopupWindowStyle">@style/ListPopUpWindowStyle</item>-->
+    </style>
+
+    <style name="AlertDialogCustom" parent="android:Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorPrimary">@color/colorPrimaryDark</item>
+        <item name="android:colorAccent">@color/colorAccentDialog</item>
+    </style>
+
+    <style name="ListPopUpWindowStyle"  parent="@style/Widget.AppCompat.Light.ListPopupWindow">
+        <item name="android:overlapAnchor">true</item>
+        <item name="android:textSize">@dimen/list_text_size</item>
+        <item name="android:background">@color/windowBackground</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

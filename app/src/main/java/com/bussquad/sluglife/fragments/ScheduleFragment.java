@@ -49,7 +49,7 @@ public class ScheduleFragment extends Fragment
     private ArrayList<DataObject> listObject =  new ArrayList<>();
     private ArrayList<Integer>  viewType = new ArrayList<>();
     private ArrayList<String> schedule = new ArrayList<>();
-    private int stopID;
+    private String stopID;
     private String route;
     private NotificationDbManger notifDb;
     private boolean dataSet = false;
@@ -73,7 +73,7 @@ public class ScheduleFragment extends Fragment
         notifDb =  new NotificationDbManger(getContext());
 
         // create database if it does not already exist
-        notifDb.createDataBase();
+       // notifDb.createDataBase();
     }
 
 
@@ -83,12 +83,11 @@ public class ScheduleFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        System.out.println("on createview fragment");
         View layout = inflater.inflate(R.layout.fragment_schedule, container, false);
 
         // get bus stop id, this will be used to obtain the bus schedule from either the sqlite
         // database or the mysql database
-        stopID = getArguments().getInt("BUSSTOPID");
+        stopID = getArguments().getString("BUSSTOPID");
 
 
         try {
@@ -131,7 +130,6 @@ public class ScheduleFragment extends Fragment
 
             try {
 
-                System.out.println("has bus schedule: n + " + notifDb.hasSchedule(this.stopID,this.route));
 
                 // check if the bus schedule exists in the sqlite database
                 if(!notifDb.hasSchedule(this.stopID,this.route)){
@@ -144,7 +142,6 @@ public class ScheduleFragment extends Fragment
                 }
                 dataSet = true;
             } catch (Exception ex) {
-                System.out.println("error getting bus schedule");
                 FirebaseCrash.log("ScheduleFragment.java There was an error retriveing schedule information for " + route);
             }
 //        }
@@ -202,11 +199,11 @@ public class ScheduleFragment extends Fragment
     private class DownloadBusSchedule2 extends AsyncTask<String,String,ArrayList<String>>    {
         /* milliseconds */
 
-        private int stopid;
+        private String stopid;
         private String route;
 
 
-        DownloadBusSchedule2(int stopid, String route){
+        DownloadBusSchedule2(String stopid, String route){
             this.stopid = stopid;
             this.route = route;
         }
@@ -229,14 +226,12 @@ public class ScheduleFragment extends Fragment
 
             ArrayList<String> schedule = new ArrayList<>();
 
-            System.out.println("getting bus stop schedule from metro site");
             try {
 
                 URL url = new URL("http://scmtd.com/en/routes/schedule-by-stop/"+stopid+"/" + date);
                 Document doc = Jsoup.parse(url,3000);
                 Element table = doc.select("table").get(0); //select the first table.
                 Elements rows = table.select("tr");
-
 
 
 
@@ -248,8 +243,12 @@ public class ScheduleFragment extends Fragment
 
                     // gets the column with the depart time
                     if(colh.select("a").text().equalsIgnoreCase(route)){
-
-                        String tmpTime = cols.get(1).text().split(" ")[1];
+                        String tmpTime;
+                        if(cols.get(1).text().contains(" ")){
+                            tmpTime  = cols.get(1).text().split(" ")[1];
+                        } else {
+                            tmpTime  = cols.get(1).text();
+                        }
                         String finalTime = "";
 
                         // clean up the text of the depart time
@@ -320,7 +319,6 @@ public class ScheduleFragment extends Fragment
         } else {
             date +=day;
         }
-        System.out.println("the new date is : " + date);
         this.date = date;
 
     }

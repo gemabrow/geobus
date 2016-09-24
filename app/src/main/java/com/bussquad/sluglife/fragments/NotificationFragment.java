@@ -31,7 +31,7 @@ import java.util.ArrayList;
 public class NotificationFragment extends Fragment implements AdapterView.OnItemSelectedListener,View.OnClickListener {
 
     private NotificationDbManger notifDb;
-    private int busStopId;
+    private String busStopId;
     private ArrayList<String> routes;
     private ArrayList<String> newRoutes = new ArrayList<>();
     //this counts how many items's are on the UI for the spinner dialogue
@@ -71,7 +71,7 @@ public class NotificationFragment extends Fragment implements AdapterView.OnItem
         notifDb =  new NotificationDbManger(getContext());
 
         // create database if it does not already exist
-        notifDb.createDataBase();
+      // notifDb.createDataBase();
 
     }
 
@@ -109,7 +109,7 @@ public class NotificationFragment extends Fragment implements AdapterView.OnItem
 
 
         // get bundles sent from parent activity
-        busStopId = getArguments().getInt("BUSSTOPID");
+        busStopId = getArguments().getString("BUSSTOPID");
         System.out.println(busStopId);
         routes = new ArrayList<>(notifDb.getBusStopRoute(busStopId));
 
@@ -154,7 +154,7 @@ public class NotificationFragment extends Fragment implements AdapterView.OnItem
             btnUpdateNotification.setEnabled(true);
 
         }
-        if(busStopId == -1){
+        if(busStopId.isEmpty()){
             btnSetNotification.setEnabled(false);
         }
 

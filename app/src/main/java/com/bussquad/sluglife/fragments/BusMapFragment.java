@@ -17,10 +17,14 @@ import com.bussquad.sluglife.Bus;
 import com.bussquad.sluglife.BusStop;
 import com.bussquad.sluglife.DataObject;
 import com.bussquad.sluglife.JsonFileReader;
+import com.bussquad.sluglife.MapMenuItem;
 import com.bussquad.sluglife.MapObject;
+import com.bussquad.sluglife.NotificationDbManger;
 import com.bussquad.sluglife.R;
+import com.bussquad.sluglife.Route;
 import com.bussquad.sluglife.activity.MainActivity;
 import com.bussquad.sluglife.activity.ScheduleAcitivity;
+import com.bussquad.sluglife.parser.JsonRouteFileReader;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.SphericalUtil;
 
@@ -31,13 +35,17 @@ import java.util.ArrayList;
 
 public class BusMapFragment extends MapFragment {
 
+    NotificationDbManger ndbase;
     private ArrayList<BusStop> busStops;
-    private ArrayList<DataObject> dataObjects ;
-    private ArrayList<Integer> cardTypeData;
-    private final JsonFileReader busStopReader = new JsonFileReader();
+    private ArrayList<MapMenuItem> menuItems =  new ArrayList<>();
+    private ArrayList<Route>routes = new ArrayList<>();
     public BusMapFragment() {
         // Required empty public constructor
         isActivityStartable(true);
+        enableMenuItems();
+        enableFilterMenuOptions();
+        setFilterMenuResourceId(R.array.bus_filter_options);
+
     }
 
 
@@ -47,6 +55,7 @@ public class BusMapFragment extends MapFragment {
     public static BusMapFragment newInstance(String param1, String param2) {
         BusMapFragment fragment = new BusMapFragment();
         Bundle args = new Bundle();
+
         return fragment;
     }
 
@@ -68,16 +77,42 @@ public class BusMapFragment extends MapFragment {
         return inflater.inflate(R.layout.display_object_loc, container, false);
     }
 
+
+
+
+
     @Override
     public void loadData(Context context) {
+        JsonFileReader busStopReader = new JsonFileReader();
+        JsonRouteFileReader routeReader = new JsonRouteFileReader();
 
+        ndbase = new NotificationDbManger(context);
         InputStream in;
         // fills the array of bus stop of bus stop locations
         try {
             Log.i("BusMapFragment","loadJsonFromAssets() Reading Bus Stop from Json file");
-            in = context.getAssets().open("UCSC_Westside_Bus_Stops.json");
+            in = context.getAssets().open("bus_stop_info.json");
             busStopReader.readBusStopJsonStream(in);
             busStops = new ArrayList<>(busStopReader.getBusStops());
+            if(!ndbase.checkTable("bus_stop_info") || ndbase.checkTableSize("bus_stop_info") == 0 ){
+
+                if(ndbase.checkTableSize("bus_stop_info")!= 0){
+                  //  ndbase.createBusStopInfoTable();
+
+                }
+
+                // add bus stop to table
+                for(BusStop stop: busStops){
+                    ndbase.addBusStopInfo(stop);
+                }
+                ndbase.printTable("bus_stop_info");
+            }
+
+            Log.i("BusMapFragment","Loading Route info from Json File");
+            in = context.getAssets().open("route_list.json");
+            routeReader.ReadJsonFile(in);
+            routes = new ArrayList<>(routeReader.getRoutes());
+            createMenuItems();
             setDataLoadedStatus(true);
 
             context = null;
@@ -87,16 +122,44 @@ public class BusMapFragment extends MapFragment {
     }
 
 
+    private void createMenuItems(){
+        if(menuItems.size() != 0){
+            Log.i("BusMapFragment", "menuItems have already been initialized");
+            return;
+        }
+        if(routes == null){
 
+        }
+        for (int count = 0 ; count < routes.size(); count++){
+            if(routes.get(count).getRouteNumber().equalsIgnoreCase("campus")){
+                menuItems.add(new MapMenuItem(routes.get(count).getRouteNumber(),count));
+            } else {
+                menuItems.add(new MapMenuItem("Route " +routes.get(count).getRouteNumber(),count));
+            }
+        }
+        setMapMenuItems(menuItems);
+    }
 
     @Override
     public ArrayList<MapObject> getMapObjects() {
 
-        ArrayList<MapObject> mapObjects = new ArrayList<MapObject>(busStops);
+        ArrayList<MapObject> mapObjects =  new ArrayList<>();
+        if(getMenuSelectedPosition() != -1){
+            for(BusStop  busStop : busStops){
+                if(routes.get(getMenuSelectedPosition()).getStopIds().contains(busStop.getObjectID())){
+                    mapObjects.add(busStop);
+                }
+            }
+        } else {
+            mapObjects = new ArrayList<MapObject>(busStops);
+        }
 
         return mapObjects;
 
     }
+
+
+
 
 
 
@@ -112,103 +175,5 @@ public class BusMapFragment extends MapFragment {
     }
 
 
-    //
-//    // returns the closest bus stops to the user based on the specified distance
-//    public ArrayList<BusStop> getClosestStops(){
-//        LatLng userLoc;
-//        double distance;
-//        ArrayList<BusStop> closestStops =  new ArrayList<>();
-//
-//        for(BusStop stop : busStops){
-////             userLoc =  new LatLng(mMap.getMyLocation().getLatitude(),mMap.getMyLocation().getLongitude());
-//            userLoc =  new LatLng(37.000084,-122.062960); // testing location
-//            distance = SphericalUtil.computeDistanceBetween(userLoc,stop.getLocation());
-//            if(distance < 200 ){
-//                closestStops.add(stop);
-//                System.out.println(stop.getName());
-//            }
-//        }
-//
-////        if(closestStops)
-//        getEta(closestStops.get(0));
-//        return closestStops;
-//    }
-//
-//    public void getEta(BusStop stop){
-//        System.out.println("calculating eta: ");
-//
-//    /*    for (String route : stop.getBusses()){
-//            if(activeBusses.containsKey(route)){
-//                if(activeBusses.get(route).size() >0){
-//                    findCLosestBus(activeBusses.get(route), stop.getObjectID());
-//                }
-//            }
-//        }
-//        */
-//    }
-//
-//
-//
-//
-//    // finds the closes buses given the route and bus to the bus stop
-//    public void findCLosestBus(ArrayList<Bus> busses, int stopID){
-//
-//        int closestBus = 0;                         // stores the index of the closes bus thus far
-//        double tmpD = 0.0;
-//        double clstBus = 0.0;
-//        int count = 0;
-//        for (Bus bus : busses)        {
-//            tmpD = calculateTotalDistance(bus.direction.toUpperCase(), bus.getLocaiton(),stopID);
-//
-//            if(tmpD >= clstBus){
-//                clstBus = tmpD;
-//                closestBus = count;
-//            }
-//            count++;
-//        }
-//
-//        System.out.println("from bus stop: " + notifDb.getStopName(stopID));
-//        System.out.println("The closest bus is: " + busses.get(closestBus).bus_id + " of route " + busses.get(closestBus).direction);
-//        System.out.println("thee distance is: " + clstBus);
-//
-//    }
-//
-//
-//
-//
-//    private double calculateTotalDistance(String route, LatLng busLocation,int stopID){
-//        boolean reachedBus =  false;
-//        double totalDistance = 0.0;
-
-
-//        int maxCount = 0;
-//        while(!reachedBus && maxCount < 32) {
-//
-//            // if bus is in between the bus stops measure the eta of between the bus stop to the user
-//            // otherwise get its estimated eta
-//            LatLng curStop = notifDb.getLocation(stopID);            // get LatLng of current stop
-//            stopID  = notifDb.getNextBusStopId(stopID,route,1);             // get the next stopID
-//            LatLng nextStop = notifDb.getLocation(stopID);           // get LatLng of next stop
-//
-//            double distbetween = SphericalUtil.computeDistanceBetween(curStop, nextStop);
-//            double toBusNextStop = SphericalUtil.computeDistanceBetween(curStop, busLocation);
-//            double toBusCurStop = SphericalUtil.computeDistanceBetween(nextStop, busLocation);
-//
-//
-//            // if the bus is in between the two bus stops then get the distance from the current
-//            // stop to the bus otherwise get the distance between the bus stops
-//            if(distbetween > toBusCurStop && distbetween > toBusNextStop){
-//                System.out.println("Reached the end");
-//                totalDistance += toBusCurStop;
-//                reachedBus = true;                                  // reached the bus
-//            } else {
-//                System.out.println(" calculating between bus stops ");
-//                totalDistance += distbetween;
-//            }
-//
-//            maxCount++;
-//        }
-//        return  totalDistance;
-//    }
 
 }

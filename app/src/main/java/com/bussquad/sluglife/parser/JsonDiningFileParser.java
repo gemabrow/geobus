@@ -59,7 +59,7 @@ public class JsonDiningFileParser {
         String name = "";
         double latitude = 0;
         double longitude = 0;
-        int id = -1;
+        String id = "";
         // reads in a bracket {
         reader.beginObject();
 
@@ -74,7 +74,7 @@ public class JsonDiningFileParser {
             } else if(token.equals("longitude")){
                 longitude = reader.nextDouble();
             } else if(token.equals("id")){
-                id = reader.nextInt();
+                id = reader.nextString();
             }else {
                 reader.skipValue();
             }

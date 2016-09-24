@@ -210,7 +210,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ImageView thumbNailImage;
         Button actionButton;
         String location;
-        int eventID;
+        String eventID;
         private final Context context;
 
 

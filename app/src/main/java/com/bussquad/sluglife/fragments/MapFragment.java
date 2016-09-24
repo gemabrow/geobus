@@ -3,16 +3,19 @@ package com.bussquad.sluglife.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.bussquad.sluglife.DataObject;
+import com.bussquad.sluglife.MapMenuItem;
 import com.bussquad.sluglife.MapObject;
 import com.bussquad.sluglife.R;
 import com.bussquad.sluglife.activity.ScheduleAcitivity;
@@ -36,13 +39,22 @@ public class MapFragment extends Fragment  {
     private boolean dataLoaded = false;
     private boolean markerVisble = true;
     private boolean enableIconGen = false;
+    private boolean hasFilterMenuItems = false;
+    private boolean hasMenuItems = false;
     private boolean hasZoom = false;
     private boolean startsActivity = false;
+    private boolean sortClosestToFurthest = true;
+
     private float zoomLevel = 14;
     private LatLng cameraLocation;
+    private ArrayList<MapMenuItem> menuItems;
+    private int menuSelectedPosition = 0; // set to first one by default
+    private int totalMenuItems = 0;
+    private float layoutHeight;
+    private double minDistance = 100;           // default distance is set to 100 meters
 
 
-
+    private int menuFilterResourceID = 0;                // resource id for the filter menu items
     // store the date to display in the card views
     private ArrayList<DataObject> listObjects = new ArrayList<>();
     // store the type of views for each data object
@@ -52,6 +64,7 @@ public class MapFragment extends Fragment  {
 
     public MapFragment() {
         // Required empty public constructor
+        menuItems  = new ArrayList<>();
     }
 
 
@@ -59,22 +72,11 @@ public class MapFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.display_object_loc, container, false);
+        View view = inflater.inflate(R.layout.display_object_loc, container, false);
+        layoutHeight = view.getHeight();
+        return view;
     }
 
-
-//    @Override
-//    public void onClick(View view) {
-//        System.out.println("drawer item clicked!");
-//        switch (view.getId()){
-//            case R.id.btnSwitchView:
-//                mListener.switchToListView();
-//                break;
-//            case R.id.btnFilter:
-//                break;
-//
-//        }
-//    }
 
 
     @Override
@@ -101,6 +103,7 @@ public class MapFragment extends Fragment  {
     // load date for the map fragment
     public void loadData(Context context){
 
+        context = null;
     }
 
 
@@ -113,17 +116,21 @@ public class MapFragment extends Fragment  {
 
 
 
-    // sets a list of objects
-    public void setListObjects(ArrayList<DataObject> listObjects) {
-        this.listObjects = listObjects;
-    }
-
 
 
 
     // returns a list of view types
     public ArrayList<Integer> getViewTypes() {
         return viewTypes;
+    }
+
+
+
+
+
+    // object id is used to filter the map objects ac
+    public ArrayList<MapObject> getMapObjects(){
+        return this.mapObjects;
     }
 
 
@@ -137,15 +144,20 @@ public class MapFragment extends Fragment  {
 
 
 
-    public ArrayList<MapObject> getMapObjects(){
-        return this.mapObjects;
+    // sets a list of objects
+    public void setListObjects(ArrayList<DataObject> listObjects) {
+        this.listObjects = listObjects;
     }
+
 
 
 
     public void setMapObjects(ArrayList<MapObject> mapObjects){
         this.mapObjects = mapObjects;
     }
+
+
+
 
 
     // returns with the current map fragment is in card mode or not
@@ -306,5 +318,117 @@ public class MapFragment extends Fragment  {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
             public void switchToListView();
+    }
+
+
+
+    // sets the menu items for the map fragment and also sets the total number of menu items
+    // for the map fragment if any
+    public void setMapMenuItems(ArrayList<MapMenuItem> menuItems){
+
+        if (menuItems == null){
+            throw new RuntimeException("MapMenuItems cannot be null");
+        }
+
+
+        this.totalMenuItems =  menuItems.size();
+        this.menuItems = new ArrayList<>(menuItems);
+    }
+
+
+    public ArrayList<MapMenuItem> getMapMenuItems(){
+
+        return this.menuItems;
+    }
+
+
+    // set the options that will show up in the popup menu which can be used to set filters to which
+    // mapobjects will be displayed on the map
+    public void setFilterMenuResourceId(int resourceId){
+        this.menuFilterResourceID = resourceId;
+    }
+
+
+    // returns a set of menu items that will present possible filtering options to the user
+    public int getFilterMenuResourceID(){
+        return this.menuFilterResourceID;
+    }
+
+
+
+    public void enableFilterMenuOptions(){
+        this.hasFilterMenuItems = true;
+    }
+
+
+
+    public void disableFilterMenuOptions(){
+        this.hasFilterMenuItems = false;
+    }
+
+
+
+    public boolean isFilterMenuEnabled(){
+        return this.hasFilterMenuItems;
+    }
+
+    // enable menu items for mapobject,when enabled this will allow the user to filter mapobjects
+    // based on a certain category
+    public void enableMenuItems(){
+        this.hasMenuItems = true;
+    }
+
+
+    public void disableMenuItems(){
+        this.hasMenuItems = false;
+    }
+
+
+
+    public boolean isMenuItemsEnabled(){
+        return this.hasMenuItems;
+    }
+
+
+
+    public int getTotalMenuItems(){
+        return this.totalMenuItems;
+    }
+
+
+    public float getLayoutHeight(){
+        return this.layoutHeight;
+    }
+
+
+    public void setMenuSelectedPosition(int position){
+        this.menuSelectedPosition = position;
+    }
+
+
+
+
+    // returns the currently selected menu item, if there are not menuitems for the selected mapfragment
+    // it will return -1 indicating that there is no menu items set
+    public int getMenuSelectedPosition(){
+
+        if(totalMenuItems == 0){
+            return -1;
+        }
+        return this.menuSelectedPosition;
+    }
+
+
+
+    // returns the map objects within range. Range can be set with the function setRange()
+    public ArrayList<MapObject> getClosestMarkers(Location userLocation){
+        ArrayList<MapObject> closestMapObjects = new ArrayList<>();
+
+        for(MapObject mapObject : getMapObjects()){
+            if(userLocation.distanceTo(mapObject.getObjLocation()) <= minDistance){
+                closestMapObjects.add(mapObject);
+            }
+        }
+        return closestMapObjects;
     }
 }

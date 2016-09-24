@@ -40,7 +40,7 @@ public class EventActivity extends AppCompatActivity implements Button.OnClickLi
 
     private EventDbManager eventDB;
     private String webUrl;
-    private int eventID;
+    private String eventID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +50,7 @@ public class EventActivity extends AppCompatActivity implements Button.OnClickLi
         Bundle extras = getIntent().getExtras();
 
         eventDB = new EventDbManager(getBaseContext());
-        eventID =  extras.getInt("EVENTID");
+        eventID =  extras.getString("EVENTID");
         Event event = eventDB.getEvent(eventID);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("SlugLife Event");
@@ -84,14 +84,12 @@ public class EventActivity extends AppCompatActivity implements Button.OnClickLi
         // set image
         imgThumbnail = (ImageView) findViewById(R.id.imgThumbNail);
         String urlThumbNail = event.getThumbNailUrl();
-        System.out.println("thumbnail url: " + urlThumbNail);;
         if(urlThumbNail != null){
             imageLoader.get(urlThumbNail, new ImageLoader.ImageListener() {
                 @Override
                 public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
 
                     if(response.getBitmap() != null){
-                        System.out.println("loading image");
                         imgThumbnail.setImageBitmap(response.getBitmap());
                     }
                 }

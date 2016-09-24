@@ -77,7 +77,7 @@ public class JsonEventJsonParser {
         double cost;
         String tmpText;
         String tmparray[];
-        int id  = -1;
+        String id  = "";
 
         // reads in a bracket {
         reader.beginObject();
@@ -98,7 +98,7 @@ public class JsonEventJsonParser {
                 location = reader.nextString();
             } else if(token.equals("link")){
                 tmpText = reader.nextString();
-                id = Integer.parseInt(tmpText.substring(tmpText.lastIndexOf('/') + 1));
+                id = tmpText.substring(tmpText.lastIndexOf('/') + 1);
                 link = tmpText;
             } else if(token.equals("event_date")){
                 date = reader.nextString();

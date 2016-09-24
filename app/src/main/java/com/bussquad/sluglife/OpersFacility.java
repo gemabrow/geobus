@@ -14,7 +14,7 @@ public class OpersFacility extends MapObject {
 
 
 
-    public OpersFacility(int id, String name, String description, String pep_count, String lastUpdated, String imgUrl, double latitude, double longitude){
+    public OpersFacility(String id, String name, String description, String pep_count, String lastUpdated, String imgUrl, double latitude, double longitude){
         this.setObjectID(id);
         this.setMapImgResource(R.drawable.ic_blank_icon);
         this.description = description;

@@ -21,6 +21,7 @@
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
     <color name="colorAccent">#C5CAE9</color>
+    <color name="colorAccentDialog">#0AAEEF</color>
     <color name="secondaryColor">#FFFF8D</color>
     <color name="secondaryColorDark">#FFD600</color>
     <color name="action_button_selected_gradient_bottom">#ffff8d</color>

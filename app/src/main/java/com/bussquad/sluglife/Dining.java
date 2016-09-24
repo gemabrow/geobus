@@ -13,7 +13,7 @@ public class Dining extends MapObject{
 
 
 
-    public Dining(int facilityid, String name, double latitude, double longitude){
+    public Dining(String facilityid, String name, double latitude, double longitude){
 
         this.setObjectID(facilityid);
         this.setName(name);

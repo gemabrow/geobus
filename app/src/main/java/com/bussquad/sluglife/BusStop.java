@@ -3,6 +3,7 @@ package com.bussquad.sluglife;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Jose on 10/14/2015.
@@ -14,14 +15,15 @@ public class BusStop extends MapObject{
 
     public final static int BUSSTOP_CLUSTERGROUP = 10;
     // used to store busses that stop at the bus stop location
-    private ArrayList<String> busses;
+    private List<String> busses;
+    private String routes;
     private ArrayList<BusStopSchedule> schedules;
 
 
 
 
     // constructor
-    public BusStop(int id, String name,double latitude, double longitude) {
+    public BusStop(String id, String name,double latitude, double longitude) {
         this.setObjectID(id);
         this.setName(name);
         this.setLatitude(latitude);
@@ -34,12 +36,14 @@ public class BusStop extends MapObject{
 
 
     // constructor
-    public BusStop(String name, double latitude, double longitude, ArrayList<String> busses,int id) {
+    public BusStop(String name, double latitude, double longitude, List<String> busses,String routes, String id) {
+
         this.setObjectID(id);
         this.setName(name);
         this.setLatitude(latitude);
         this.setLongitude(longitude);
         this.setLocation(new LatLng(latitude,longitude));
+        this.routes = routes;
         this.busses =  new ArrayList<>(busses);
         this.setImageResource(R.drawable.ic_directions_bus_black_24dp);
         this.setMapImgResource(R.drawable.ic_busstop_marker);
@@ -111,9 +115,18 @@ public class BusStop extends MapObject{
         return "Next Bus: 10";
     }
     // stores a list of busses that stop at this bus stop
-    public ArrayList<String> getBusses() {
+    public List<String> getBusses() {
         return busses;
     }
+
+
+
+
+    public String getRoutes(){
+        return this.routes;
+    }
+
+
 
 
 
