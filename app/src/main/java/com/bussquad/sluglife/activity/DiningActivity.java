@@ -36,23 +36,23 @@ public class DiningActivity extends AppCompatActivity implements
         Bundle extras = getIntent().getExtras();
         dinName = extras.getString("DINING_NAME");
 
-        setContentView(R.layout.activity_dining);
+        setContentView(R.layout.dining);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(dinName);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        TextView diningDescription = (TextView) findViewById(R.id.txtDiningDescription);
+        TextView diningDescription = (TextView) findViewById(R.id.description);
         diningDescription.setText("Its a really good place to eat... but sometimes it does suck");
 
-        TextView diningName = (TextView) findViewById(R.id.txtDining_hall_name);
+        TextView diningName = (TextView) findViewById(R.id.location_name);
         diningName.setText(dinName);
 
-        View calendarLayout = findViewById(R.id.calendar_date_picker); // root View id from that link
-        btnCalendarPicker = (Button) calendarLayout.findViewById(R.id.btnCalendarPicker);
-        setDate();
-        btnCalendarPicker.setOnClickListener(this);
+//        View calendarLayout = findViewById(R.id.calendar_date_picker); // root View id from that link
+//        btnCalendarPicker = (Button) calendarLayout.findViewById(R.id.btnCalendarPicker);
+//        setDate();
+//        btnCalendarPicker.setOnClickListener(this);
 
 
     }

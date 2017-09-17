@@ -28,6 +28,7 @@ public class BusStop extends MapObject{
         this.setName(name);
         this.setLatitude(latitude);
         this.setLongitude(longitude);
+        this.setCardViewType(5);
         this.setLocation(new LatLng(latitude,longitude));
         this.setImageResource(R.drawable.ic_directions_bus_black_24dp);
         this.setMapImgResource(R.drawable.ic_busstop_marker);
@@ -42,6 +43,7 @@ public class BusStop extends MapObject{
         this.setName(name);
         this.setLatitude(latitude);
         this.setLongitude(longitude);
+        this.setCardViewType(5);
         this.setLocation(new LatLng(latitude,longitude));
         this.routes = routes;
         this.busses =  new ArrayList<>(busses);

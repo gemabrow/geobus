@@ -52,7 +52,7 @@ public class JsonOpersFacilityParser {
         // skips last updated
 
         System.out.println("skipping value");
-        reader.skipValue();
+//        reader.skipValue();
         // skips closing brace
         System.out.println("ending object");
 
@@ -90,7 +90,7 @@ public class JsonOpersFacilityParser {
                 pep_count = reader.nextString();
             } else if(token.equals("facility_name")){
                 name = reader.nextString();
-            } else if(token.equals("last_update")){
+            } else if(token.equals("last_updated")){
                 lastupdate  = reader.nextString();
             } else if(token.equals("imgurl")){
                 imgurl  = reader.nextString();

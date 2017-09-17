@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="primaryText">#d9000000</color>
-    <color name="secondaryText">#8C000000</color>
-    <color name="disabledText">#61000000</color>
-    <color name="mdx_blue">#ff1994d7</color>
-    <color name="mdx_blue_dark">#ff253b56</color>
-    <color name="mdx_blue_gray_dark">#ff7b88a0</color>
-    <color name="mdx_blue_inactive">#ffacd5eb</color>
-    <color name="mdx_blue_light">#fff5f9fc</color>
-    <color name="mdx_blue_powder">#ffdcedf6</color>
-    <color name="mdx_blue_tap">#ff4dabde</color>
-    <color name="black">#1e000000</color>
-    <color name="actionbar">#2495d4</color>
-    <color name="mdx_home_divider">#ffe4e8ec</color>
-    <color name="divide_black">#ffe4e8ec</color>
+    <!-- main colors -->
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
+    <color name="light_primary_color">#C5CAE9</color>
+    <color name="colorAccentDialog">#ffc107</color>
+
+    <!-- main text colors-->
+    <color name="inactiveText">#ffacd5eb</color>
+    <color name="primaryText">#212121</color>
+    <color name="secondaryText">#757575</color>
+
+
+    <color name="divider">#BDBDBD</color>
+    <color name="disabledText">#61000000</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
-    <color name="navigationBarColor">#000000</color>
-    <color name="colorAccent">#C5CAE9</color>
-    <color name="colorAccentDialog">#0AAEEF</color>
+    <color name="navigationBarColor">#f90101</color>
     <color name="secondaryColor">#FFFF8D</color>
     <color name="secondaryColorDark">#FFD600</color>
     <color name="action_button_selected_gradient_bottom">#ffff8d</color>
 
+    <!--tab colors-->
+    <color name="tab_active">#FFFFFF</color>
+    <color name="tab_inactive">#C5CAE9</color>
     <color name="dark_grey">#424242</color>
     <color name="medium_grey">#757575</color>
     <color name="button_grey">#757575</color>

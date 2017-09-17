@@ -23,6 +23,7 @@ public class Event extends MapObject {
         this.setLatitude(latitude);
         this.setLongitude(longitude);
         this.setImageResource(R.drawable.ic_event_black_24dp);
+        this.setCardViewType(1);
         this.setThumbNailUrl(imgURL);
         this.setMapImgResource(R.drawable.ic_event_marker);
 
@@ -42,6 +43,7 @@ public class Event extends MapObject {
         this.setThumbNailUrl(thumbnailLink);
         this.setFullViewImageUrl(largeImgUrl);
         this.setCardSubText1(teaser);
+        this.setCardViewType(1);
         this.setFullViewText1(description);
         this.eventWebUrl = weblink;
         this.event_date = date;
@@ -81,12 +83,6 @@ public class Event extends MapObject {
 
     // sets the card type of the event object to 1, this makes it possible to call a specific
     // card view for events
-    @Override
-    public int getCardViewType() {
-        return 1;
-    }
-
-
 
 
     // sets the link with more information about the event

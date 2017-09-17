@@ -112,9 +112,9 @@ public class NetworkService extends Service {
             }else{
                 // if mapActivity is not running and if there is no notifications pending
                 // stop getting map coordinates
+                // stoppin the network service
                 Log.d("NETWORK", "Network Service Stopped, MapActivity is not active, No Pending Notifications");
                 stopSelf();
-                System.out.println("stopping network service");
             }
         }
     };
@@ -125,7 +125,7 @@ public class NetworkService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "NetworkService Destroyed", Toast.LENGTH_LONG).show();
+    //    Toast.makeText(this, "NetworkService Destroyed", Toast.LENGTH_LONG).show();
         handler.removeCallbacks(getCoordinates);
     }
 

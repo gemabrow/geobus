@@ -26,11 +26,12 @@ import com.bussquad.sluglife.parser.JsonEventJsonParser;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
+ * This Fragment extends the MapFragment. It is used to provide information about events that
+ * are going throughout campus
  */
 public class EventFragment extends MapFragment {
     private ArrayList<Event> events;
@@ -68,12 +69,15 @@ public class EventFragment extends MapFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        // display_object_loc is a generic layout, its not really used, its just a place holder
         return inflater.inflate(R.layout.display_object_loc, container, false);
     }
 
 
 
 
+    // the data is loaded directly from the ucsc event website. Currently it only grabs
+    // featured events, buy by switching the featured.json with month.json , week.json etc
     @Override
     public void loadData(final Context context) {
         System.out.println("loading event");
@@ -131,7 +135,11 @@ public class EventFragment extends MapFragment {
     @Override
     public ArrayList<MapObject> getMapObjects() {
 
+
+
         ArrayList<MapObject> mapObjects;
+        // if there are no events found just return nothing
+        // TO-DO should notify the user that there are no events goin on
         if(events == null){
             mapObjects = new ArrayList<>();
 

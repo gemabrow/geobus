@@ -198,14 +198,14 @@
         <item>Metro Schedule</item>
     </string-array>
     <string-array name="navigation_drawer_help_support_item_array">
-    <!-- Sub Header -->
-    <item>Help &amp; Support</item>
-    <!-- list items-->
-    <item>Tips &amp; Tricks</item>
-    <item>Help Center</item>
-    <item>Settings</item>
-    <item>Sign In</item>
-</string-array>
+        <!-- Sub Header -->
+        <item>Help &amp; Support</item>
+        <!-- list items-->
+        <item>Tips &amp; Tricks</item>
+        <item>Help Center</item>
+        <item>Settings</item>
+        <item>Sign In</item>
+    </string-array>
     <string-array name="bus_filter_options">
         <!-- Sub Header -->
         <item>Closest Stops</item>
@@ -243,4 +243,6 @@
     <string name="ok_dialog">Ok</string>
     <string name="show_dialog">Show</string>
     <string name="filter_options_dialog">Filter Options</string>
+    <string name="random_text"> Random Text To Display</string>
+    <string name="location_name">Location Name</string>
 </resources>

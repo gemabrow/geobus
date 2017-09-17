@@ -124,7 +124,7 @@ public class ScheduleAcitivity extends AppCompatActivity implements
         tabLayout.setupWithViewPager(viewPager);
         float myTabLayoutSize = 360;
         // if the number of tabs is less than 5 set tab mode as fixed other wise make the tabs scrollable
-        if (routes.size() < 4 ){
+        if (routes.size() < 5 ){
             tabLayout.setTabMode(TabLayout.MODE_FIXED);
         } else {
             tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
@@ -336,6 +336,7 @@ public class ScheduleAcitivity extends AppCompatActivity implements
             System.out.println("unable to create map");
         } else {
             mMap = googleMap;
+            System.out.println("stop id being read " + busStopId);
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(notifDb.getLocation(busStopId),
                     (float)initalCameraZoom));
             mMap.getUiSettings().setMyLocationButtonEnabled(false);

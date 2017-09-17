@@ -14,16 +14,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.bussquad.sluglife.activity.AppController;
 import com.bussquad.sluglife.activity.EventActivity;
+import com.bussquad.sluglife.activity.ScheduleAcitivity;
 import com.bussquad.sluglife.utilities.VolleySingleton;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.w3c.dom.Text;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,6 +48,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int OPERS = 2;
     private static final int BUSSCHEDULEITEM = 3;
     private static final int NOBUSCEDULE = 4;
+    private static final int BUSSTOP = 5;
     private LayoutInflater inflater;
     private AppController dataController;
     private ImageLoader imageLoader;
@@ -132,22 +137,59 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public class BusStopViewHolder extends ViewHolder {
 
-        TextView title;
-        TextView subtext1;
-        TextView subtext2;
-        NetworkImageView displayImage;
+        CardView cv;
+        TextView name;
+        Button btnSchedule;
+        Button btnNotification;
+        MapObject mapObject;
+        String stopID;
+        String title;
+        ImageView iconImage;
         private final Context context;
 
         public BusStopViewHolder(View v){
+
             super(v);
             this.context = v.getContext();
-            this.displayImage = (NetworkImageView) v.findViewById(R.id.displayImage);
-            this.title = (TextView) v.findViewById(R.id.title);
-            this.subtext1 = (TextView) v.findViewById(R.id.subtext1);
-            this.subtext2 = (TextView) v.findViewById(R.id.subtext2);
+            CardView cv = (CardView)v.findViewById(R.id.cv_bus_stops_view);
+            this.iconImage = (ImageView) v.findViewById(R.id.imgIcon);
+            this.name = (TextView) v.findViewById(R.id.name);
+
+            this.btnSchedule = (Button) v.findViewById(R.id.btn_schedule);
+            this.btnNotification = (Button) v.findViewById(R.id.btn_notification);
+            this.btnSchedule.setOnClickListener(this);
+            this.btnNotification.setOnClickListener(this);
 
 
+        }
 
+        @Override
+        public void onClick(View v) {
+            super.onClick(v);
+            switch (v.getId()){
+                case R.id.btn_notification:
+                    //    startBusNotificationActivity();
+                    System.out.println("Notification Button clicked");
+                    String function = "Function not available yet";
+                    Toast toast = Toast.makeText(context, function, Toast.LENGTH_SHORT);
+                    toast.show();
+                    break;
+                case R.id.btn_schedule:
+                    //    startBusNotificationActivity();
+                    System.out.println("Schedule Button clicked");
+                    startScheduleActivity();
+                    break;
+
+            }
+
+        }
+
+        private void startScheduleActivity(){
+            Intent myIntent = new Intent(context,ScheduleAcitivity.class);
+            myIntent.putExtra("BUSSTOPID",stopID);
+            myIntent.putExtra("bus_stop_name",title);
+            context.startActivity(myIntent);
+            ((Activity)context).overridePendingTransition(R.anim.slide_in_left,R.anim.fade_out_in_place);
         }
 
     }
@@ -274,6 +316,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.no_busschedule, parent, false);
                 return new BusScheduleViewHolder(view,2);
+            case BUSSTOP:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.bus_stop_card_view,parent,false);
+                return new BusStopViewHolder(view);
             default:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.general_card_view, parent, false);
@@ -336,7 +382,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 final BusScheduleViewHolder holder4 = (BusScheduleViewHolder)viewHolder;
                 holder4.schedule_Time.setText(mDataset.get(position).getMainText());
                 break;
-
+            case BUSSTOP:
+                final BusStopViewHolder bholder = (BusStopViewHolder)viewHolder;
+                bholder.iconImage.setImageResource(mDataset.get(position).getIconId());
+                bholder.name.setText(mDataset.get(position).getHeaderText());
+                bholder.stopID = mDataset.get(position).getObjectid();
+                bholder.title = mDataset.get(position).getHeaderText();
+                break;
             case GENERAL:
                 final GeneralViewHolder dHolder = (GeneralViewHolder) viewHolder;
                 dHolder.iconImage.setImageResource(mDataset.get(position).getIconId());
@@ -344,6 +396,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 dHolder.mainText.setText(mDataset.get(position).getMainText());
                 dHolder.additionalInfo.setText(mDataset.get(position).getSubText());
                 break;
+
             default:
                 break;
 

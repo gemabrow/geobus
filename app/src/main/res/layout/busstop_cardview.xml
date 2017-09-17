@@ -46,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/item_name"
-                android:divider="@color/black"
+                android:divider="@color/divider"
                 android:id="@+id/sample_bus_schedule_holder"
                 android:showDividers="middle"
                 android:dividerPadding="1dp">

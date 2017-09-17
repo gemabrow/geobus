@@ -70,9 +70,9 @@ public class OptionListAdapter extends ArrayAdapter<MapMenuItem> {
                 if(position == selected){
 
                     if(Build.VERSION.SDK_INT >= 23){
-                        txtTitle.setBackgroundColor(ContextCompat.getColor(mContext,R.color.mdx_blue_powder));
+                        txtTitle.setBackgroundColor(ContextCompat.getColor(mContext,R.color.colorAccentDialog));
                     } else {
-                        txtTitle.setBackgroundColor(mContext.getResources().getColor(R.color.mdx_blue_powder));
+                        txtTitle.setBackgroundColor(mContext.getResources().getColor(R.color.colorAccentDialog));
                     }
 
                 }

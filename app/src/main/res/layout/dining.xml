@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:id="@+id/view">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    </android.support.design.widget.AppBarLayout>
+    <ScrollView
+
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/detail_view"
+        android:layout_below="@+id/view">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <!--Image with Title -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/image_and_title_frame">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="225dp"
+                android:src="@drawable/sample"
+                android:id="@+id/dining_location_image"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="16dp"
+                    android:paddingTop="24dp"
+                    android:paddingRight="16dp"
+                    android:paddingLeft="16dp"
+                    android:text="location_name"
+                    android:textSize="24sp"
+                    android:id="@+id/location_name"
+
+                    android:layout_gravity="left|bottom" />
+            </FrameLayout>
+            <!--Description of Dining facility-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/image_and_title_frame"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/description"
+                android:textSize="15sp"
+                android:id="@+id/description"
+                />
+            <!--Phone Number-->
+            <RelativeLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_below="@+id/description"
+                android:id="@+id/phone_number"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_phone_black_24dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="8dp"
+
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:paddingLeft="72dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="8dp"
+                    android:text="@string/random_text"
+                    android:textSize="16sp"
+                    android:id="@+id/phone_text"
+
+                    android:layout_centerVertical="false"
+                    android:layout_alignParentStart="false"
+                    android:paddingBottom="20dp" />
+
+
+            </RelativeLayout>
+            <!--Hours of Operation-->
+            <RelativeLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_below="@+id/phone_number"
+                android:id="@+id/hours_of_operation"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_schedule_black_24dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="8dp"
+
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:paddingLeft="72dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="8dp"
+                    android:text="@string/random_text"
+                    android:textSize="16sp"
+                    android:id="@+id/hours_text"
+                    android:layout_centerVertical="false"
+                    android:layout_alignParentStart="false"
+                    android:paddingBottom="20dp" />
+
+
+            </RelativeLayout>
+            <!--Menu -->
+            <RelativeLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_below="@+id/hours_of_operation"
+                android:id="@+id/menu"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_restaurant_menu_black_24dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="8dp"
+
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:paddingLeft="72dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="8dp"
+                    android:text="@string/random_text"
+                    android:textSize="16sp"
+                    android:id="@+id/menu_text"
+                    android:layout_centerVertical="false"
+                    android:layout_alignParentStart="false"
+                    android:paddingBottom="20dp" />
+
+
+            </RelativeLayout>
+                    <!--website-->
+            <RelativeLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_below="@+id/menu"
+                android:id="@+id/website"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_web_black_24dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="8dp"
+
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:paddingLeft="72dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="8dp"
+                    android:text="@string/random_text"
+                    android:textSize="16sp"
+                    android:id="@+id/website_text"
+                    android:layout_centerVertical="false"
+                    android:layout_alignParentStart="false"
+                    android:paddingBottom="20dp" />
+
+
+            </RelativeLayout>
+                    <!--population count-->
+            <RelativeLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_below="@+id/website"
+                android:id="@+id/population"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_people_black_24dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="8dp"
+
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:paddingLeft="72dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="8dp"
+                    android:text="@string/random_text"
+                    android:textSize="16sp"
+                    android:id="@+id/population_text"
+                    android:layout_centerVertical="false"
+                    android:layout_alignParentStart="false"
+                    android:paddingBottom="20dp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

@@ -63,6 +63,10 @@ public class LibraryFragment extends MapFragment {
         // fills the array of bus stop of bus stop locations
         try {
             Log.i("LibraryFragment","loadData() Reading Library data from Json file");
+
+            // loads data from a locally stored json file, this should eventyally load from our database
+            // at first and then once it has been loaded, copy the data into the sqlite database
+            //
             in = context.getAssets().open("libraries.json");
             libraryReader.ReadJsonFile(in);
             libraries = new ArrayList<>(libraryReader.getLibraries());

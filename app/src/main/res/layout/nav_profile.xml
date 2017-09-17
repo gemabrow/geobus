@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="280dp"
     android:layout_height="wrap_content"
-    android:background="@color/mdx_blue_powder">
+    android:background="@color/light_primary_color">
 
     <!-- Large profile pic -->
     <ImageView

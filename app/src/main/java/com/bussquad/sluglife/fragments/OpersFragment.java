@@ -92,6 +92,7 @@ public class OpersFragment extends MapFragment {
                 Log.i("OpersFragment","loadData() Reading Opers data from Json file");
                 try{
                     InputStream in =  new ByteArrayInputStream(response.toString().getBytes(StandardCharsets.UTF_8));
+                    System.out.println("reading input stream");
                     facilityReader.ReadJsonFile(in);
                     opers = new ArrayList<>(facilityReader.getOpersFacilities());
                     if(opers != null){
@@ -104,7 +105,7 @@ public class OpersFragment extends MapFragment {
                     }
 
                 } catch (Exception e) {
-                    System.out.println("error loading opers" + e.getMessage());
+                    System.out.println("error loading opers: " + e.getMessage());
                 }
 
 

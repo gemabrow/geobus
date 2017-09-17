@@ -1,5 +1,6 @@
 package com.bussquad.sluglife.activity;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -101,6 +102,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -225,6 +227,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private ImageButton btnFilter;
     private ImageButton btnSwitchView;
+    private ImageButton btnShowLocation;
     private Menu menu;
     ListPopupWindow popupWindow;
     /**
@@ -285,6 +288,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         btnSwitchView = (ImageButton) findViewById(R.id.btnSwitchView);
         btnFilter = (ImageButton) findViewById(R.id.btnFilter);
+        btnShowLocation = (ImageButton)findViewById(R.id.btnShowMyLocation);
         btnMenuFilter = (Button) findViewById(R.id.btnMenuFilter);
         btnMenuFilter.setText("");
 
@@ -303,6 +307,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // set button listners
         btnSwitchView.setOnClickListener(this);
         btnMenuFilter.setOnClickListener(this);
+        btnShowLocation.setOnClickListener(this);
         btnFilter.setOnClickListener(this);
         mDrawerList.setOnItemClickListener(this);
 
@@ -507,9 +512,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 mMessageReceiver, new IntentFilter("data_ready"));
         System.out.println("Starting");
-        btnMenuFilter.setText(vAdapter.getItem(currentTab).getMapMenuItems().
-                get(vAdapter.getItem(currentTab)
-                        .getMenuSelectedPosition()).getTitle());
+        System.out.println("current tab: " + currentTab);
+//        btnMenuFilter.setText(vAdapter.getItem(currentTab).getMapMenuItems().
+//                get(vAdapter.getItem(currentTab)
+//                        .getMenuSelectedPosition()).getTitle());
 
         startBackgroundData();
 
@@ -593,6 +599,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     //// TODO: 8/27/2016  make this more modular! 
     private void setupTabIcons() {
 
+        // custom_tab is used therfore if you want to make changes to the text color make the
+        // changes in the custom_tab layout.
         TextView tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         tabOne.setText("Campus Shuttles");
         tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_directions_bus_white_24dp, 0, 0);
@@ -645,6 +653,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 {
                     showFilterMenu(vAdapter.getItem(currentTab).getFilterMenuResourceID());
                 }
+                break;
+            case R.id.btnShowMyLocation:
+                if(checkPermissionStatus(android.Manifest.permission.ACCESS_COARSE_LOCATION) && checkPermissionStatus(android.Manifest.permission.ACCESS_FINE_LOCATION)){
+
+                if(mMap != null){
+
+
+                    Location myLocation = mMap.getMyLocation();
+                    if(myLocation != null){
+                        LatLng myLatLng = new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
+
+                        zoomToLocation(myLatLng,initalCameraZoom);
+                    } else {
+
+                    }
+
+                } else {
+                    System.out.println("requesting location permission");
+                    requestLocationPermission( Manifest.permission.ACCESS_FINE_LOCATION,R.string.location,R.string.location_description);
+                    requestLocationPermission( Manifest.permission.ACCESS_COARSE_LOCATION,R.string.location,R.string.location_description);
+
+                }
+                }
+
                 break;
             case R.id.btnMenuFilter:
                 if(vAdapter.getItem(currentTab).getMapMenuItems().size() == 0){
@@ -802,7 +834,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    // Map Functionality
+
 
     // draws google map and sets up initial settings.
     @Override
@@ -832,10 +864,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 FirebaseCrash.log(TAG + " Access Coarse Location and Acess " +
                         "Fine Location permissions has not been granted. Requesting permissions");
-                requestLocationPermission();
+
+                requestLocationPermission( android.Manifest.permission.ACCESS_COARSE_LOCATION,R.string.location,R.string.location_description);
+                requestLocationPermission( Manifest.permission.ACCESS_FINE_LOCATION,R.string.location,R.string.location_description);
 
             }
+        } else {
+            System.out.println("permissions have already been requested");
+            mMap.setMyLocationEnabled(true);
         }
+
 
         mMap.setOnInfoWindowClickListener(this);
         mMap.setInfoWindowAdapter(new MapInfoWindowAdapter(getBaseContext()));
@@ -847,13 +885,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    public boolean checkPermissionStatus(String permission){
+        if (Build.VERSION.SDK_INT > 23) {
+            if (ActivityCompat.checkSelfPermission(this,permission
+                    ) != PackageManager.PERMISSION_GRANTED ) {
 
-    public void requestLocationPermission() {
+                requestLocationPermission( android.Manifest.permission.ACCESS_COARSE_LOCATION,R.string.location,R.string.location_description);
+
+            }
+        }
+        return true;
+    }
+
+    public void requestLocationPermission(String permission,int title, int permission_msg) {
 
 
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION) || ActivityCompat.shouldShowRequestPermissionRationale(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,permission) ){
             DialogFragment newFragment = PermissionDialog.newInstance(R.string.location_permission_title, R.string.location_permission_msg);
             newFragment.show(getSupportFragmentManager(), "dialog");
 
@@ -863,6 +910,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_LOCATION);
         }
     }
+
 
 
     @Override
@@ -876,7 +924,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     // enable location dectecter
                     mMap.setMyLocationEnabled(true);
-
+                    System.out.println("permissions requested, location set");
 
                 } else {
 

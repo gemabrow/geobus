@@ -72,11 +72,16 @@ public class EventActivity extends AppCompatActivity implements Button.OnClickLi
 
         locationInfoLayout = findViewById(R.id.location_information);
         locationInfo = (TextView) locationInfoLayout.findViewById(R.id.location_description);
-        locationInfo.setText(event.getLocationDetail());
+        if(event.getLocationDetail().isEmpty()){
+            locationInfo.setText("Check website for details");
+        } else {
+            locationInfo.setText(event.getLocationDetail() );
+        }
+
 
         admissinoLayout = findViewById(R.id.txtAdmission);
         eventCost = (TextView) admissinoLayout.findViewById(R.id.txtDescription) ;
-        eventCost.setText(setCost(event.getAdmissionCost()));
+     //   eventCost.setText(setCost(event.getAdmissionCost()));
 
         btnWebPageLink = (Button) findViewById(R.id.btnWebPageUrl);
         webUrl = event.getEventWebUrl();

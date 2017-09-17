@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -120,7 +121,8 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
         System.out.println("creating database");
         //If the database does not exist, copy it from the assets.
         boolean mDataBaseExist = checkDataBase();
-        if(mDataBaseExist)
+        System.out.println("databases status: " + mDataBaseExist);
+        if(!mDataBaseExist)
         {
             this.getReadableDatabase();
             this.close();
@@ -180,25 +182,9 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
      */
     private boolean checkDataBase(){
 
-        SQLiteDatabase checkDB = null;
+        File dbFile = new File(DB_PATH + DB_NAME);
 
-        try{
-            String myPath = DB_PATH + DB_NAME;
-            checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-
-        }catch(SQLiteException e){
-
-            //database does't exist yet.
-
-        }
-
-        if(checkDB != null){
-
-            checkDB.close();
-
-        }
-
-        return checkDB != null ? true : false;
+        return dbFile.exists();
     }
 
 
