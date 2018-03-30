@@ -9,14 +9,26 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class MapObject {
 
+    private int id = -1;
 
-    private  double latitude = 0.0;
-    private  double longitude = 0.0;
-    private  LatLng location;
+    private double latitude = 0.0;
+    private double longitude = 0.0;
+    private LatLng location;
     private Location objLocation;
-    private  String name;
-    private String objectID ="-1";
 
+    private String name;
+    private String objectID ="-1";
+    private String website;
+    private String phoneNumber;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     private int cardViewType = 0;
     private String mainInfo;
@@ -35,7 +47,7 @@ public class MapObject {
 
 
 
-    MapObject(){
+    public MapObject(){
 
     }
 
@@ -46,6 +58,16 @@ public class MapObject {
         this.longitude = longitude;
         this.name = name;
         this.objectID = id;
+        objLocation = new Location("");
+        objLocation.setLatitude(this.latitude);
+        objLocation.setLongitude(this.longitude);
+    }
+
+    public MapObject( int id, String name, double latitude, double longitude){
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.name = name;
+        this.id = id;
         objLocation = new Location("");
         objLocation.setLatitude(this.latitude);
         objLocation.setLongitude(this.longitude);
@@ -183,10 +205,6 @@ public class MapObject {
 
 
 
-    public void setAdditionalInfo(String additionalInfo) {
-        this.additionalInfo = additionalInfo;
-    }
-
 
 
 
@@ -196,17 +214,30 @@ public class MapObject {
 
 
 
+    public LatLng getLatLng(){
+        return location;
+    }
+
+
+
+    public String getCardSubText1(){
+        return this.cardSubText1;
+    }
+
+
+
+    public void setAdditionalInfo(String additionalInfo) {
+        this.additionalInfo = additionalInfo;
+    }
+
+
+
+
 
     public void setImageResource(int imageResource) {
         this.imageResource = imageResource;
     }
 
-
-
-
-    public LatLng getLatLng(){
-        return location;
-    }
 
 
 
@@ -225,21 +256,8 @@ public class MapObject {
     }
 
 
-
-    public String getCardSubText1(){
-        return this.cardSubText1;
-    }
-
-
-
     public void setCardSubText2(String sampleText){
         this.cardSubText2 = sampleText;
-    }
-
-
-
-    public String getCardSubText2(){
-        return this.cardSubText2;
     }
 
 
@@ -247,6 +265,72 @@ public class MapObject {
 
     public void setFullViewText1(String fullViewText1){
         this.fullViewText1 = fullViewText1;
+    }
+
+
+
+    public void setCardViewType(int cardViewType) {
+        this.cardViewType = cardViewType;
+    }
+
+
+
+
+    public void setThumbNailUrl(String thumbNailUrl) {
+        this.thumbNailUrl = thumbNailUrl;
+    }
+
+
+
+    public void setFullViewImageUrl(String fullViewImageUrl) {
+        this.fullViewImageUrl = fullViewImageUrl;
+    }
+
+
+    // set the marker icon to show on the map
+    public void setMapImgResource(int mapImgResource) {
+        this.mapImgResource = mapImgResource;
+    }
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setObjLocation(Location objLocation) {
+        this.objLocation = objLocation;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    // get the marker icon to show on the map
+    public int getMapImgResource() {
+        return mapImgResource;
+    }
+
+
+
+    public String getCardSubText2(){
+        return this.cardSubText2;
     }
 
 
@@ -264,50 +348,14 @@ public class MapObject {
 
 
 
-
-    public void setCardViewType(int cardViewType) {
-        this.cardViewType = cardViewType;
-    }
-
-
-
     public String getThumbNailUrl() {
         return thumbNailUrl;
     }
 
 
 
-
-    public void setThumbNailUrl(String thumbNailUrl) {
-        this.thumbNailUrl = thumbNailUrl;
-    }
-
-
-
-
     public String getFullViewImageUrl() {
         return fullViewImageUrl;
-    }
-
-
-
-
-    public void setFullViewImageUrl(String fullViewImageUrl) {
-        this.fullViewImageUrl = fullViewImageUrl;
-    }
-
-
-
-    // get the marker icon to show on the map
-    public int getMapImgResource() {
-        return mapImgResource;
-    }
-
-
-
-    // set the marker icon to show on the map
-    public void setMapImgResource(int mapImgResource) {
-        this.mapImgResource = mapImgResource;
     }
 
 

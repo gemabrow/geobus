@@ -120,14 +120,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         OnFragmentInteractionListener {
 
 
-    private static final int PERMISSION_REQUEST_LOCATION = 1;
     final String TAG1 = "MainActivity";
     public static MainActivity activity;
     public final static String EXTRA_INFO = "com.bussquad.geobus.INFO";
+
+    // Static variables
+    private static final int PERMISSION_REQUEST_LOCATION = 1;
     private final static int MARKER_UPDATE_INTERVAL = 2000; // in milliseconds
     private final static float ICON_DEGREES_OFFSET = 90;
     private Interpolator interpolator = new DecelerateInterpolator();
 
+
+    // Android Layouts
     private TabLayout tabLayout;
     private MapViewPager viewPager;
     private ViewPagerAdapter vAdapter;
@@ -141,11 +145,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private String REQUEST_CAMERA_UPDATE_KEY = "CAMERALOC";
     private String CAMERA_POSITION_KEY = "POSITIONKEY";
     private double initalCameraZoom = 14.333;
+    private double currentZoom = 14.333;                                // not sure if that should be the value
     private LatLng cameraPosition = new LatLng(36.991406, -122.060731);
     private CameraPosition lstCameraPosition;
 
     // list of objects retrieved from json files
-
     private ArrayList<MapObject> activeMapObjects;
     private ArrayAdapter<String> mAdapter;
     private ProgressDialog pDialog;
@@ -323,153 +327,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    /**
-     * Registers the application with GCM connection servers asynchronously.
-     * <p>
-     * Stores the registration ID and app versionCode in the application's
-     * shared preferences.
-     */
-    private void registerInBackground() {
-        new AsyncTask() {
-            @Override
-            protected Object doInBackground(Object[] params) {
-                String msg = "";
-                try {
-                    if (gcm == null) {
-                        gcm = GoogleCloudMessaging.getInstance(context);
-                    }
-                    regid = InstanceID.getInstance(context).getToken(PROJECTID, "GCM");
-                    msg = "Device registered, registration ID=" + regid;
-
-                    // You should send the registration ID to your server over HTTP,
-                    // so it can use GCM/HTTP or CCS to send messages to your app.
-                    // The request to your server should be authenticated if your app
-                    // is using accounts.
-                    sendRegistrationIdToBackend();
-
-                    // For this demo: we don't need to send it because the device
-                    // will send upstream messages to a server that echo back the
-                    // message using the 'from' address in the message.
-
-                    // Persist the registration ID - no need to register again.
-                    storeRegistrationId(context, regid);
-                } catch (Exception ex) {
-                    msg = "Error :" + ex.getMessage();
-                    // If there is an error, don't just keep trying to register.
-                    // Require the user to click a button again, or perform
-                    // exponential back-off.
-                }
-                return msg;
-            }
-
-
-        }.execute(null, null, null);
-    }
-
-
-    /**
-     * Sends the registration ID to your server over HTTP, so it can use GCM/HTTP
-     * or CCS to send messages to your app. Not needed for this demo since the
-     * device sends upstream messages to a server that echoes back the message
-     * using the 'from' address in the message.
-     */
-    private void sendRegistrationIdToBackend() {
-        // Your implementation here.
-    }
-
-
-    /**
-     * Check the device to make sure it has the Google Play Services APK. If
-     * it doesn't, display a dialog that allows users to download the APK from
-     * the Google Play Store or enable it in the device's system settings.
-     */
-    private boolean checkPlayServices() {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (apiAvailability.isUserResolvableError(resultCode)) {
-                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
-                        .show();
-            } else {
-                Log.i(TAG, "This device is not supported.");
-                finish();
-            }
-            return false;
-        }
-        return true;
-    }
-
-
-    /**
-     * Gets the current registration token for application on GCM service.
-     * <p>
-     * If result is empty, the app needs to register.
-     *
-     * @return registration token, or empty string if there is no existing
-     * registration token.
-     */
-    private String getRegistrationId(Context context) {
-        final SharedPreferences prefs = getGCMPreferences(context);
-        String registrationId = prefs.getString(PROPERTY_REG_ID, "");
-        if (registrationId.isEmpty()) {
-            Log.i(TAG, "Registration not found.");
-            return "";
-        }
-        // Check if app was updated; if so, it must clear the registration ID
-        // since the existing registration ID is not guaranteed to work with
-        // the new app version.
-        int registeredVersion = prefs.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
-        int currentVersion = getAppVersion(context);
-        if (registeredVersion != currentVersion) {
-            Log.i(TAG, "App version changed.");
-            return "";
-        }
-        return registrationId;
-    }
-
-
-    /**
-     * @return Application's {@code SharedPreferences}.
-     */
-    private SharedPreferences getGCMPreferences(Context context) {
-        // This sample app persists the registration ID in shared preferences, but
-        // how you store the registration ID in your app is up to you.
-        return getSharedPreferences(MainActivity.class.getSimpleName(),
-                Context.MODE_PRIVATE);
-    }
-
-
-    /**
-     * @return Application's version code from the {@code PackageManager}.
-     */
-    private static int getAppVersion(Context context) {
-        try {
-            PackageInfo packageInfo = context.getPackageManager()
-                    .getPackageInfo(context.getPackageName(), 0);
-            return packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            // should never happen
-            throw new RuntimeException("Could not get package name: " + e);
-        }
-    }
-
-
-    /**
-     * Stores the registration ID and app versionCode in the application's
-     * {@code SharedPreferences}.
-     *
-     * @param context application's context.
-     * @param regId   registration ID
-     */
-    private void storeRegistrationId(Context context, String regId) {
-        final SharedPreferences prefs = getGCMPreferences(context);
-        int appVersion = getAppVersion(context);
-        Log.i(TAG, "Saving regId on app version " + appVersion);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(PROPERTY_REG_ID, regId);
-        editor.putInt(PROPERTY_APP_VERSION, appVersion);
-        editor.commit();
-    }
 
 
     @Override
@@ -513,9 +370,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 mMessageReceiver, new IntentFilter("data_ready"));
         System.out.println("Starting");
         System.out.println("current tab: " + currentTab);
-//        btnMenuFilter.setText(vAdapter.getItem(currentTab).getMapMenuItems().
-//                get(vAdapter.getItem(currentTab)
-//                        .getMenuSelectedPosition()).getTitle());
+//
+
+
+
 
         startBackgroundData();
 
@@ -538,7 +396,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (currentTab != tab.getPosition()) {
             previousTab = currentTab;
             currentTab = tab.getPosition();
-            if (previousTab != currentTab && previousTab == 4) {
+
+            // resets the zoom from opers to span entire campus
+            System.out.println("currentZoom level " + currentZoom +  " initialZoom " + initalCameraZoom);
+            if (previousTab != currentTab && initalCameraZoom < currentZoom ) {
                 zoomToLocation(cameraPosition, initalCameraZoom);
             }
             MapFragment mapFragment = vAdapter.getItem(currentTab);
@@ -583,7 +444,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         vAdapter.addFrag(new BusMapFragment(), "Campus Shuttles");
         vAdapter.addFrag(new DiningFragment(), "Dining");
 //        adapter.addFrag(new MapFragment(), "Bike Parking");
-        vAdapter.addFrag(new LibraryFragment(), "Library");
+       vAdapter.addFrag(new LibraryFragment(), "Library");
         vAdapter.addFrag(new EventFragment(), "Campus Events");
         vAdapter.addFrag(new OpersFragment(), "OPERS");
         viewPager.setAdapter(vAdapter);
@@ -984,7 +845,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void zoomToLocation(LatLng newCameraLoc, double zoom) {
 
         float cameraZoom = (float) zoom;
-
+        currentZoom = zoom;
         // smooth zoom transition
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newCameraLoc, cameraZoom), 2000, null);
 
@@ -1010,16 +871,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mNavItems.add(new NavItem("Home", false, R.drawable.ic_home_black_24dp));
         mNavItems.add(new NavItem("Search", false, R.drawable.ic_search_black_24dp));
         mNavItems.add(new NavItem("Bus Schedule", false, R.drawable.ic_directions_bus_black_24dp));
-        mNavItems.add(new NavItem(true));               // is a divider
-        mNavItems.add(new NavItem("My Account", true, -1));
-        mNavItems.add(new NavItem("My Profile", false, R.drawable.ic_person_black_24dp));
-        mNavItems.add(new NavItem("Notifications", false, R.drawable.ic_notifications_black_24dp));
-        mNavItems.add(new NavItem("Class Schedule", false, R.drawable.ic_schedule_black_24dp));
+//        mNavItems.add(new NavItem(true));               // is a divider
+//        mNavItems.add(new NavItem("My Account", true, -1));
+//        mNavItems.add(new NavItem("My Profile", false, R.drawable.ic_person_black_24dp));
+//        mNavItems.add(new NavItem("Notifications", false, R.drawable.ic_notifications_black_24dp));
+//        mNavItems.add(new NavItem("Class Schedule", false, R.drawable.ic_schedule_black_24dp));
         mNavItems.add(new NavItem(true));               // is a divider
         mNavItems.add(new NavItem("Help & Support", true, -1));
         mNavItems.add(new NavItem("Help Center", false, R.drawable.ic_help_black_24dp));
         mNavItems.add(new NavItem("Settings", false, R.drawable.ic_settings_black_24dp));
-        mNavItems.add(new NavItem("Sign In", false, R.drawable.ic_check_box_black_24dp));
+  //      mNavItems.add(new NavItem("Sign In", false, R.drawable.ic_check_box_black_24dp));
     }
 
 
