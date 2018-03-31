@@ -1,5 +1,7 @@
 package com.bussquad.sluglife;
 
+import android.os.Debug;
+
 import java.util.ArrayList;
 
 /**
@@ -61,7 +63,10 @@ public class BusStopSchedule {
 
     //  sets an array of bus depart times
     public void setBusDepartSchedule(ArrayList<String> busDepartSchedule){
+
+
         this.departTime = new ArrayList<String>(busDepartSchedule);
+
     }
 
 

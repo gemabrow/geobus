@@ -1,0 +1,1037 @@
+{  
+   "version":1,
+   "bus_stop_info":[  
+      {  
+         "id":1513,
+         "latitude":36.977859,
+         "longitude":-122.048325,
+         "name":"High & Moore",
+         "direction":"Westbound",
+         "routes":10
+      },
+      {  
+         "id":2375,
+         "latitude":36.977303,
+         "longitude":-122.054329,
+         "name":"High & Barn Theater",
+         "direction":"",
+         "routes":"15,19,41,INNER"
+      },
+      {  
+         "id":1510,
+         "latitude":36.978615,
+         "longitude":-122.057854,
+         "name":"High & Western Dr",
+         "direction":"Eastbound",
+         "routes":"10,16,20,20D,41,42,OUTER"
+      },
+      {  
+         "id":2374,
+         "latitude":36.978806,
+         "longitude":-122.057739,
+         "name":"High & Western Dr",
+         "direction":"Westbound",
+         "routes":"15,19,41,INNER"
+      },
+      {  
+         "id":2178,
+         "latitude":36.969754,
+         "longitude":-121.984818,
+         "name":"17th Ave & Kinsley St",
+         "direction":null,
+         "routes":"66,66N"
+      },
+      {  
+         "id":1385,
+         "latitude":36.982765,
+         "longitude":-122.062713,
+         "name":"Empire Grade & Arboretum ",
+         "direction":"Westbound",
+         "routes":"15,19,INNER"
+      },
+      {  
+         "id":2328,
+         "latitude":36.983662,
+         "longitude":-122.064964,
+         "name":"Empire Grade & Arboretum",
+         "direction":"Eastbound",
+         "routes":"10,16,20,20D,41,42,OUTER"
+      },
+      {  
+         "id":1505,
+         "latitude":36.989918,
+         "longitude":-122.06723,
+         "name":"Heller Dr & Oakes College",
+         "direction":"Southbound",
+         "routes":"10,16,20,20D,OUTER"
+      },
+      {  
+         "id":2670,
+         "latitude":36.990578,
+         "longitude":-122.066116,
+         "name":"Heller Dr & Oakes College",
+         "direction":"Northbound",
+         "routes":"15,19,INNER"
+      },
+      {  
+         "id":2516,
+         "latitude":36.991829,
+         "longitude":-122.066833,
+         "name":"Heller Dr & Family Student Housing",
+         "direction":"",
+         "routes":"10,16,20,20D,OUTER"
+      },
+      {  
+         "id":2448,
+         "latitude":36.992977,
+         "longitude":-122.065224,
+         "name":"Heller Dr & College 8\/Porter",
+         "direction":"Westbound",
+         "routes":"10,16,20,20D,OUTER"
+      },
+      {  
+         "id":2671,
+         "latitude":36.992779,
+         "longitude":-122.06488,
+         "name":"Heller Dr & College 8\/Porter",
+         "direction":"Eastbound",
+         "routes":"15,19,INNER"
+      },
+      {  
+         "id":2677,
+         "latitude":36.991257,
+         "longitude":-122.054962,
+         "name":"Hagar Dr & East Remote",
+         "direction":"Westbound",
+         "routes":"15,19,INNER"
+      },
+      {  
+         "id":1342,
+         "latitude":36.981354,
+         "longitude":-122.051971,
+         "name":"Coolidge Dr & Hagar Ct",
+         "direction":"Northbound",
+         "routes":"10,16,20,20D,OUTER"
+      },
+      {  
+         "id":1501,
+         "latitude":36.991299,
+         "longitude":-122.054657,
+         "name":"Hagar Dr & East Remote",
+         "direction":"Northbound",
+         "routes":"10,16,20,20D,OUTER"
+      },
+      {  
+         "id":2101,
+         "latitude":36.994247,
+         "longitude":-122.055511,
+         "name":"Hagar Dr & East Field House",
+         "direction":"",
+         "routes":"10,16,20,20D,OUTER"
+      },
+      {  
+         "id":2676,
+         "latitude":36.996662,
+         "longitude":-122.055481,
+         "name":"Hagar Dr & Bookstore",
+         "direction":"",
+         "routes":"15,19,INNER"
+      },
+      {  
+         "id":2102,
+         "latitude":36.997482,
+         "longitude":-122.055031,
+         "name":"Hagar Dr & Bookstore-Stevenson College",
+         "direction":"",
+         "routes":"10,16,20,20D,OUTER"
+      },
+      {  
+         "id":1617,
+         "latitude":36.999023,
+         "longitude":-122.055229,
+         "name":"McLaughlin & Crown College",
+         "direction":"",
+         "routes":"10,16,20,20D,OUTER"
+      },
+      {  
+         "id":1616,
+         "latitude":36.999939,
+         "longitude":-122.05835,
+         "name":"McLaughlin & College 9 & 10 - Health Center",
+         "direction":"Westbound",
+         "routes":"10,16,20,20D,OUTER"
+      },
+      {  
+         "id":2675,
+         "latitude":36.999706,
+         "longitude":-122.058342,
+         "name":"McLaughlin & College 9 & 10 - Health Center",
+         "direction":"Eastbound",
+         "routes":"15,19,INNER"
+      },
+      {  
+         "id":2674,
+         "latitude":36.999931,
+         "longitude":-122.06205,
+         "name":"McLaughlin & Science Hill",
+         "direction":"Eastbound",
+         "routes":"15,19,INNER"
+      },
+      {  
+         "id":1690,
+         "latitude":36.963531,
+         "longitude":-121.971924,
+         "name":"Portola & 35th",
+         "direction":"",
+         "routes":"66,66N,68"
+      },
+      {  
+         "id":2673,
+         "latitude":36.99921,
+         "longitude":-122.064339,
+         "name":"Heller & Kresge College ",
+         "direction":"North\/Eastbound",
+         "routes":"15,19,INNER"
+      },
+      {  
+         "id":2672,
+         "latitude":36.996705,
+         "longitude":-122.063583,
+         "name":"Heller & Kerr Hall",
+         "direction":"",
+         "routes":"15,19,INNER"
+      },
+      {  
+         "id":1509,
+         "latitude":36.999279,
+         "longitude":-122.064552,
+         "name":"Heller Dr & McLaughlin Dr ",
+         "direction":"South\/Westbound",
+         "routes":"10,12,16,20,20D,OUTER"
+      },
+      {  
+         "id":1512,
+         "latitude":36.977594,
+         "longitude":-122.048618,
+         "name":"High & Moore",
+         "direction":"Eastbound",
+         "routes":10
+      },
+      {  
+         "id":2394,
+         "latitude":36.976203,
+         "longitude":-122.035042,
+         "name":"Storey & Escalona Dr",
+         "direction":"",
+         "routes":10
+      },
+      {  
+         "id":2090,
+         "latitude":36.977392,
+         "longitude":-122.050373,
+         "name":"High & Cardiff Pl",
+         "direction":"Westbound",
+         "routes":10
+      },
+      {  
+         "id":2091,
+         "latitude":36.977288,
+         "longitude":-122.050233,
+         "name":"High & Cardiff Pl",
+         "direction":"Eastbound",
+         "routes":10
+      },
+      {  
+         "id":2497,
+         "latitude":36.977072,
+         "longitude":-122.052865,
+         "name":"High & Bay Dr",
+         "direction":"",
+         "routes":10
+      },
+      {  
+         "id":1341,
+         "latitude":36.977342,
+         "longitude":-122.054306,
+         "name":"Bay & High",
+         "direction":"",
+         "routes":"10,16,20"
+      },
+      {  
+         "id":1231,
+         "latitude":36.973722,
+         "longitude":-122.050103,
+         "name":"Bay Dr & Nobel",
+         "direction":"",
+         "routes":"15,16,19,41,42"
+      },
+      {  
+         "id":1230,
+         "latitude":36.974286,
+         "longitude":-122.050409,
+         "name":"Bay Dr & Iowa Dr",
+         "direction":"",
+         "routes":"15,16,19,41"
+      },
+      {  
+         "id":1232,
+         "latitude":36.975428,
+         "longitude":-122.052463,
+         "name":"Bay Dr & Meder",
+         "direction":"",
+         "routes":"15,16,19,41"
+      },
+      {  
+         "id":1225,
+         "latitude":36.96622,
+         "longitude":-122.039836,
+         "name":"Bay & Mission",
+         "direction":"",
+         "routes":"3,19"
+      },
+      {  
+         "id":10000001,
+         "latitude":36.963565,
+         "longitude":-121.990699,
+         "name":"East Cliff Dr",
+         "direction":"",
+         "routes":68
+      },
+      {  
+         "id":1515,
+         "latitude":36.9777737,
+         "longitude":-122.042374,
+         "name":"High & Laurent",
+         "direction":"Westbound",
+         "routes":10
+      },
+      {  
+         "id":2086,
+         "latitude":36.977579,
+         "longitude":-122.042175,
+         "name":"High & Laurent",
+         "direction":"Eastbound",
+         "routes":10
+      },
+      {  
+         "id":2679,
+         "latitude":36.981537,
+         "longitude":-122.052132,
+         "name":"Coolidge Dr & Hagar Ct",
+         "direction":"Southbound",
+         "routes":"15,19,INNER"
+      },
+      {  
+         "id":303,
+         "latitude":36.990734,
+         "longitude":-122.052144,
+         "name":"East Remote Parking Lot",
+         "direction":"",
+         "routes":"UPPER"
+      },
+      {  
+         "id":304,
+         "latitude":36.988576,
+         "longitude":-122.024488,
+         "name":"West Remote Parking Lot",
+         "direction":"",
+         "routes":"UPPER"
+      },
+      {  
+         "id":1493,
+         "latitude":36.960903,
+         "longitude":-122.049522,
+         "name":"Grandview & Mission",
+         "direction":null,
+         "routes":3
+      },
+      {  
+         "id":2571,
+         "latitude":36.957236,
+         "longitude":-122.04884,
+         "name":"Swift & Jeter",
+         "direction":null,
+         "routes":3
+      },
+      {  
+         "id":2330,
+         "latitude":36.955706,
+         "longitude":-122.049012,
+         "name":"Delaware Ave & Swift",
+         "direction":null,
+         "routes":"3,20,20D"
+      },
+      {  
+         "id":1350,
+         "latitude":36.954792,
+         "longitude":-122.057677,
+         "name":"Delaware Ave & Natural Bridges Dr",
+         "direction":null,
+         "routes":3
+      },
+      {  
+         "id":1349,
+         "latitude":36.95461,
+         "longitude":-122.06315,
+         "name":"Delaware & Shaffer",
+         "direction":null,
+         "routes":3
+      },
+      {  
+         "id":2740,
+         "latitude":36.954993,
+         "longitude":-122.054372,
+         "name":"Delaware Ave & Swanton Blvd",
+         "direction":null,
+         "routes":"3,20"
+      },
+      {  
+         "id":1351,
+         "latitude":36.955647,
+         "longitude":-122.048022,
+         "name":"Delaware Ave & Swift",
+         "direction":null,
+         "routes":"3,20,20D"
+      },
+      {  
+         "id":1408,
+         "latitude":36.955934,
+         "longitude":-122.045284,
+         "name":"Delaware Ave & Fair Ave",
+         "direction":null,
+         "routes":"3,20"
+      },
+      {  
+         "id":1410,
+         "latitude":36.957799,
+         "longitude":-122.045468,
+         "name":"Fair Ave & Hebard",
+         "direction":null,
+         "routes":3
+      },
+      {  
+         "id":1414,
+         "latitude":36.961173,
+         "longitude":-122.046302,
+         "name":"Fair Ave & Mission",
+         "direction":null,
+         "routes":3
+      },
+      {  
+         "id":1619,
+         "latitude":36.962137,
+         "longitude":-122.044601,
+         "name":"Mission & Miramar Dr",
+         "direction":null,
+         "routes":"3,20,40"
+      },
+      {  
+         "id":1621,
+         "latitude":36.963526,
+         "longitude":-122.042836,
+         "name":"Mission & Believue",
+         "direction":null,
+         "routes":"3,40"
+      },
+      {  
+         "id":1623,
+         "latitude":36.965121,
+         "longitude":-122.041531,
+         "name":"Mission & Palm (Palm Center)",
+         "direction":null,
+         "routes":"3,40"
+      },
+      {  
+         "id":1224,
+         "latitude":36.965206,
+         "longitude":-122.038338,
+         "name":"Bay Dr & Seaside",
+         "direction":null,
+         "routes":"3,19"
+      },
+      {  
+         "id":1222,
+         "latitude":36.963944,
+         "longitude":-122.036444,
+         "name":"Bay Dr & Redwood",
+         "direction":null,
+         "routes":"3,19"
+      },
+      {  
+         "id":1219,
+         "latitude":36.962439,
+         "longitude":-122.034164,
+         "name":"Bay Dr (Garfield Park Village)",
+         "direction":null,
+         "routes":"3,19"
+      },
+      {  
+         "id":2585,
+         "latitude":36.961379,
+         "longitude":-122.03259,
+         "name":"Bay Dr & National",
+         "direction":null,
+         "routes":"3,19"
+      },
+      {  
+         "id":2586,
+         "latitude":36.960403,
+         "longitude":-122.029275,
+         "name":"Bay & Laguna",
+         "direction":null,
+         "routes":"3,19,20D"
+      },
+      {  
+         "id":2587,
+         "latitude":36.961236,
+         "longitude":-122.025953,
+         "name":"Bay & West Cliff Dr",
+         "direction":null,
+         "routes":"3,19,20"
+      },
+      {  
+         "id":2636,
+         "latitude":36.962899,
+         "longitude":-122.023281,
+         "name":"Beach & Pacific",
+         "direction":null,
+         "routes":3
+      },
+      {  
+         "id":2736,
+         "latitude":36.964491,
+         "longitude":-122.018678,
+         "name":"Beach & Riverside Ave",
+         "direction":null,
+         "routes":3
+      },
+      {  
+         "id":2079,
+         "latitude":37.003281,
+         "longitude":-122.073163,
+         "name":"Empire Grade",
+         "direction":null,
+         "routes":42
+      },
+      {  
+         "id":2303,
+         "latitude":36.971588,
+         "longitude":-122.026779,
+         "name":"Cedar & Cathcart",
+         "direction":null,
+         "routes":"10,42"
+      },
+      {  
+         "id":2302,
+         "latitude":36.976174,
+         "longitude":-122.027996,
+         "name":"Cedar & Center",
+         "direction":null,
+         "routes":10
+      },
+      {  
+         "id":2304,
+         "latitude":36.973562,
+         "longitude":-122.02714,
+         "name":"Cedar & Walnut Ave",
+         "direction":null,
+         "routes":10
+      },
+      {  
+         "id":2669,
+         "latitude":36.985941,
+         "longitude":-122.053551,
+         "name":"Hagar Dr & Village Rd",
+         "direction":null,
+         "routes":"10,16,20,OUTER"
+      },
+      {  
+         "id":1228,
+         "latitude":36.96417,
+         "longitude":-122.045905,
+         "name":"Bay & Escalona Dr",
+         "direction":null,
+         "routes":"15,16,19,41"
+      },
+      {  
+         "id":1516,
+         "latitude":36.977904,
+         "longitude":-122.033671,
+         "name":"High & Highland",
+         "direction":null,
+         "routes":10
+      },
+      {  
+         "id":2085,
+         "latitude":36.97747,
+         "longitude":-122.030078,
+         "name":"Mission & Sylvar",
+         "direction":null,
+         "routes":10
+      },
+      {  
+         "id":"SCMC1",
+         "latitude":36.971094,
+         "longitude":-122.024585,
+         "name":"Santa Cruz Metro - Lane 1",
+         "direction":null,
+         "routes":"10,15,16,19,20,40,41,42"
+      },
+      {  
+         "id":"SCMC2",
+         "latitude":36.971094,
+         "longitude":-122.024585,
+         "name":"Santa Cruz Metro - Lane 2",
+         "direction":null,
+         "routes":"3,4,4W,8,17"
+      },
+      {  
+         "id":"SCMC3",
+         "latitude":36.971094,
+         "longitude":-122.024585,
+         "name":"Santa Cruz Metro - Lane 3",
+         "direction":null,
+         "routes":"30,35,35A"
+      },
+      {  
+         "id":"SCMC4",
+         "latitude":36.971094,
+         "longitude":-122.024585,
+         "name":"Santa Cruz Metro - Lane 4",
+         "direction":null,
+         "routes":"66,66N,68,69A,71,91X"
+      },
+      {  
+         "id":1629,
+         "latitude":36.969172,
+         "longitude":-122.03744,
+         "name":"Mission & Laurel",
+         "direction":null,
+         "routes":"15,16,40,41,42"
+      },
+      {  
+         "id":2627,
+         "latitude":36.97678,
+         "longitude":-122.026564,
+         "name":"Front & Pacific Ave",
+         "direction":null,
+         "routes":10
+      },
+      {  
+         "id":2364,
+         "latitude":36.973523,
+         "longitude":-122.024779,
+         "name":"Front & Soquel Ave",
+         "direction":null,
+         "routes":"10,35,66,71"
+      },
+      {  
+         "id":2656,
+         "latitude":36.975871,
+         "longitude":-122.032713,
+         "name":"Mission & Union",
+         "direction":null,
+         "routes":10
+      },
+      {  
+         "id":2739,
+         "latitude":36.97989,
+         "longitude":-122.059326,
+         "name":"High (Tosca Terrace)",
+         "direction":null,
+         "routes":"10,16,20,41,42,OUTER"
+      },
+      {  
+         "id":1227,
+         "latitude":36.968305,
+         "longitude":-122.043327,
+         "name":"Bay & King",
+         "direction":null,
+         "routes":"15,16,19,41"
+      },
+      {  
+         "id":2678,
+         "latitude":36.985544,
+         "longitude":-122.053549,
+         "name":"Hagar Dr & Village Rd",
+         "direction":null,
+         "routes":"15,19"
+      },
+      {  
+         "id":2731,
+         "latitude":36.968581,
+         "longitude":-122.031339,
+         "name":"Laurel & Blackburn",
+         "direction":null,
+         "routes":"15,16,40,41,42"
+      },
+      {  
+         "id":1591,
+         "latitude":36.96842,
+         "longitude":-122.022747,
+         "name":"Laurel & Center",
+         "direction":null,
+         "routes":"15,16,40,41,42"
+      },
+      {  
+         "id":2582,
+         "latitude":36.961377,
+         "longitude":-122.025847,
+         "name":"Bay & West Cliff Dr",
+         "direction":null,
+         "routes":"3,19,20"
+      },
+      {  
+         "id":2376,
+         "latitude":36.976767,
+         "longitude":-122.0538,
+         "name":"Bay Dr & High",
+         "direction":null,
+         "routes":"10,16,19,41,42"
+      },
+      {  
+         "id":2572,
+         "latitude":36.968653,
+         "longitude":-122.028987,
+         "name":"Laurel & Chestnut",
+         "direction":null,
+         "routes":"15,16,40,41,42"
+      },
+      {  
+         "id":1625,
+         "latitude":36.967281,
+         "longitude":-122.039141,
+         "name":"Mission & Trescony",
+         "direction":null,
+         "routes":"15,16,40,41,42"
+      },
+      {  
+         "id":2291,
+         "latitude":36.963696,
+         "longitude":-122.035793,
+         "name":"Bay & California",
+         "direction":null,
+         "routes":"3,19"
+      },
+      {  
+         "id":2583,
+         "latitude":36.9606,
+         "longitude":-122.029101,
+         "name":"Bay & Laguna",
+         "direction":null,
+         "routes":"3,19,20"
+      },
+      {  
+         "id":2588,
+         "latitude":36.966258,
+         "longitude":-122.039667,
+         "name":"Bay & Mission",
+         "direction":null,
+         "routes":"3,19"
+      },
+      {  
+         "id":1226,
+         "latitude":36.966921,
+         "longitude":-122.040607,
+         "name":"Bay & Mission",
+         "direction":null,
+         "routes":"15,16,19,41"
+      },
+      {  
+         "id":1223,
+         "latitude":36.96509,
+         "longitude":-122.038525,
+         "name":"Bay & Seaside",
+         "direction":null,
+         "routes":"3,19"
+      },
+      {  
+         "id":2584,
+         "latitude":36.961457,
+         "longitude":-122.032442,
+         "name":"Bay ",
+         "direction":null,
+         "routes":"3,19"
+      },
+      {  
+         "id":2593,
+         "latitude":36.963898,
+         "longitude":-122.024912,
+         "name":"Pacific Ave & 2nd",
+         "direction":null,
+         "routes":"3,19,20"
+      },
+      {  
+         "id":2592,
+         "latitude":36.963676,
+         "longitude":-122.024902,
+         "name":"Pacific Ave & Viaduct Ln",
+         "direction":null,
+         "routes":"3.19.20"
+      },
+      {  
+         "id":2697,
+         "latitude":36.965663,
+         "longitude":-122.025368,
+         "name":"Pacfic Ave & Center",
+         "direction":null,
+         "routes":"3,19,20"
+      },
+      {  
+         "id":2694,
+         "latitude":36.958051,
+         "longitude":-122.030998,
+         "name":"Delaware Ave & Centennial",
+         "direction":null,
+         "routes":"20,20D"
+      },
+      {  
+         "id":2420,
+         "latitude":36.956005,
+         "longitude":-122.045862,
+         "name":"Delaware Ave & Fair Ave",
+         "direction":null,
+         "routes":"20,20D"
+      },
+      {  
+         "id":1363,
+         "latitude":36.963577,
+         "longitude":-121.990704,
+         "name":"East Cliff Dr ",
+         "direction":null,
+         "routes":68
+      },
+      {  
+         "id":1356,
+         "latitude":36.957107,
+         "longitude":-122.037637,
+         "name":"Delaware Ave & Woodrow Ave",
+         "direction":null,
+         "routes":"20,20D"
+      },
+      {  
+         "id":1615,
+         "latitude":36.999974,
+         "longitude":-122.062335,
+         "name":"McLaughlin Dr ",
+         "direction":null,
+         "routes":"10,16,20"
+      },
+      {  
+         "id":1620,
+         "latitude":36.962397,
+         "longitude":-122.044512,
+         "name":"Mission & Miramar Dr ",
+         "direction":null,
+         "routes":"3,20,40,42"
+      },
+      {  
+         "id":2698,
+         "latitude":36.960888,
+         "longitude":-122.061773,
+         "name":"Mission & Shaffer Rd",
+         "direction":null,
+         "routes":20
+      },
+      {  
+         "id":2718,
+         "latitude":36.95508,
+         "longitude":-122.056982,
+         "name":"Natural Bridges Dr & Delaware Ave",
+         "direction":null,
+         "routes":"20,20D"
+      },
+      {  
+         "id":1688,
+         "latitude":36.963347,
+         "longitude":-121.972391,
+         "name":"Portola Dr & 30th",
+         "direction":null,
+         "routes":"66,66N,68"
+      },
+      {  
+         "id":1687,
+         "latitude":36.963569,
+         "longitude":-121.973891,
+         "name":"Portola Dr & 30th",
+         "direction":null,
+         "routes":"66,66N,68"
+      },
+      {  
+         "id":1686,
+         "latitude":36.96335,
+         "longitude":-121.974937,
+         "name":"Portola Dr & 26th",
+         "direction":null,
+         "routes":"66,66N,68"
+      },
+      {  
+         "id":2650,
+         "latitude":36.963534,
+         "longitude":-121.96591,
+         "name":"Portola Dr & 41st ",
+         "direction":null,
+         "routes":68
+      },
+      {  
+         "id":2651,
+         "latitude":36.963299,
+         "longitude":-121.965582,
+         "name":"Portola Dr & 41st ",
+         "direction":null,
+         "routes":68
+      },
+      {  
+         "id":1681,
+         "latitude":36.962609,
+         "longitude":-121.9872,
+         "name":"Portola Dr & 18th",
+         "direction":null,
+         "routes":"66,66N,68"
+      },
+      {  
+         "id":1683,
+         "latitude":36.962259,
+         "longitude":-121984568,
+         "name":"Portola Dr & 21st",
+         "direction":null,
+         "routes":"66,66N,68"
+      },
+      {  
+         "id":1682,
+         "latitude":36.962474,
+         "longitude":-121.983593,
+         "name":"Portola Dr & Coastview Dr",
+         "direction":null,
+         "routes":"66,66N,68"
+      },
+      {  
+         "id":2173,
+         "latitude":36.963678,
+         "longitude":-121.987267,
+         "name":"17th Ave Matthew Ln",
+         "direction":null,
+         "routes":"66,66N"
+      },
+      {  
+         "id":2551,
+         "latitude":36.96403,
+         "longitude":-121.987326,
+         "name":"17th Ave & Tremont Dr",
+         "direction":null,
+         "routes":"66,66N"
+      },
+      {  
+         "id":2172,
+         "latitude":36.964993,
+         "longitude":-121.986738,
+         "name":"17th Ave & Merrill St",
+         "direction":null,
+         "routes":"66,66N"
+      },
+      {  
+         "id":2174,
+         "latitude":36.965305,
+         "longitude":-121.986317,
+         "name":"17th Ave & Merrill St",
+         "direction":null,
+         "routes":"66,66N"
+      },
+      {  
+         "id":2175,
+         "latitude":36.96717,
+         "longitude":-121.985221,
+         "name":"17th Ave & Felt St",
+         "direction":null,
+         "routes":"66,66N"
+      },
+      {  
+         "id":2170,
+         "latitude":36.970664,
+         "longitude":-121.984767,
+         "name":"17th Ave & Brommer St",
+         "direction":null,
+         "routes":"66,66N"
+      },
+      {  
+         "id":1267,
+         "latitude":36.971112,
+         "longitude":-121.985312,
+         "name":"Brommer St & 17th Ave",
+         "direction":null,
+         "routes":"66,66N"
+      },
+      {  
+         "id":2177,
+         "latitude":36.962891,
+         "longitude":-121.981435,
+         "name":"Portola Dr & Corcoran Ave",
+         "direction":null,
+         "routes":"66,66N,68"
+      },
+      {  
+         "id":1685,
+         "latitude":36.962976,
+         "longitude":-121.980384,
+         "name":"Portola Dr & 24th Ave",
+         "direction":null,
+         "routes":"66,66N,88"
+      },
+      {  
+         "id":2166,
+         "latitude":36.972103,
+         "longitude":-121.967324,
+         "name":"38th Ave & King's Center ",
+         "direction":null,
+         "routes":"66,66N"
+      },
+      {  
+         "id":1302,
+         "latitude":36.973609,
+         "longitude":-121.966558,
+         "name":"Capitola Rd & 41st Ave",
+         "direction":null,
+         "routes":"66,66N,69A,69W"
+      },
+      {  
+         "id":2377,
+         "latitude":36.973826,
+         "longitude":-121.969952,
+         "name":"Capitola Rd & Clares\/Sommerfeld St",
+         "direction":null,
+         "routes":"69A,69W"
+      },
+      {  
+         "id":1715,
+         "latitude":36.981708,
+         "longitude":-122.02919,
+         "name":"River St & Josephine St",
+         "direction":null,
+         "routes":"4,4W"
+      },
+      {  
+         "id":2396,
+         "latitude":36.981169,
+         "longitude":-122.029148,
+         "name":"River St & Josephine St",
+         "direction":null,
+         "routes":"4,4W"
+      },
+      {  
+         "id":1714,
+         "latitude":36.979213,
+         "longitude":-122.02749,
+         "name":"River St & N Pacfic Ave",
+         "direction":null,
+         "routes":"4,4W"
+      },
+      {  
+         "id":1713,
+         "latitude":36.976477,
+         "longitude":-122.025206,
+         "name":"River St & River St Extension ",
+         "direction":null,
+         "routes":"4,4W,8,30,35,35A,66,71"
+      }
+   ]
+}

@@ -1,0 +1,205 @@
+ {
+  "version": 1,
+  "ucsc_dining": [
+    {
+      "id": "1",
+      "name": "Owl's Nest Cafe",
+      "latitude": "36.99886828",
+      "longitude": "-122.0661199",
+      "description": "Check out the Express Store located at Quarry Plaza right next to the Bay Tree Bookstore. The Express Store has a variety of teas, coffees, sandwiches, drinks, snacks, breakfast foods, pastries, and a host of convenience items.",
+      "phone": "8314591934",
+      "website": "https:\/\/dining.ucsc.edu\/eat\/index.html#dining",
+      "type": "cafe"
+    },
+    {
+      "id": "2",
+      "name": "Banana Joe's",
+      "latitude": "36.99997469",
+      "longitude": "36.99997469",
+      "description": "Located near the Crown College fountain this cafe\/convenience store offers burgers, sandwiches, coolers stocked with grab-and-go meals, espresso drinks, groceries and plenty of variety.",
+      "phone": "8314591445",
+      "website": "https:\/\/dining.ucsc.edu\/eat\/index.html#dining",
+      "type": "cafe"
+    },
+    {
+      "id": "3",
+      "name": "Perk Coffee @ Baskin Engineering",
+      "latitude": "37.00047915",
+      "longitude": "-122.0630407",
+      "description": "Perk Coffee Bars offer 100% organic coffee and a wide selection of freshly baked muffins, Bagelry bagels, and pastries. Stop by for a latte or mocha, or meet friends for a quick lunch from the selection of salads, sandwiches or sushi offered at most locati",
+      "phone": null,
+      "website": "https:\/\/dining.ucsc.edu\/eat\/index.html#dining",
+      "type": "cafe"
+    },
+    {
+      "id": "4",
+      "name": "Perk Coffee @ Physical Science Building",
+      "latitude": "36.99955376",
+      "longitude": "-122.0617747",
+      "description": "Perk Coffee Bars offer 100% organic coffee and a wide selection of freshly baked muffins, Bagelry bagels, and pastries. Stop by for a latte or mocha, or meet friends for a quick lunch from the selection of salads, sandwiches or sushi offered at most locati",
+      "phone": null,
+      "website": "https:\/\/dining.ucsc.edu\/eat\/index.html#dining",
+      "type": "cafe"
+    },
+    {
+      "id": "5",
+      "name": "Perk Coffee @ Earth & Marine Sciences",
+      "latitude": "36.99792573",
+      "longitude": "-122.0594037",
+      "description": "Perk Coffee Bars offer 100% organic coffee and a wide selection of freshly baked muffins, Bagelry bagels, and pastries. Stop by for a latte or mocha, or meet friends for a quick lunch from the selection of salads, sandwiches or sushi offered at most locati",
+      "phone": null,
+      "website": "https:\/\/dining.ucsc.edu\/eat\/index.html#dining",
+      "type": "cafe"
+    },
+    {
+      "id": "6",
+      "name": "Porter Slug Grill and Cafe",
+      "latitude": "36.99430967",
+      "longitude": "-122.0658034",
+      "description": null,
+      "phone": null,
+      "website": "https:\/\/dining.ucsc.edu\/eat\/index.html#dining",
+      "type": null
+    },
+    {
+      "id": "7",
+      "name": "Porter Kresge Dining Hall",
+      "latitude": "36.994297890489",
+      "longitude": "-122.06602871418",
+      "description": "Serving the west side of campus, this dining hall features a remodeled serving area made with natural, sustainable textures and surfaces. Come enjoy the patio, perched high on the hill overlooking the bay.",
+      "phone": "8314594774",
+      "website": "https:\/\/dining.ucsc.edu\/eat\/index.html#dining",
+      "type": null
+    },
+    {
+      "id": "8",
+      "name": "College Eight\/Oakes Dining Hall",
+      "latitude": "36.99158787",
+      "longitude": "-122.0653233",
+      "description": "Located near the West Field House, this dining hall features incredible views of the hillsides of Santa Cruz. This is also the home of The Bakery at Rachel Carson College, which supplies fresh-baked goods to all our locations.",
+      "phone": "8314593547",
+      "website": "https:\/\/dining.ucsc.edu\/eat\/index.html#dining",
+      "type": null
+    },
+    {
+      "id": "9",
+      "name": "College Eight Cafe",
+      "latitude": "36.99164036",
+      "longitude": "-122.0642853",
+      "description": "Located at Rachel Carson College. Serving made to order espresso coffee drinks, pastries, grab-and-go meals, local, organic ice cream by alumni-owned Mission Hill Creamery, and more.",
+      "phone": "8314594567",
+      "website": "https:\/\/dining.ucsc.edu\/eat\/index.html#dining",
+      "type": null
+    },
+    {
+      "id": "10",
+      "name": "Oakes Cafe",
+      "latitude": "36.98926018",
+      "longitude": "-122.0631856",
+      "description": "Located in the Oakes College community, this fun, funky caf\u00e9 is the perfect spot for a grilled chicken sandwich or charbroiled burger. With its international surf theme and late night hours, Oakes Caf\u00e9 is a popular student hangout\u2014staff and faculty are wel",
+      "phone": "8314592640",
+      "website": "https:\/\/dining.ucsc.edu\/eat\/index.html#dining",
+      "type": null
+    },
+    {
+      "id": "11",
+      "name": "Global Village Cafe",
+      "latitude": "36.99583709",
+      "longitude": "-122.0588619",
+      "description": "Our menu features many delicious items including: Acai Bowl - blended with strawberries and bananas, with granola on top; free range eggs; all natural meat; and Gallo Pinto - a mix of rice, beans, and veggies with Lizano sauce from Costa Rica.",
+      "phone": "831594428",
+      "website": "https:\/\/dining.ucsc.edu\/eat\/index.html#dining",
+      "type": null
+    },
+    {
+      "id": "12",
+      "name": "Bay Tree Express Store",
+      "latitude": "36.997760716477",
+      "longitude": "-122.05561101437",
+      "description": "Check out the Express Store located at Quarry Plaza right next to the Bay Tree Bookstore. The Express Store has a variety of teas, coffees, sandwiches, drinks, snacks, breakfast foods, pastries, and a host of convenience items.",
+      "phone": null,
+      "website": "https:\/\/dining.ucsc.edu\/eat\/index.html#dining",
+      "type": "store"
+    },
+    {
+      "id": "13",
+      "name": "Stevenson Coffee House",
+      "latitude": "36.997301290916",
+      "longitude": "-122.05228507519",
+      "description": "Located at Stevenson College. This long-standing favorite offers espresso drinks, made-to-order salads and sandwiches, their famous fudgies, and more.",
+      "phone": null,
+      "website": "https:\/\/dining.ucsc.edu\/eat\/index.html#dining",
+      "type": null
+    },
+    {
+      "id": "14",
+      "name": "Cowell\/Stevenson Dining Hall",
+      "latitude": "36.99699174",
+      "longitude": "-122.0530629",
+      "description": "Located on the hill above the East Field, this dining hall features a fantastic view of the Monterey Bay, with outdoor patio dining available to capture the crisp ocean breezes.",
+      "phone": null,
+      "website": "https:\/\/dining.ucsc.edu\/eat\/index.html#dining",
+      "type": null
+    },
+    {
+      "id": "15",
+      "name": "Cowell Coffee Shop",
+      "latitude": "36.99699174",
+      "longitude": "-122.0530629",
+      "description": "The Cowell Coffee Shop offers delicious baked goods, chili, salads, sandwiches and more. It also exhibits student art shows. Cash, check, credit\/debit cards, and flexi-dollars accepted.",
+      "phone": "8314592710",
+      "website": "https:\/\/dining.ucsc.edu\/eat\/index.html#dining",
+      "type": null
+    },
+    {
+      "id": "16",
+      "name": "Crown\/Merrill Dining Hall",
+      "latitude": "37.00011071",
+      "longitude": "-122.0544255",
+      "description": "Serving the east side of campus, this dining hall boasts a 20-foot salad bar. Next door is Banana Joe\u2019s, offering premium beverages, on-the-go menu selections, groceries, and convenient, natural foods to-go.",
+      "phone": "8314594619",
+      "website": "https:\/\/dining.ucsc.edu\/eat\/index.html#dining",
+      "type": null
+    },
+    {
+      "id": "17",
+      "name": "Terraa Fresca Restaurant & Coffee Bar",
+      "latitude": "37.00078761",
+      "longitude": "-122.0578909",
+      "description": "Enjoy an exquisite lunch at this full service restaurant, or visit the coffee bar for a quick bite. Located above the Colleges Nine & Ten Dining Hall.",
+      "phone": "8314592689",
+      "website": "https:\/\/dining.ucsc.edu\/eat\/index.html#dining",
+      "type": null
+    },
+    {
+      "id": "18",
+      "name": "College Nine and Ten Dining Hall",
+      "latitude": "37.00109393",
+      "longitude": "-122.0577581",
+      "description": "Nestled in the redwoods near the academic campus core, this is our largest dining hall. Upstairs, you\u2019ll find Terra Fresca Restaurant and Coffee Bar, a popular spot for students to meet with faculty.",
+      "phone": "8315028397",
+      "website": "https:\/\/dining.ucsc.edu\/eat\/index.html#dining",
+      "type": null
+    },
+    {
+      "id": "19",
+      "name": "Perk Coffee @ University Center",
+      "latitude": "37.00078761",
+      "longitude": "-122.0578909",
+      "description": "Perk Coffee Bars offer 100% organic coffee and a wide selection of freshly baked muffins, Bagelry bagels, and pastries. ",
+      "phone": null,
+      "website": "https:\/\/dining.ucsc.edu\/eat\/index.html#dining",
+      "type": null
+    },
+    {
+      "id": "20",
+      "name": "Vivas",
+      "latitude": "37.000089",
+      "longitude": "-122.053529",
+      "description": "Located at Merrill College, Vivas serves fresh, natural & organic mexican food.",
+      "phone": "8314593299",
+      "website": "https:\/\/dining.ucsc.edu\/eat\/index.html#dining",
+      "type": null
+    }
+  ]
+}

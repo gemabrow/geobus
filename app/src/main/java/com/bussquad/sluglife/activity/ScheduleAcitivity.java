@@ -75,14 +75,17 @@ public class ScheduleAcitivity extends AppCompatActivity implements
     private double initalCameraZoom = 20;
 
     // bus stop related varibles
+    // List of bus routes
     List<String> routes = new ArrayList<>();
+    // bus stop idf
     String busStopId;
     private NotificationDbManger notifDb;
     ViewPagerAdapter adapter;
 
 
-    // calander related  values
+    // the button is used to activate the Calendar picker when selected
     private Button btnCalendarPicker;
+    // values used to define the months in the calendar picker
     private String[] monthOfTheYear = {"January","Feburary","March","April","May",
             "June","July","August","September","October","November","December"};
     private static final String FRAG_TAG_DATE_PICKER = "fragment_date_picker_name";
@@ -354,6 +357,7 @@ public class ScheduleAcitivity extends AppCompatActivity implements
     // create the marker that will represent the bus stop, This will throw an error if the bus stop
     // does not have an id
     private void createBusStopMarker(){
+
         if (busStopId == null ){
             FirebaseCrash.log("Bus stop Id is null");
         } else {
@@ -412,6 +416,7 @@ public class ScheduleAcitivity extends AppCompatActivity implements
             adapter.getItem(count).setDate(year,month+1,dayOfMonth);
         }
         // manually update currently selected route
+        System.out.println("loading bus schedule");
         adapter.getItem(tab).loadBusSchedule();
 
     }

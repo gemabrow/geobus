@@ -40,6 +40,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+//  The ScheduleFragment creates a card with information about the bus schedule
 public class ScheduleFragment extends Fragment
 {
 
@@ -57,7 +58,7 @@ public class ScheduleFragment extends Fragment
     private TimeHelper timeHelper = new TimeHelper();
     private String date;
 
-
+    private String tag = "ScheduleFragment.java";
 
 
     public ScheduleFragment() {
@@ -127,21 +128,24 @@ public class ScheduleFragment extends Fragment
     // retrieves the bus schedule from the sqlite database, if there is no schedule it will show nothing
     public void loadBusSchedule(){
 //        if(!dataSet) {
-
+        System.out.println("ScheduleFragment loadingbusschedule().java loading bus schedule");
             try {
 
 
-                // check if the bus schedule exists in the sqlite database
+                // check if the bus schedule does not exist in the sqlite database
                 if(!notifDb.hasSchedule(this.stopID,this.route)){
                     notifDb.hasLatestScheduleVersion(this.stopID,this.route);
                     DownloadBusSchedule2 busSchedule2 = new DownloadBusSchedule2(this.stopID,this.route);
                     busSchedule2.execute();
                 } else {
+                    // if the bus schedule has already been retrieved previously it will be cached in
+                    // the sqlite database. This next step will load the schedule from the sqlite db
                     schedule = new ArrayList<>(notifDb.getStopScheduleForRoute(this.stopID, this.route));
                     setBusSchedule(schedule);
                 }
                 dataSet = true;
             } catch (Exception ex) {
+                Log.i(tag,ex.toString());
                 FirebaseCrash.log("ScheduleFragment.java There was an error retriveing schedule information for " + route);
             }
 //        }
@@ -154,10 +158,12 @@ public class ScheduleFragment extends Fragment
         listObject.clear();
         viewType.clear();
         schedule = new ArrayList<>(schedules);
+        System.out.println("retrieving bus schedule");
         try {
 
             // there was an error retrieving the bus departures
             if(schedules == null){
+                Log.i("ScheduleFragment.java","error retriving schedule");
                 FirebaseCrash.log("Bus schedule missing for stop " + route);
                 DataObject dataObject = new DataObject();
                 dataObject.setMainText("No Bus Schedule available for this Route");
@@ -220,15 +226,15 @@ public class ScheduleFragment extends Fragment
 
 
 
-        // retrieve bus schedule from the mysql database
+        // retrieve bus schedule from the Santa Cruz Metro WebSite by parsing the website.
+        // it uses an asynchornous method of retriving the bus  schedule from the Santa cruz metro site
         @Override
         protected ArrayList<String> doInBackground(String... params) {
 
             ArrayList<String> schedule = new ArrayList<>();
-
             try {
 
-                URL url = new URL("http://scmtd.com/en/routes/schedule-by-stop/"+stopid+"/" + date);
+                URL url = new URL("http://scmtd.com/en/routes/schedule-by-stop/"+stopid+"/" + date + "#tripDiv");
                 Document doc = Jsoup.parse(url,3000);
                 Element table = doc.select("table").get(0); //select the first table.
                 Elements rows = table.select("tr");
@@ -261,12 +267,15 @@ public class ScheduleFragment extends Fragment
                             }
                         }
                         // add the depart time to the schedule list
+                        System.out.println("schedule value: " + finalTime);
                         schedule.add(finalTime.trim());
                     }
 
                 }
+
                 return schedule;
             }catch(Exception e){
+                System.out.println("ScheduleFragment.java unable to load bus schedule");
                 Log.e("ERROR_debug",e.getMessage());
                 return schedule;
             } finally {

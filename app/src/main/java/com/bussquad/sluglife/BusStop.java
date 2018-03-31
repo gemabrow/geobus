@@ -1,5 +1,7 @@
 package com.bussquad.sluglife;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ public class BusStop extends MapObject{
     private List<String> busses;
     private String routes;
     private ArrayList<BusStopSchedule> schedules;
-
+    private String tag = "BusStop.java";
 
 
 
@@ -63,6 +65,8 @@ public class BusStop extends MapObject{
 
     // returns the schedule of the bus
     public ArrayList<BusStopSchedule> getBusStopSchedule() {
+        Log.i(tag,"total number of times for bus" + this.schedules.size());
+
         return this.schedules;
     }
 
@@ -116,7 +120,10 @@ public class BusStop extends MapObject{
     public String getEtaNextBus(){
         return "Next Bus: 10";
     }
+
     // stores a list of busses that stop at this bus stop
+
+
     public List<String> getBusses() {
         return busses;
     }

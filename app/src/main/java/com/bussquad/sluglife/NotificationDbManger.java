@@ -832,7 +832,7 @@ public class NotificationDbManger  extends SQLiteOpenHelper {
         String routeData;
         // sets the pointer tot he first row of the database
         currentRow = 0;
-
+        System.out.println("NotificationDBManager getting stop schedule for route");
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("select " + "\"" + routeName + "\"" + " from bus_stop_schedule where ID_BUSSTOP=" + busStopId, null);
         c.moveToFirst();
