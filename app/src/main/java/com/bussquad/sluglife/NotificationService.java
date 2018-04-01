@@ -6,11 +6,9 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
-
 import com.google.maps.android.SphericalUtil;
-
 
 import java.util.ArrayList;
 
@@ -161,7 +159,7 @@ public class NotificationService extends Service {
     private boolean busInRange(Bus bus, String stopID){
 
         String currStopId = notifDb.getCurrStop(stopID);
-        double distance  = SphericalUtil.computeDistanceBetween(bus.getLocaiton(), notifDb.getLocation(currStopId));
+        double distance  = SphericalUtil.computeDistanceBetween(bus.getLocation(), notifDb.getLocation(currStopId));
 
         return distance <= 100;
     }

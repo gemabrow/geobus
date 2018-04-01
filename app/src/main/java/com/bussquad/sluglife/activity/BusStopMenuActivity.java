@@ -32,7 +32,7 @@ public class BusStopMenuActivity extends AppCompatActivity  {
     int busStopId;
     private String busStopName;
     private ArrayList<String> routes;
-    // database that is called whenever a new notificaiton is selected
+    // database that is called whenever a new notification is selected
     private NotificationDbManger notifDb;
 
 
@@ -82,8 +82,7 @@ public class BusStopMenuActivity extends AppCompatActivity  {
         toolbar.setSubtitle(busStopName);
         setSupportActionBar(toolbar);
 
-
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);

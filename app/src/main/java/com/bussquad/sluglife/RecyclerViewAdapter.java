@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +20,9 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.bussquad.sluglife.activity.AppController;
 import com.bussquad.sluglife.activity.EventActivity;
-import com.bussquad.sluglife.activity.ScheduleAcitivity;
+import com.bussquad.sluglife.activity.ScheduleActivity;
 import com.bussquad.sluglife.utilities.VolleySingleton;
-import com.google.android.gms.maps.model.LatLng;
 
-import org.w3c.dom.Text;
-
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -185,7 +180,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
         private void startScheduleActivity(){
-            Intent myIntent = new Intent(context,ScheduleAcitivity.class);
+            Intent myIntent = new Intent(context,ScheduleActivity.class);
             myIntent.putExtra("BUSSTOPID",stopID);
             myIntent.putExtra("bus_stop_name",title);
             context.startActivity(myIntent);

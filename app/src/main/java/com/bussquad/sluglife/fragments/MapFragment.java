@@ -4,12 +4,9 @@ package com.bussquad.sluglife.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -18,11 +15,10 @@ import com.bussquad.sluglife.DataObject;
 import com.bussquad.sluglife.MapMenuItem;
 import com.bussquad.sluglife.MapObject;
 import com.bussquad.sluglife.R;
-import com.bussquad.sluglife.activity.ScheduleAcitivity;
+import com.bussquad.sluglife.activity.ScheduleActivity;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 
 // Adds functionality to the fragment to handle map clicks
@@ -296,7 +292,7 @@ public class MapFragment extends Fragment  {
 
     public Intent getMapFragmentIntent(Context context,String title,MapObject mapObject){
 
-        Intent mIntent = new Intent(context, ScheduleAcitivity.class);
+        Intent mIntent = new Intent(context, ScheduleActivity.class);
 
         return mIntent;
 

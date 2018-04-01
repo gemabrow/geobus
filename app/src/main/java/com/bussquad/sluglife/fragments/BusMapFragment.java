@@ -2,31 +2,21 @@ package com.bussquad.sluglife.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 
-import com.bussquad.sluglife.Bus;
 import com.bussquad.sluglife.BusStop;
-import com.bussquad.sluglife.DataObject;
 import com.bussquad.sluglife.JsonFileReader;
 import com.bussquad.sluglife.MapMenuItem;
 import com.bussquad.sluglife.MapObject;
 import com.bussquad.sluglife.NotificationDbManger;
 import com.bussquad.sluglife.R;
 import com.bussquad.sluglife.Route;
-import com.bussquad.sluglife.activity.MainActivity;
-import com.bussquad.sluglife.activity.ScheduleAcitivity;
+import com.bussquad.sluglife.activity.ScheduleActivity;
 import com.bussquad.sluglife.parser.JsonRouteFileReader;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.maps.android.SphericalUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -167,7 +157,7 @@ public class BusMapFragment extends MapFragment {
     @Override
     public Intent getMapFragmentIntent(Context context,String title,MapObject mapObject) {
 
-        Intent mIntent = new Intent(context, ScheduleAcitivity.class);
+        Intent mIntent = new Intent(context, ScheduleActivity.class);
         mIntent.putExtra("bus_stop_name",title); //Optional parameters
         mIntent.putExtra("BUSSTOPID", mapObject.getObjectID());
         mIntent.putExtra("COORDINATES", mapObject.getLatLng());

@@ -9,14 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -24,6 +21,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.content.res.ResourcesCompat;
@@ -31,18 +29,25 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.MenuAdapter;
 import android.support.v7.widget.ListPopupWindow;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
-
+import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidmapsextensions.AnimationSettings;
 import com.androidmapsextensions.ClusterGroup;
@@ -53,62 +58,49 @@ import com.androidmapsextensions.Marker;
 import com.androidmapsextensions.MarkerOptions;
 import com.androidmapsextensions.OnMapReadyCallback;
 import com.androidmapsextensions.SupportMapFragment;
-
 import com.bussquad.sluglife.Bus;
 import com.bussquad.sluglife.DataObject;
 import com.bussquad.sluglife.MapMenuItem;
 import com.bussquad.sluglife.MapObject;
+import com.bussquad.sluglife.NotificationDbManger;
+import com.bussquad.sluglife.R;
+import com.bussquad.sluglife.adapters.DrawerListAdapter;
 import com.bussquad.sluglife.adapters.MapInfoWindowAdapter;
+import com.bussquad.sluglife.adapters.NavItem;
 import com.bussquad.sluglife.adapters.OptionListAdapter;
 import com.bussquad.sluglife.fragments.BusMapFragment;
 import com.bussquad.sluglife.fragments.DiningFragment;
 import com.bussquad.sluglife.fragments.EventFragment;
 import com.bussquad.sluglife.fragments.LibraryFragment;
+import com.bussquad.sluglife.fragments.MapFragment;
 import com.bussquad.sluglife.fragments.MarkerFilterDialog;
+import com.bussquad.sluglife.fragments.NavListFragment;
 import com.bussquad.sluglife.fragments.OpersFragment;
 import com.bussquad.sluglife.fragments.PermissionDialog;
 import com.bussquad.sluglife.utilities.NetworkService;
-import com.bussquad.sluglife.NotificationDbManger;
-import com.bussquad.sluglife.R;
-import com.bussquad.sluglife.fragments.MapFragment;
-import com.bussquad.sluglife.fragments.NavListFragment;
-import com.bussquad.sluglife.adapters.NavItem;
-import com.bussquad.sluglife.adapters.DrawerListAdapter;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-//import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.maps.android.ui.IconGenerator;
 
-import android.support.v4.app.FragmentManager;
-import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.Interpolator;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.bussquad.sluglife.fragments.MapFragment.*;
+import static com.bussquad.sluglife.fragments.MapFragment.OnFragmentInteractionListener;
+
+//import com.google.android.gms.common.ConnectionResult;
+//import com.google.android.gms.common.GoogleApiAvailability;
+//import com.google.android.gms.iid.InstanceID;
+//import com.google.firebase.crash.FirebaseCrash;
+//import android.widget.SimpleAdapter;
+//import java.sql.SQLOutput;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,
         TabLayout.OnTabSelectedListener,
@@ -457,7 +449,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     // sets up a default Tab Icons
-    //// TODO: 8/27/2016  make this more modular! 
+    //// TODO: 8/27/2016  make this more modular!
     private void setupTabIcons() {
 
         // custom_tab is used therfore if you want to make changes to the text color make the
@@ -516,28 +508,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
                 break;
             case R.id.btnShowMyLocation:
-                if(checkPermissionStatus(android.Manifest.permission.ACCESS_COARSE_LOCATION) && checkPermissionStatus(android.Manifest.permission.ACCESS_FINE_LOCATION)){
+                if(checkPermissionStatus(android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                && checkPermissionStatus(android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    if (mMap != null) {
+                        mMap.setMyLocationEnabled(true);
+                        Location myLocation = mMap.getMyLocation();
+                        if (myLocation != null) {
+                            LatLng myLatLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+                            zoomToLocation(myLatLng, initalCameraZoom);
+                        } else {
+                            Toast toast = Toast.makeText(context, "Unable to Locate", Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
 
-                if(mMap != null){
-
-
-                    Location myLocation = mMap.getMyLocation();
-                    if(myLocation != null){
-                        LatLng myLatLng = new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
-
-                        zoomToLocation(myLatLng,initalCameraZoom);
                     } else {
-
+                        System.out.println("requesting location permission");
+                        requestLocationPermission(Manifest.permission.ACCESS_FINE_LOCATION, R.string.location, R.string.location_description);
+                        requestLocationPermission(Manifest.permission.ACCESS_COARSE_LOCATION, R.string.location, R.string.location_description);
                     }
-
-                } else {
-                    System.out.println("requesting location permission");
-                    requestLocationPermission( Manifest.permission.ACCESS_FINE_LOCATION,R.string.location,R.string.location_description);
-                    requestLocationPermission( Manifest.permission.ACCESS_COARSE_LOCATION,R.string.location,R.string.location_description);
-
                 }
-                }
-
                 break;
             case R.id.btnMenuFilter:
                 if(vAdapter.getItem(currentTab).getMapMenuItems().size() == 0){
@@ -633,7 +622,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 toast.show();
                 break;
             case R.drawable.ic_help_black_24dp:
-                //  FirebaseCrash.logcat(Log.INFO,TAG,"Crash button clicked");
+                //FirebaseCrash.logcat(Log.INFO,TAG,"Crash button clicked");
                 //FirebaseCrash.report(ex);
 
                 break;
@@ -649,14 +638,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    // Called when the dialogfragment agree button is clicked
+    // Called when the dialog fragment agree button is clicked
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
 
     }
 
 
-    // called when the dialog fragment disagress button is clicked
+    // called when the dialog fragment disagrees button is clicked
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
 
@@ -696,11 +685,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-
     // draws google map and sets up initial settings.
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
 
         mMap = googleMap;
         // mMap.setOnMarkerClickListener(this);
@@ -710,7 +697,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         new DefaultClusterOptionsProvider(getResources())));
 
         // set up coordinates for the center of UCSC and move the camera to there with a zoom level of 15 on startup
-
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(this.cameraPosition, (float) this.initalCameraZoom));
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setCompassEnabled(false);
@@ -718,7 +704,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // if the version of the phone is 6.0 or greater ask the user for permission to get location
         // information from the user
-        if (Build.VERSION.SDK_INT > 23) {
+        if (Build.VERSION.SDK_INT >= 23) {
             if (ActivityCompat.checkSelfPermission(this,
                     android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                     ActivityCompat.checkSelfPermission(this,
@@ -765,7 +751,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             DialogFragment newFragment = PermissionDialog.newInstance(R.string.location_permission_title, R.string.location_permission_msg);
             newFragment.show(getSupportFragmentManager(), "dialog");
 
-
         } else {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION,
                     android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_LOCATION);
@@ -797,14 +782,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
     }
-
-
-    public void hideAllMapObjectMarkers(){
-       for(Marker marker : mMap.getMarkers()){
-
-       }
-    }
-
 
 
     public void drawMarkers(ArrayList<?> mapObjects, boolean visible, boolean enableIconGen) {
@@ -1005,7 +982,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .duration(MARKER_UPDATE_INTERVAL).interpolator(interpolator);
 
 
-        // checks if the timestamp has been updated if it has not then it will notifiy the network
+        // checks if the timestamp has been updated if it has not then it will notify the network
         // service that xml file has not been updated
         try {
 
@@ -1039,21 +1016,31 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         .title(bus.route)
                         .clusterGroup(ClusterGroup.NOT_CLUSTERED)
                         .snippet("Bus ID: " + Integer.toString(bus.bus_id)));
-                if (bus.color == Bus.BLUE) {
-                    bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("blue_marker", 64, 111)));
-                } else if (bus.color == Bus.ORANGE) {
-                    bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("orange_marker", 64, 111)));
-                } else if (bus.color == Bus.YELLOW) {
-                    bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("yellow_marker", 64, 111)));
-                } else if (bus.color == Bus.GREY) {
-                    bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("grey_marker", 64, 111)));
-                } else {
-                    bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("green_marker", 64, 111)));
+                switch (bus.color) {
+                    case Bus.BLUE:
+                        bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(
+                            resizeMapIcons("blue_marker", 64, 111)));
+                        break;
+                    case Bus.ORANGE:
+                        bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(
+                            resizeMapIcons("orange_marker", 64, 111)));
+                        break;
+                    case Bus.YELLOW:
+                        bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(
+                            resizeMapIcons("yellow_marker", 64, 111)));
+                        break;
+                    case Bus.GREEN:
+                        bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(
+                            resizeMapIcons("green_marker", 64, 111)));
+                        break;
+                    default:
+                        bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(
+                            resizeMapIcons("grey_marker", 64, 111)));
                 }
             } else {
+
                 // if marker exists, check for changes in position
                 // and for change in bus route from last update
-
                 int typeChange = bus_marker.getPosition().equals(newPos) ? 0 : 2;
                 typeChange -= bus_marker.getTitle().equals(bus.route) ? 0 : 1;
                 switch (typeChange) {
@@ -1062,22 +1049,36 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     case (1):
                         bus_marker.setTitle(bus.route);
                         bus_marker.setClusterGroup(bus.clusterGroup);
-                        if (bus.color == Bus.BLUE) {
-                            bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("blue_marker", 64, 111)));
-                        } else if (bus.color == Bus.ORANGE) {
-                            bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("orange_marker", 64, 111)));
-                        } else if (bus.color == Bus.YELLOW) {
-                            bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("yellow_marker", 64, 111)));
-                        } else if (bus.color == Bus.GREEN) {
-                            bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("green_marker", 64, 111)));
-                        } else if (bus.color == Bus.GREY) {
-                            bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("grey_marker", 64, 111)));
-                        } else {
-                            bus_marker.setIcon(BitmapDescriptorFactory.defaultMarker(bus.color));
+                        switch (bus.color) {
+                            case Bus.BLUE:
+                                bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(
+                                    resizeMapIcons("blue_marker", 64, 111)));
+                                break;
+                            case Bus.ORANGE:
+                                bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(
+                                    resizeMapIcons("orange_marker", 64, 111)));
+                                break;
+                            case Bus.YELLOW:
+                                bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(
+                                    resizeMapIcons("yellow_marker", 64, 111)));
+                                break;
+                            case Bus.GREEN:
+                                bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(
+                                    resizeMapIcons("green_marker", 64, 111)));
+                                break;
+                            case Bus.GREY:
+                                bus_marker.setIcon(BitmapDescriptorFactory.fromBitmap(
+                                    resizeMapIcons("grey_marker", 64, 111)));
+                                break;
+                            default:
+                                bus_marker.setIcon(BitmapDescriptorFactory.defaultMarker(bus.color));
                         }
                     case (2):
                         bus_marker.animatePosition(newPos, settings);
-                        bus_marker.setRotation(bus.updateBearing(bus_marker.getPosition(), bus_marker.getRotation() - ICON_DEGREES_OFFSET) + ICON_DEGREES_OFFSET);
+                        bus_marker.setRotation(
+                                bus.updateBearing(bus_marker.getPosition(),
+                                        bus_marker.getRotation() - ICON_DEGREES_OFFSET)
+                                        + ICON_DEGREES_OFFSET);
                         break;
                 }
                 busMarkers.remove(Integer.toString(bus.bus_id));

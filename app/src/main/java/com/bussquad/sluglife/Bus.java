@@ -121,7 +121,7 @@ public class Bus {
 
 
 
-    public LatLng getLocaiton(){
+    public LatLng getLocation(){
         return location;
     }
 

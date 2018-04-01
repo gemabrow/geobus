@@ -12,7 +12,6 @@ package com.bussquad.sluglife.activity;
 
 import android.os.Build;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -20,10 +19,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -35,7 +32,6 @@ import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialo
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -45,12 +41,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.crash.FirebaseCrash;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class ScheduleAcitivity extends AppCompatActivity implements
+public class ScheduleActivity extends AppCompatActivity implements
         TabLayout.OnTabSelectedListener,
         OnMapReadyCallback,
         CalendarDatePickerDialogFragment.OnDateSetListener,
@@ -390,7 +385,7 @@ public class ScheduleAcitivity extends AppCompatActivity implements
     public void displayCalendar() {
         // MonthAdapter.CalendarDay minDate = new MonthAdapter.CalendarDay(now.getYear(), now.getMonthOfYear() - 2, now.getDayOfMonth());
         CalendarDatePickerDialogFragment cdp = new CalendarDatePickerDialogFragment()
-                .setOnDateSetListener(ScheduleAcitivity.this)
+                .setOnDateSetListener(ScheduleActivity.this)
                 .setFirstDayOfWeek(Calendar.SUNDAY)
                 .setPreselectedDate(year,month,day)
                 .setThemeLight();

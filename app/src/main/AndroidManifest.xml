@@ -105,7 +105,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activity.ScheduleAcitivity"
+            android:name=".activity.ScheduleActivity"
             android:label="@string/title_activity_dining"
             android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait"
